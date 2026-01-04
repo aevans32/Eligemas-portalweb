@@ -8,6 +8,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { Router, RouterModule } from '@angular/router';
 import { Header } from "../shared/components/header/header";
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -17,27 +18,31 @@ import { Header } from "../shared/components/header/header";
 })
 export class Login {
 
+  authService = inject(AuthService);
   router = inject(Router);
   
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [
-      Validators.required,
-      Validators.minLength(8),
-    ]),
+    password: new FormControl('', [Validators.required, Validators.minLength(6),]),
   });
 
-  login() {
+  async login() {
+
+    if (this.loginForm.invalid) return;
+
     const email = this.loginForm.controls.email.value!;
     const password = this.loginForm.controls.password.value!;
 
-      // this.authService.login(email, password).subscribe((res) => {
-      // localStorage.setItem('token', res.data.token);
-      // localStorage.setItem('tokenExpiration', res.data.expirationDate);
-      // this.authService.decodeToken();
-      // this.notifications.success('Login exitoso', 'Bienvenido.');
-    //   this.router.navigateByUrl('/');
-    // });
-    this.router.navigateByUrl('/');
+    const { data, error } = await this.authService.signIn(email, password);
+    console.log('SESSION:', data.session);
+    console.log('ACCESS TOKEN:', data.session?.access_token);
+
+    if (error) {
+      //TODO: show a MatSnackBar or a notification service
+      console.error('Login error:', error.message);
+      return;
+    }
+
+    await this.router.navigateByUrl('/');
   }
 }

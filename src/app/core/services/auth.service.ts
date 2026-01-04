@@ -9,9 +9,14 @@ export class AuthService {
     private _session$ = new BehaviorSubject<Session | null>(null);
     session$ = this._session$.asObservable();
 
+    private _loaded$ = new BehaviorSubject<boolean>(false);
+    loaded$ = this._loaded$.asObservable();
+
     async init() {
         const { data } = await supabase.auth.getSession();
         this._session$.next(data.session ?? null);
+        this._loaded$.next(true);
+        console.log('AuthService initialized');
 
         supabase.auth.onAuthStateChange((_event, session) => {
             this._session$.next(session ?? null);
@@ -27,6 +32,7 @@ export class AuthService {
     }
 
     async signIn(email: string, password: string) {
+        console.log('AuthService signIn called');
         return supabase.auth.signInWithPassword({ email, password });
     }
 
