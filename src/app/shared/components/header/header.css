@@ -90,3 +90,25 @@ header {
       justify-content: center;
       gap: 10px;
     }
+
+    .logo-container {
+  cursor: pointer;
+}
+
+.logo-container img {
+  cursor: pointer;
+}
+
+.logo-container {
+  cursor: pointer;
+  display: inline-flex;
+}
+
+.logo-container img {
+  transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.logo-container:hover img {
+  transform: scale(1.03);
+  opacity: 0.9;
+}
