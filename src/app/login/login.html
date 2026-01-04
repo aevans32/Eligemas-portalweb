@@ -1,0 +1,56 @@
+<div class="page-container">
+  <app-header></app-header>
+  <div class="title-container">
+    <div class="title">
+      <span>Inicia sesion para comenzar!</span>
+    </div>
+  </div>
+  <div class="content-container">
+    <div class="card">
+      <div class="form-title-container">
+        <span>INICIO DE SESIÓN</span>
+      </div>
+      <form [formGroup]="loginForm">
+        <mat-form-field class="email" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input type="email" matInput formControlName="email" />
+          @if(loginForm.controls.email.hasError('required')){
+            <mat-error>Email es requerido</mat-error>
+          } 
+          @if(loginForm.controls.email.hasError('email')){
+            <mat-error>Ingresa un email valido</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input type="password" matInput formControlName="password" />
+          @if(loginForm.controls.password.hasError('required')){
+          <mat-error>Contraseña es requerida</mat-error>
+          } @if(loginForm.controls.password.hasError('minlength')){
+          <mat-error>La contraseña debe tener al menos 8 caracteres</mat-error>
+          }
+        </mat-form-field>
+        <div class="forgot-password">
+          <span routerLink="/forgot-password">¿Olvidaste tu contraseña?</span>
+        </div>
+        <button
+          type="button"
+          mat-flat-button
+          (click)="login()"
+          [disabled]="loginForm.invalid"
+        >
+          INGRESAR
+        </button>
+        <div class="register">
+          <span
+            >Si no tienes cuenta
+            <span class="text-link" routerLink="/register"
+              >regístrate</span
+            ></span
+          >
+        </div>
+      </form>
+    </div>
+  </div>
+  
+</div>
