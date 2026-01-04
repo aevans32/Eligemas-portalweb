@@ -6,7 +6,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
-import { Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Header } from "../shared/components/header/header";
 import { AuthService } from '../core/services/auth.service';
 
@@ -20,6 +20,7 @@ export class Login {
 
   authService = inject(AuthService);
   router = inject(Router);
+  route = inject(ActivatedRoute);
   
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -43,6 +44,9 @@ export class Login {
       return;
     }
 
-    await this.router.navigateByUrl('/');
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+    await this.router.navigateByUrl(returnUrl);
+    // TODO: delete after testing
+    // await this.router.navigateByUrl('/');
   }
 }
