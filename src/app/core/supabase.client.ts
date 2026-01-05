@@ -1,7 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
 
-console.log('Creating Supabase client instance');
 export const supabase = createClient(
     environment.supabaseUrl,
     environment.supabasePublishableKey,
@@ -10,8 +9,8 @@ export const supabase = createClient(
         {
             persistSession: false,      // DEV: avoids Web Locks + storage contention
             autoRefreshToken: true,
-            detectSessionInUrl: true,
-            storage: localStorage
+            detectSessionInUrl: true,   // important for email-confirm redirect
+            // storage: localStorage    // We can re-enable persistence later using storage: localStorage once locks are stable.
         }
     }
 );

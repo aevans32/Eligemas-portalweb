@@ -16,6 +16,11 @@ export const routes: Routes = [
     loadComponent: () => import('./signup/signup').then(m => m.Signup),
   },
   {
+    path: 'basic-info',
+    canMatch: [authGuard],
+    loadComponent: () => import('./basic-info/basic-info').then(m => m.BasicInfo),
+  },
+  {
     path: 'dashboard',
     canMatch: [authGuard],
     loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard),

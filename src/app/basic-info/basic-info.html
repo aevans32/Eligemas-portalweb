@@ -1,0 +1,50 @@
+<div class="page-container"> 
+    <app-header></app-header> 
+    <div class="content-container"> 
+        <form [formGroup]="form" (ngSubmit)="save()"> 
+            
+            <mat-form-field appearance="outline"> 
+                <mat-label>Nombres</mat-label> 
+                <input matInput formControlName="nombres" /> 
+            </mat-form-field> 
+            <mat-form-field appearance="outline"> 
+                <mat-label>Apellidos</mat-label> 
+                <input matInput formControlName="apellidos" /> 
+            </mat-form-field> 
+            <mat-form-field appearance="outline"> 
+                <mat-label>DNI</mat-label> 
+                <input matInput formControlName="dni" /> 
+            </mat-form-field> 
+            <mat-form-field appearance="outline"> 
+                <mat-label>Estado Civil</mat-label> 
+                <mat-select formControlName="estadoCivil"> 
+                    <mat-option *ngFor="let e of estadoCivilOptions" [value]="e">{{ e }}</mat-option> 
+                </mat-select> 
+            </mat-form-field> 
+            <mat-form-field appearance="outline"> 
+                <mat-label>Celular</mat-label> 
+                <input matInput formControlName="celular" /> 
+            </mat-form-field> 
+            <mat-form-field appearance="outline"> 
+                <mat-label>Fecha de nacimiento</mat-label> 
+                <input matInput type="date" formControlName="fechaNacimiento" /> 
+            </mat-form-field> 
+            <mat-form-field appearance="outline"> 
+                <mat-label>Dirección</mat-label> 
+                <input matInput formControlName="direccion" /> 
+            </mat-form-field> 
+            <mat-form-field appearance="outline"> 
+                <mat-label>Ciudad</mat-label> 
+                <input matInput formControlName="ciudad" /> 
+            </mat-form-field> 
+            <mat-form-field appearance="outline"> 
+                <mat-label>Departamento</mat-label> 
+                <mat-select formControlName="departamentoCode"> 
+                    <mat-option *ngFor="let d of departamentos" [value]="d.code">{{ d.nombre }}</mat-option> 
+                </mat-select> 
+            </mat-form-field> 
+            <button mat-flat-button type="submit" [disabled]="form.invalid"> REGISTRARME </button> 
+        </form> 
+    </div> 
+    <app-footer></app-footer> 
+</div>
