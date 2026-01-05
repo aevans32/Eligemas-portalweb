@@ -35,8 +35,7 @@ export class Login {
     const password = this.loginForm.controls.password.value!;
 
     const { data, error } = await this.authService.signIn(email, password);
-    console.log('SESSION:', data.session);
-    console.log('ACCESS TOKEN:', data.session?.access_token);
+    console.log('Login successful.');
 
     if (error) {
       //TODO: show a MatSnackBar or a notification service
@@ -46,7 +45,5 @@ export class Login {
 
     const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
     await this.router.navigateByUrl(returnUrl);
-    // TODO: delete after testing
-    // await this.router.navigateByUrl('/');
   }
 }

@@ -1,0 +1,66 @@
+.content-container { 
+    padding: 16px; 
+}
+
+.title {
+  margin: 0 0 12px 0;
+}
+
+.solicitudes-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.row-cell {
+  padding: 12px 8px;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+.row-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+
+.row-sub {
+  margin-top: 6px;
+  opacity: 0.8;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.state {
+  opacity: 0.8;
+}
+
+.error { color: #d32f2f; }
+
+.action-button-container {
+                & .action-button {
+                    background-color: #EFF9F7;
+                    color: #103D51;
+                    padding: 12px 24px;
+                    font-size: 18px;
+                    font-weight: 600;
+
+                    border: 2px solid #103D51;
+                    border-radius: 16px;
+
+                    cursor: pointer;
+                    text-decoration: none;
+                    display: inline-block;
+                    transition: background-color 0.3s ease;
+
+                    &:hover {
+                        background-color: #8DD2B5;
+                    }
+                }
+            }
+
+
+/* .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+label { display: block; margin-bottom: 12px; }
+input, select { display: block; width: 100%; padding: 8px; margin-top: 6px; box-sizing: border-box; }
+.actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 16px; } */

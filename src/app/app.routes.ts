@@ -26,6 +26,11 @@ export const routes: Routes = [
     loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard),
   },
   {
+    path: 'nueva-solicitud',
+    canMatch: [authGuard],
+    loadComponent: () => import('./nueva-solicitud/nueva-solicitud').then(m => m.NuevaSolicitud),
+  },
+  {
     // wildcard route for a 404 page
     path: '**',
     redirectTo: '',

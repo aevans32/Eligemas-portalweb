@@ -2,7 +2,53 @@
     <app-header></app-header>
 
     <div class="content-container">
-        <p>dashboard works!</p>
+        
+        <h1>Mis Solicitudes</h1>
+
+        <div class="table-container">
+            @if (loading) {
+                <p>Cargando...</p>
+            }
+            @else {
+                @if (errorMsg) {
+                    <p class="error">{{ errorMsg }}</p>
+                }
+                @else {
+                    @if (solicitudes.length === 0) {
+                        <p>No tienes solicitudes aún.</p>
+                    }
+                    @else {
+
+                        <table mat-table [dataSource]="solicitudes" class="solicitudes-table">
+
+                            <ng-container matColumnDef="row">
+                                <td mat-cell *matCellDef="let s" class="row-cell">
+                                    <div class="row-line">
+                                        <strong>Solicitud #{{ s.id }}</strong>
+                                        <span class="state">{{ s.estado ?? '-' }}</span>
+                                    </div>
+
+                                    <div class="row-sub">
+                                        <span>{{ formatDate(s.created_at) }}</span>
+                                        @if (s.monto_actual_credito !== null) {
+                                            <span>• Monto actual: {{ s.monto_actual_credito }}</span>
+                                        }
+                                    </div>
+                                </td>
+                            </ng-container>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        </table>
+
+                    }
+                }
+            }
+
+
+        </div>
+
+        <div class="action-button-container">
+                <button mat-button routerLink="/nueva-solicitud" class="action-button">Nueva Solicitud</button>
+        </div> 
     </div>
 
     <app-footer></app-footer>
