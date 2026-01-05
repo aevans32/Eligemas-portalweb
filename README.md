@@ -1,59 +1,136 @@
-# CompraDeudaAlphaApp
+# Elige+ — MVP de Reestructuración de Deudas
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.3.
+## Descripción general
 
-## Development server
+**Elige+** es un MVP (Minimum Viable Product) de una plataforma web que permite a los usuarios
+**centralizar, evaluar y refinanciar sus deudas** mediante propuestas ofrecidas por entidades financieras.
 
-To start a local development server, run:
+El objetivo principal del proyecto es servir como un **hub digital de comparación y selección de ofertas de refinanciamiento**, simplificando el proceso para el usuario final y permitiendo escalar gradualmente el número de entidades financieras participantes.
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+## Problema que resuelve
 
-## Code scaffolding
+Actualmente, los usuarios con créditos (por ejemplo, vehiculares) deben:
+- Contactar múltiples entidades financieras
+- Comparar manualmente tasas, plazos y cuotas
+- Repetir el mismo proceso de evaluación crediticia varias veces
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+Elige+ centraliza este flujo permitiendo:
+- Registrar una **solicitud única**
+- Recibir **múltiples propuestas**
+- Elegir la mejor alternativa desde un solo lugar
 
-```bash
-ng generate component component-name
-```
+---
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Arquitectura del MVP
 
-```bash
-ng generate --help
-```
+### Frontend
+- **Angular (Standalone Components)**
+- **Angular Material** para formularios y UI básica
+- Formularios reactivos (`FormGroup`, `FormControl`)
+- Control Flow moderno (`@if`, `@for`)
+- Hosting previsto en **Vercel**
 
-## Building
+### Backend / Data
+- **Supabase**
+  - PostgreSQL como base de datos
+  - Auth (usuarios con UUID)
+  - Row Level Security (RLS) orientado a `user_id`
+- Hosting de backend y base de datos en **Render / Supabase**
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## Modelo de datos (alto nivel)
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Entidades principales
 
-## Running unit tests
+- **profiles**
+  - Usuarios autenticados (UUID)
+- **solicitud**
+  - Representa una solicitud de refinanciamiento
+  - Pertenece a un usuario (`user_id`)
+- **propuesta**
+  - Ofertas realizadas por entidades financieras
+  - Relación 1:N con `solicitud`
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Tablas de catálogo
+- `entidad_financiera`
+- `moneda`
+- `condicion_laboral`
+- `fuente_ingresos`
 
-```bash
-ng test
-```
+Estas tablas permiten crecimiento futuro sin cambios estructurales.
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## Flujo funcional del usuario
 
-```bash
-ng e2e
-```
+### 1. Autenticación
+- Registro e inicio de sesión usando Supabase Auth
+- El usuario queda identificado por un `UUID`
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+### 2. Dashboard — “Mis Solicitudes”
+- Lista todas las solicitudes del usuario autenticado
+- Cada fila representa una solicitud creada previamente
+- Opción para crear una nueva solicitud
 
-## Additional Resources
+### 3. Nueva Solicitud
+Formulario dividido en **dos secciones dentro del mismo módulo**:
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+#### 3.1 Datos del Crédito
+- Entidad financiera actual
+- Moneda
+- Montos (total, actual, bien)
+- Plazo, cuotas pagadas, TCEA
+- Placa del vehículo
+
+#### 3.2 Datos del Perfil Crediticio
+- Condición laboral
+- Datos del empleador
+- Antigüedad laboral
+- Fuente principal de ingresos
+
+El formulario se envía como **una sola transacción**, creando un registro en la tabla `solicitud`.
+
+---
+
+## Estado actual del MVP
+
+### Implementado ✅
+- Autenticación de usuarios
+- Creación de perfiles
+- Catálogos base (moneda, entidades financieras, etc.)
+- Creación de solicitudes
+- Dashboard con listado de solicitudes por usuario
+- Persistencia en PostgreSQL (Supabase)
+
+### Pendiente / Próximos pasos 🚧
+- Simulación de entidades financieras
+- Generación automática de propuestas
+- Selección de propuesta por el usuario
+- Cierre de solicitudes
+- Mejoras visuales y UX
+- Validaciones avanzadas
+- Auditoría y trazabilidad
+
+---
+
+## Principios del diseño
+
+- **MVP-first**: priorizar funcionalidad sobre estilo
+- **Escalabilidad**: catálogos y relaciones extensibles
+- **Seguridad**: acceso a datos basado en `user_id`
+- **Separación clara de responsabilidades** (UI, servicios, datos)
+
+---
+
+## Notas finales
+
+Este proyecto está diseñado como una base sólida para:
+- Pruebas de concepto
+- Iteraciones rápidas
+- Escalamiento funcional y técnico
+
+La estructura actual permite incorporar nuevas entidades financieras, reglas de negocio y flujos más complejos sin refactorizaciones mayores.
+
