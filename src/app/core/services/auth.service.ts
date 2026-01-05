@@ -2,6 +2,7 @@ import { Injectable } from "@angular/core";
 import { Session } from "@supabase/supabase-js";
 import { BehaviorSubject } from "rxjs";
 import { supabase } from "../supabase.client";
+import { ProfileInsert } from "../../shared/models/profile-insert";
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -12,11 +13,16 @@ export class AuthService {
     private _loaded$ = new BehaviorSubject<boolean>(false);
     loaded$ = this._loaded$.asObservable();
 
+    private initialized = false;
+
     async init() {
+
+        if (this.initialized) return;
+        this.initialized = true;
+
         const { data } = await supabase.auth.getSession();
         this._session$.next(data.session ?? null);
         this._loaded$.next(true);
-        console.log('AuthService initialized');
 
         supabase.auth.onAuthStateChange((_event, session) => {
             this._session$.next(session ?? null);
@@ -32,12 +38,21 @@ export class AuthService {
     }
 
     async signIn(email: string, password: string) {
-        console.log('AuthService signIn called');
         return supabase.auth.signInWithPassword({ email, password });
     }
 
     async signOut() {
         return supabase.auth.signOut();
+    }
+
+    /** Insert profile row (requires authenticated user + RLS) */
+    createProfile(profile: ProfileInsert) {
+        return supabase.from('profiles').insert(profile).select().single();
+    }
+
+    /** Read departments list for a dropdown */
+    getDepartamentos() {
+        return supabase.from('departamentos').select('code,nombre').order('nombre');
     }
 
 }
