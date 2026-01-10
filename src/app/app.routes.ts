@@ -16,6 +16,10 @@ export const routes: Routes = [
     loadComponent: () => import('./signup/signup').then(m => m.Signup),
   },
   {
+    path: 'privacy-policy',
+    loadComponent: () => import('./privacy-policy/privacy-policy').then(m => m.PrivacyPolicy),
+  },
+  {
     path: 'basic-info',
     canMatch: [authGuard],
     loadComponent: () => import('./basic-info/basic-info').then(m => m.BasicInfo),
