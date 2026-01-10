@@ -9,10 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Header } from "../shared/components/header/header";
 import { AuthService } from '../core/services/auth.service';
+import { Footer } from "../shared/components/footer/footer";
 
 @Component({
   selector: 'app-login',
-  imports: [MatInputModule, Header,ReactiveFormsModule, RouterModule],
+  imports: [MatInputModule, Header, ReactiveFormsModule, RouterModule, Footer],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
