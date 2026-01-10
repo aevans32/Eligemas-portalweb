@@ -47,6 +47,16 @@ export class NuevaSolicitud implements OnInit {
   submitting = false;
   errorMsg: string | null = null;
 
+  step = 1; // 1 = Credito, 2 = Perfil
+
+  goStep(next: 1 | 2) {
+    this.step = next;
+    // optional: scroll to top of wrapper for nicer UX
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+
+
   form = new FormGroup({
     // Datos del Crédito
     entidad_financiera_id: new FormControl<number | null>(null),
