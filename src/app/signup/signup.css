@@ -1,0 +1,97 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.page-container .content-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #f4f6fa;
+  border-radius: 16px;
+  padding: 40px;
+
+  max-width: 480px;
+  width: 100%;
+  margin: 24px auto;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.page-container .content-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.page-container form {
+  width: 100%;
+  max-width: 260px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.page-container button {
+  margin-top: 16px;
+}
+
+
+/* TITLE */
+.page-container .title-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 54px;
+  margin-bottom: 16px;
+}
+
+.page-container .title-container .title {
+  text-align: center;
+}
+
+.page-container .title-container .title span {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* INSTRUCTIONS */
+.page-container .instructions {
+  margin-top: 12px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.page-container .instructions span {
+  font-size: 13px;
+  color: #6b7280; /* neutral gray */
+  line-height: 1.4;
+}
+
+/* Optional: clickable hint styling */
+.page-container .instructions span[routerLink] {
+  cursor: default;
+}
+
+
+@media (max-width: 480px) {
+  .page-container .title-container .title span {
+    font-size: 20px;
+  }
+
+  .page-container .instructions span {
+    font-size: 12px;
+  }
+}
+
+
+@media (min-width: 768px) {
+  .page-container .content-wrapper {
+    width: 420px;
+    height: 420px;
+  }
+}
