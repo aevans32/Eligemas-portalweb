@@ -1,21 +1,99 @@
-.content-container { 
-    padding: 16px; 
+/* PAGE LAYOUT */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Same wrapper style as other pages */
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+
+  background-color: #f4f6fa;
+  border-radius: 16px;
+  padding: 28px;
+
+  max-width: 1000px;
+  width: 100%;
+  margin: 24px auto;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+.content-inner {
+  width: 100%;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+/* TITLE + SUBTITLE (same pattern) */
+.title-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 6px;
+  margin-bottom: 10px;
 }
 
 .title {
-  margin: 0 0 12px 0;
+  text-align: center;
+  padding: 0 24px;
+}
+
+.title span {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+.subtitle-container {
+  text-align: center;
+  padding: 0 24px;
+  margin-bottom: 18px;
+}
+
+.subtitle-container span {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* CARD FOR TABLE CONTENT */
+.table-card {
+  background: white;
+  border-radius: 12px;
+  padding: 10px;
+}
+
+/* TABLE */
+.table-container {
+  padding: 8px;
 }
 
 .solicitudes-table {
   width: 100%;
-  border-collapse: collapse;
+  border-collapse: separate;
+  border-spacing: 0 10px; /* creates space between rows */
 }
 
+/* Make each row look like a list item card */
 .row-cell {
-  padding: 12px 8px;
-  border-bottom: 1px solid rgba(0,0,0,0.12);
+  padding: 14px 14px;
+  background: #f8fafc;
+  border-radius: 10px;
+
+  border: 1px solid rgba(17, 24, 39, 0.08);
 }
 
+/* Hover effect (feels clickable) */
+.solicitudes-table tr.mat-mdc-row:hover .row-cell {
+  background: #eef2ff;
+  border-color: rgba(17, 24, 39, 0.14);
+}
+
+/* Row layout */
 .row-line {
   display: flex;
   justify-content: space-between;
@@ -25,42 +103,75 @@
 
 .row-sub {
   margin-top: 6px;
-  opacity: 0.8;
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
+
+  font-size: 12px;
+  color: #6b7280;
 }
 
+/* Estado as a pill badge */
 .state {
-  opacity: 0.8;
+  font-size: 12px;
+  font-weight: 600;
+  color: #111827;
+
+  background: rgba(16, 61, 81, 0.10);
+  padding: 4px 10px;
+  border-radius: 999px;
 }
 
-.error { color: #d32f2f; }
+/* Messages */
+.error {
+  color: #d32f2f;
+  padding: 8px 10px;
+}
 
+/* CTA button */
 .action-button-container {
-                & .action-button {
-                    background-color: #EFF9F7;
-                    color: #103D51;
-                    padding: 12px 24px;
-                    font-size: 18px;
-                    font-weight: 600;
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
 
-                    border: 2px solid #103D51;
-                    border-radius: 16px;
+.action-button-container .action-button {
+  background-color: #EFF9F7;
+  color: #103D51;
+  padding: 12px 24px;
+  font-size: 18px;
+  font-weight: 600;
 
-                    cursor: pointer;
-                    text-decoration: none;
-                    display: inline-block;
-                    transition: background-color 0.3s ease;
+  border: 2px solid #103D51;
+  border-radius: 16px;
 
-                    &:hover {
-                        background-color: #8DD2B5;
-                    }
-                }
-            }
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background-color 0.3s ease;
+}
 
+.action-button-container .action-button:hover {
+  background-color: #8DD2B5;
+}
 
-/* .card { border: 1px solid #ddd; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
-label { display: block; margin-bottom: 12px; }
-input, select { display: block; width: 100%; padding: 8px; margin-top: 6px; box-sizing: border-box; }
-.actions { display: flex; justify-content: space-between; gap: 12px; margin-top: 16px; } */
+/* MOBILE */
+@media (max-width: 600px) {
+  .content-wrapper {
+    padding: 16px;
+    margin: 16px auto;
+  }
+
+  .title span {
+    font-size: 20px;
+  }
+
+  .row-cell {
+    padding: 12px;
+  }
+
+  .action-button-container .action-button {
+    width: 100%;
+    max-width: 360px;
+  }
+}
