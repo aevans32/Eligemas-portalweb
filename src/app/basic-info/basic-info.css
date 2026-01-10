@@ -1,0 +1,166 @@
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* TITLE */
+.page-container .title-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 54px;
+  margin-bottom: 10px;
+}
+
+.page-container .title-container .title {
+  text-align: center;
+  padding: 0 24px;
+}
+
+.page-container .title-container .title span {
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary-color);
+}
+
+/* SUBTITLE / INSTRUCTIONS */
+.page-container .subtitle-container {
+  text-align: center;
+  padding: 0 24px;
+  margin-bottom: 18px;
+}
+
+.page-container .subtitle-container span {
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* WRAPPER (rounded square) */
+.page-container .content-wrapper {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #f4f6fa;
+  border-radius: 16px;
+  padding: 32px;
+
+  max-width: 520px;
+  width: 100%;
+  margin: 24px auto;
+
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* CONTENT */
+.page-container .content-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+/* FORM LAYOUT */
+.page-container form {
+  width: 100%;
+  max-width: 320px; /* a bit wider than signup, more fields */
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.page-container button {
+  margin-top: 10px;
+}
+
+/* Desktop square shape */
+@media (min-width: 768px) {
+  .page-container .content-wrapper {
+    width: 520px;
+    height: 520px;
+  }
+}
+
+/* Mobile polish */
+@media (max-width: 480px) {
+  .page-container .title-container .title span {
+    font-size: 20px;
+  }
+
+  .page-container .subtitle-container span {
+    font-size: 12px;
+  }
+
+  .page-container .content-wrapper {
+    padding: 24px;
+    margin: 16px auto;
+  }
+}
+
+/* Grid 2 columnas dentro del wrapper */
+.page-container .basic-info-form {
+  width: 100%;
+  max-width: 720px;              /* ajusta según tu wrapper */
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px 16px;                /* row gap / column gap */
+  align-items: start;
+}
+
+/* Asegura que Angular Material no “encoga” */
+.page-container .basic-info-form mat-form-field {
+  width: 100%;
+}
+
+/* Helpers para controlar spans */
+.page-container .basic-info-form .span-1 {
+  grid-column: span 1;
+}
+
+.page-container .basic-info-form .span-2 {
+  grid-column: 1 / -1;           /* full width */
+}
+
+/* Botón full width y centrado visual */
+.page-container .basic-info-form button.span-2 {
+  margin-top: 8px;
+  height: 44px;
+  border-radius: 999px;          /* estilo “pill” como tu referencia */
+}
+
+/* Responsive: en mobile todo a 1 columna */
+@media (max-width: 600px) {
+  .page-container .basic-info-form {
+    grid-template-columns: 1fr;
+  }
+
+  .page-container .basic-info-form .span-2 {
+    grid-column: span 1;
+  }
+}
+
+
+/* Texto de privacidad */
+.page-container .basic-info-form .privacy-text {
+  margin-top: 4px;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.page-container .basic-info-form .privacy-text span {
+  font-size: 11px;
+  line-height: 1.4;
+  color: #6b7280; /* gris neutral */
+}
+
+/* Link de política */
+.page-container .basic-info-form .privacy-link {
+  color: var(--primary-color);
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.page-container .basic-info-form .privacy-text {
+  opacity: 0.85;
+}
