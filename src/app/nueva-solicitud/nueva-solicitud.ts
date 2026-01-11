@@ -11,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatRadioModule } from '@angular/material/radio';
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -23,7 +24,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatButtonModule
+    MatButtonModule,
+    MatRadioModule
   ],
   templateUrl: './nueva-solicitud.html',
   styleUrl: './nueva-solicitud.css',
@@ -40,7 +42,6 @@ export class NuevaSolicitud implements OnInit {
 
   entidades: CatalogItem[] = [];
   monedas: CatalogItem[] = [];
-  condiciones: CatalogItem[] = [];
   
 
   loading = true;
@@ -74,7 +75,9 @@ export class NuevaSolicitud implements OnInit {
     placa_vehiculo: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(6)]),
 
     // Perfil (condicion_laboral_id NOT NULL)
-    condicion_laboral_id: new FormControl<number | null>(null, [Validators.required]),
+    // condicion_laboral_id: new FormControl<number | null>(null, [Validators.required]),
+    es_dependiente: new FormControl<boolean | null>(null, [Validators.required]),
+
 
     // Opcionales
     ruc_empleador: new FormControl<string | null>(null, [Validators.maxLength(11)]),
@@ -98,19 +101,32 @@ export class NuevaSolicitud implements OnInit {
     try {
       this.loading = true;
 
-      const [e, m, c] = await Promise.all([
+      const [e, m] = await Promise.all([
         this.catalogos.getEntidadesFinancieras(),
         this.catalogos.getMonedas(),
-        this.catalogos.getCondicionesLaborales(),
       ]);
 
       if (e.error) throw e.error;
       if (m.error) throw m.error;
-      if (c.error) throw c.error;
 
       this.entidades = e.data ?? [];
       this.monedas = m.data ?? [];
-      this.condiciones = c.data ?? [];
+
+      this.form.controls.es_dependiente.valueChanges.subscribe((v) => {
+        if (v === true) {
+          // Dependiente → limpiar independiente
+          this.form.controls.ruc_titular.reset(null);
+          this.form.controls.ocupacion.reset(null);
+        }
+
+        if (v === false) {
+          // Independiente → limpiar dependiente
+          this.form.controls.ruc_empleador.reset(null);
+          this.form.controls.razon_social_empleador.reset(null);
+        }
+      });
+
+
       
     } catch (err: any) {
       this.errorMsg = err?.message ?? 'Error cargando catálogos';
@@ -131,6 +147,20 @@ export class NuevaSolicitud implements OnInit {
     this.perfilSection?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  private logInvalidControls() {
+    const invalid = Object.entries(this.form.controls)
+      .filter(([_, c]) => c.invalid)
+      .map(([name, c]) => ({
+        name,
+        value: c.value,
+        errors: c.errors
+      }));
+
+    console.log('[NuevaSolicitud] Controles inválidos:', invalid);
+  }
+
+
+
   
 
   private upperOrNull(v: string | null | undefined) {
@@ -141,18 +171,20 @@ export class NuevaSolicitud implements OnInit {
 
 
   async enviar() {
-    // TODO:  MVP permite nulls; lo único inválido aquí suelen ser maxLength.
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
+      // this.logInvalidControls();
       return;
     }
+
 
     const session = this.auth.session;
     const userId = session?.user?.id;
 
     if (!userId) {
       this.errorMsg = 'No hay sesión activa. Vuelve a iniciar sesión.';
+      // console.log('[NuevaSolicitud] no hay sesión activa');
       return;
     }
 
@@ -167,6 +199,7 @@ export class NuevaSolicitud implements OnInit {
         // aunque tengas Validators.required, TS no lo sabe; y además esto refuerza UX
         this.form.controls.placa_vehiculo.setErrors({ required: true });
         this.form.controls.placa_vehiculo.markAsTouched();
+        // console.log('[NuevaSolicitud] placa inválida');
         return;
       }
 
@@ -188,7 +221,7 @@ export class NuevaSolicitud implements OnInit {
 
         placa_vehiculo: placa, // <-- ahora sí es string
 
-        condicion_laboral_id: v.condicion_laboral_id!,
+        es_dependiente: v.es_dependiente!,
 
         ruc_empleador: this.upperOrNull(v.ruc_empleador),
         razon_social_empleador: (v.razon_social_empleador ?? '').trim() || null,

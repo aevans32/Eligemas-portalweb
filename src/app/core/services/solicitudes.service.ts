@@ -18,7 +18,7 @@ export type SolicitudInsert = {
 
   placa_vehiculo: string;
 
-  condicion_laboral_id: number;
+  es_dependiente: boolean;
 
   // opcionales
   ruc_empleador?: string | null;

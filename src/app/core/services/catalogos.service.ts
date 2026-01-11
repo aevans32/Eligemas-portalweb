@@ -22,13 +22,6 @@ export class CatalogosService {
             .order('codigo');
     }
 
-    getCondicionesLaborales() {
-        return supabase
-            .from('condicion_laboral')
-            .select('id,nombre')
-            .eq('activo', true)
-            .order('nombre');
-    }
 
     getFuentesIngresos() {
         return supabase
