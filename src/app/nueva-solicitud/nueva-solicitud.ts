@@ -5,7 +5,7 @@ import { CatalogItem, CatalogosService } from '../core/services/catalogos.servic
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService } from '../core/services/auth.service';
 import { Router, RouterModule } from '@angular/router';
-import { SolicitudesService } from '../core/services/solicitudes.service';
+import { SolicitudesService, SolicitudInsert } from '../core/services/solicitudes.service';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -41,7 +41,7 @@ export class NuevaSolicitud implements OnInit {
   entidades: CatalogItem[] = [];
   monedas: CatalogItem[] = [];
   condiciones: CatalogItem[] = [];
-  fuentes: CatalogItem[] = [];
+  
 
   loading = true;
   submitting = false;
@@ -58,29 +58,36 @@ export class NuevaSolicitud implements OnInit {
 
 
   form = new FormGroup({
-    // Datos del Crédito
-    entidad_financiera_id: new FormControl<number | null>(null),
-    moneda_id: new FormControl<number | null>(null),
+    // Datos del Crédito (NOT NULL)
+    entidad_financiera_id: new FormControl<number | null>(null, [Validators.required]),
+    moneda_id: new FormControl<number | null>(null, [Validators.required]),
 
-    monto_total_credito: new FormControl<number | null>(null),
-    monto_total_bien: new FormControl<number | null>(null),
-    monto_actual_credito: new FormControl<number | null>(null),
+    monto_total_credito: new FormControl<number | null>(null, [Validators.required]),
+    monto_actual_credito: new FormControl<number | null>(null, [Validators.required]),
 
-    plazo_total_meses: new FormControl<number | null>(null),
-    numero_cuotas_pagadas: new FormControl<number | null>(null),
+    plazo_total_meses: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
+    numero_cuotas_pagadas: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
 
-    tcea: new FormControl<number | null>(null),
-    placa_vehiculo: new FormControl<string | null>(null, [Validators.maxLength(6)]),
+    tcea: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    tea: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
 
-    // Datos del Perfil Crediticio
-    condicion_laboral_id: new FormControl<number | null>(null),
+    placa_vehiculo: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(6)]),
+
+    // Perfil (condicion_laboral_id NOT NULL)
+    condicion_laboral_id: new FormControl<number | null>(null, [Validators.required]),
+
+    // Opcionales
     ruc_empleador: new FormControl<string | null>(null, [Validators.maxLength(11)]),
     razon_social_empleador: new FormControl<string | null>(null),
-    antiguedad_laboral_meses: new FormControl<number | null>(null),
 
     ruc_titular: new FormControl<string | null>(null, [Validators.maxLength(11)]),
-    fuente_ingresos_id: new FormControl<number | null>(null),
+    ocupacion: new FormControl<string | null>(null, [Validators.maxLength(50)]),
+
+    // NOT NULL
+    moneda_ingreso_id: new FormControl<number | null>(null, [Validators.required]),
+    ingreso_bruto: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
   });
+
 
 
 
@@ -91,22 +98,20 @@ export class NuevaSolicitud implements OnInit {
     try {
       this.loading = true;
 
-      const [e, m, c, f] = await Promise.all([
+      const [e, m, c] = await Promise.all([
         this.catalogos.getEntidadesFinancieras(),
         this.catalogos.getMonedas(),
         this.catalogos.getCondicionesLaborales(),
-        this.catalogos.getFuentesIngresos(),
       ]);
 
       if (e.error) throw e.error;
       if (m.error) throw m.error;
       if (c.error) throw c.error;
-      if (f.error) throw f.error;
 
       this.entidades = e.data ?? [];
       this.monedas = m.data ?? [];
       this.condiciones = c.data ?? [];
-      this.fuentes = f.data ?? [];
+      
     } catch (err: any) {
       this.errorMsg = err?.message ?? 'Error cargando catálogos';
     } finally {
@@ -126,11 +131,14 @@ export class NuevaSolicitud implements OnInit {
     this.perfilSection?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 
+  
+
   private upperOrNull(v: string | null | undefined) {
     if (!v) return null;
     const t = v.trim();
     return t ? t.toUpperCase() : null;
   }
+
 
   async enviar() {
     // TODO:  MVP permite nulls; lo único inválido aquí suelen ser maxLength.
@@ -154,31 +162,43 @@ export class NuevaSolicitud implements OnInit {
 
       const v = this.form.getRawValue();
 
-      const payload = {
+      const placa = this.upperOrNull(v.placa_vehiculo);
+      if (!placa) {
+        // aunque tengas Validators.required, TS no lo sabe; y además esto refuerza UX
+        this.form.controls.placa_vehiculo.setErrors({ required: true });
+        this.form.controls.placa_vehiculo.markAsTouched();
+        return;
+      }
+
+      const payload: SolicitudInsert = {
         user_id: userId,
         estado: 'ACTIVA',
 
-        entidad_financiera_id: v.entidad_financiera_id,
-        moneda_id: v.moneda_id,
+        entidad_financiera_id: v.entidad_financiera_id!,
+        moneda_id: v.moneda_id!,
 
-        monto_total_credito: v.monto_total_credito,
-        monto_total_bien: v.monto_total_bien,
-        monto_actual_credito: v.monto_actual_credito,
+        monto_total_credito: v.monto_total_credito!,
+        monto_actual_credito: v.monto_actual_credito!,
 
-        plazo_total_meses: v.plazo_total_meses,
-        numero_cuotas_pagadas: v.numero_cuotas_pagadas,
+        plazo_total_meses: v.plazo_total_meses!,
+        numero_cuotas_pagadas: v.numero_cuotas_pagadas!,
 
-        tcea: v.tcea,
-        placa_vehiculo: this.upperOrNull(v.placa_vehiculo),
+        tea: v.tea!,
+        tcea: v.tcea!,
 
-        condicion_laboral_id: v.condicion_laboral_id,
+        placa_vehiculo: placa, // <-- ahora sí es string
+
+        condicion_laboral_id: v.condicion_laboral_id!,
+
         ruc_empleador: this.upperOrNull(v.ruc_empleador),
         razon_social_empleador: (v.razon_social_empleador ?? '').trim() || null,
-        antiguedad_laboral_meses: v.antiguedad_laboral_meses,
-
         ruc_titular: this.upperOrNull(v.ruc_titular),
-        fuente_ingresos_id: v.fuente_ingresos_id,
+
+        ocupacion: (v.ocupacion ?? '').trim() || null,
+        moneda_ingreso_id: v.moneda_ingreso_id!,
+        ingreso_bruto: v.ingreso_bruto!,
       };
+
 
       const { data, error } = await this.solicitudes.createSolicitud(payload);
 

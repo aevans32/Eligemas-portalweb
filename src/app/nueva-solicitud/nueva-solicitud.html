@@ -73,14 +73,14 @@
                 <input matInput type="number" step="0.01" formControlName="monto_total_credito" />
               </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Monto Total del Bien</mat-label>
-                <input matInput type="number" step="0.01" formControlName="monto_total_bien" />
-              </mat-form-field>
+              
 
               <mat-form-field appearance="outline">
-                <mat-label>Monto Actual de Crédito</mat-label>
-                <input matInput type="number" step="0.01" formControlName="monto_actual_credito" />
+                <mat-label>Monto Total de Crédito (original)</mat-label>
+                <input matInput type="number" step="0.01" formControlName="monto_total_credito" />
+                @if (form.controls.monto_total_credito.touched && form.controls.monto_total_credito.hasError('required')) {
+                  <mat-error>Campo requerido.</mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field appearance="outline">
@@ -94,7 +94,18 @@
               </mat-form-field>
 
               <mat-form-field appearance="outline">
-                <mat-label>TCEA</mat-label>
+                <mat-label>TEA (%)</mat-label>
+                <input matInput type="number" step="0.01" formControlName="tea" />
+                @if (form.controls.tea.touched && form.controls.tea.hasError('required')) {
+                  <mat-error>Campo requerido.</mat-error>
+                }
+                @if (form.controls.tea.touched && form.controls.tea.hasError('min')) {
+                  <mat-error>No puede ser negativo.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>TCEA (%)</mat-label>
                 <input matInput type="number" step="0.01" formControlName="tcea" />
               </mat-form-field>
 
@@ -141,10 +152,6 @@
                 <input matInput type="text" formControlName="razon_social_empleador" />
               </mat-form-field>
 
-              <mat-form-field appearance="outline">
-                <mat-label>Antigüedad Laboral (meses)</mat-label>
-                <input matInput type="number" formControlName="antiguedad_laboral_meses" />
-              </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <mat-label>RUC de Titular</mat-label>
@@ -155,14 +162,39 @@
               </mat-form-field>
 
               <mat-form-field appearance="outline">
-                <mat-label>Principal Fuente de Ingresos</mat-label>
-                <mat-select formControlName="fuente_ingresos_id">
+                <mat-label>Ocupación</mat-label>
+                <input matInput type="text" maxlength="50" formControlName="ocupacion" />
+                @if (form.controls.ocupacion.touched && form.controls.ocupacion.hasError('maxlength')) {
+                  <mat-error>Máximo 50 caracteres.</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Moneda de Ingreso</mat-label>
+                <mat-select formControlName="moneda_ingreso_id">
                   <mat-option [value]="null">-- Selecciona --</mat-option>
-                  @for (x of fuentes; track x.id) {
-                    <mat-option [value]="x.id">{{ x.nombre }}</mat-option>
+                  @for (x of monedas; track x.id) {
+                    <mat-option [value]="x.id">
+                      {{ x.codigo }} @if (x.nombre) { - {{ x.nombre }} }
+                    </mat-option>
                   }
                 </mat-select>
+                @if (form.controls.moneda_ingreso_id.touched && form.controls.moneda_ingreso_id.hasError('required')) {
+                  <mat-error>Campo requerido.</mat-error>
+                }
               </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Ingreso Bruto</mat-label>
+                <input matInput type="number" step="0.01" formControlName="ingreso_bruto" />
+                @if (form.controls.ingreso_bruto.touched && form.controls.ingreso_bruto.hasError('required')) {
+                  <mat-error>Campo requerido.</mat-error>
+                }
+                @if (form.controls.ingreso_bruto.touched && form.controls.ingreso_bruto.hasError('min')) {
+                  <mat-error>No puede ser negativo.</mat-error>
+                }
+              </mat-form-field>
+
 
               <div class="actions">
                 <button mat-stroked-button type="button" (click)="goStep(1)">Anterior</button>

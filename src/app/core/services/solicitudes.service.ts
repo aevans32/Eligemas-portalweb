@@ -2,31 +2,37 @@ import { Injectable } from '@angular/core';
 import { supabase } from '../supabase.client';
 
 export type SolicitudInsert = {
-  user_id: string; // uuid
+  user_id: string;
 
-  entidad_financiera_id?: number | null;
-  moneda_id?: number | null;
+  entidad_financiera_id: number;
+  moneda_id: number;
 
-  monto_total_credito?: number | null;
-  monto_total_bien?: number | null;
-  monto_actual_credito?: number | null;
+  monto_total_credito: number;
+  monto_actual_credito: number;
 
-  plazo_total_meses?: number | null;
-  numero_cuotas_pagadas?: number | null;
+  plazo_total_meses: number;
+  numero_cuotas_pagadas: number;
 
-  tcea?: number | null;
-  placa_vehiculo?: string | null;
+  tcea: number;
+  tea: number;
 
-  condicion_laboral_id?: number | null;
+  placa_vehiculo: string;
+
+  condicion_laboral_id: number;
+
+  // opcionales
   ruc_empleador?: string | null;
   razon_social_empleador?: string | null;
-  antiguedad_laboral_meses?: number | null;
-
   ruc_titular?: string | null;
-  fuente_ingresos_id?: number | null;
+  ocupacion?: string | null;
+
+  // nuevos NOT NULL
+  moneda_ingreso_id: number;
+  ingreso_bruto: number;
 
   estado?: string; // 'ACTIVA'
 };
+
 
 export type SolicitudRow = {
   id: number;
