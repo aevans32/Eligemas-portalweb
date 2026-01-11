@@ -4,6 +4,11 @@ import { BehaviorSubject } from "rxjs";
 import { supabase } from "../supabase.client";
 import { ProfileInsert } from "../../shared/models/profile-insert";
 
+type ProfileMini = { nombres: string | null };
+
+export const LS_USER_NAME = 'eligeplus.userName';
+
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
     
@@ -14,6 +19,8 @@ export class AuthService {
     loaded$ = this._loaded$.asObservable();
 
     private initialized = false;
+
+    
 
     async init() {
 
@@ -79,5 +86,30 @@ export class AuthService {
         .select('id,codigo,nombre')
         .order('id');
     }
+
+    async getMyProfile() {
+        const uid = this.session?.user.id;
+        if (!uid) return { data: null as ProfileMini | null, error: null as any };
+
+        return supabase
+            .from('profiles')
+            .select('nombres')
+            .eq('id', uid)
+            .single<ProfileMini>();
+    }
+
+    setCachedUserName(name: string | null) {
+        if (name) {
+            localStorage.setItem(LS_USER_NAME, name);
+        } else {
+            localStorage.removeItem(LS_USER_NAME);
+        }
+    }
+
+    getCachedUserName(): string | null {
+        return localStorage.getItem(LS_USER_NAME);
+    }
+
+
 
 }

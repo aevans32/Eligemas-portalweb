@@ -29,22 +29,31 @@ export class Login {
   });
 
   async login() {
-
     if (this.loginForm.invalid) return;
 
     const email = this.loginForm.controls.email.value!;
     const password = this.loginForm.controls.password.value!;
 
-    const { data, error } = await this.authService.signIn(email, password);
-    console.log('Login successful.');
+    const { error } = await this.authService.signIn(email, password);
 
     if (error) {
-      //TODO: show a MatSnackBar or a notification service
       console.error('Login error:', error.message);
       return;
     }
 
-    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+    // Ahora que ya hay sesión, trae profile y cachea nombre
+    const { data: profile, error: profileError } = await this.authService.getMyProfile();
+
+    if (profileError) {
+      console.warn('getMyProfile error:', profileError.message);
+    }
+
+    const nombre = profile?.nombres?.trim() || null;
+    this.authService.setCachedUserName(nombre);
+
+    const returnUrl =
+      this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+
     await this.router.navigateByUrl(returnUrl);
   }
 }
