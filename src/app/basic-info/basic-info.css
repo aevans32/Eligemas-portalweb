@@ -164,3 +164,85 @@
 .page-container .basic-info-form .privacy-text {
   opacity: 0.85;
 }
+
+/* Para centrar campos "solos" en una fila dentro de un grid de 2 columnas */
+.page-container .basic-info-form {
+  --col-gap: 16px; /* debe coincidir con tu gap */
+}
+
+.page-container .basic-info-form .center-single {
+  grid-column: 1 / -1; /* ocupa toda la fila */
+  width: calc((100% - var(--col-gap)) / 2); /* ancho de 1 columna */
+  justify-self: center; /* centrado horizontal */
+}
+
+/* En mobile vuelve a full width */
+@media (max-width: 600px) {
+  .page-container .basic-info-form .center-single {
+    width: 100%;
+  }
+}
+
+
+
+/* ================================
+   Angular Material form-field skin
+   ================================ */
+/* Angular Material (MDC) - forzar estilos dentro del mat-form-field */
+:host ::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  background-color: #EFF9F7 !important;
+  border-radius: 8px;
+}
+
+/* Borde outline (normal) */
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__notch,
+:host ::ng-deep .mat-mdc-form-field .mdc-notched-outline__trailing {
+  border-color: #8DD2B5 !important;
+}
+
+/* Hover */
+:host ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__notch,
+:host ::ng-deep .mat-mdc-form-field:hover .mdc-notched-outline__trailing {
+  border-color: #8DD2B5 !important;
+}
+
+/* Focus */
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__leading,
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__notch,
+:host ::ng-deep .mat-mdc-form-field.mat-focused .mdc-notched-outline__trailing {
+  border-color: #8DD2B5 !important;
+  border-width: 2px !important;
+}
+
+
+/* ================================
+   Submit button custom style
+   ================================ */
+
+:host ::ng-deep button.submit-button.mat-mdc-unelevated-button {
+  background-color: #ADEBB3 !important;
+  color: #FFFFFF !important;
+  border: 2px solid #004B8D !important;
+
+  height: 44px;
+  border-radius: 999px;
+
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+/* Hover */
+:host ::ng-deep button.submit-button.mat-mdc-unelevated-button:hover {
+  background-color: #9FE0A7 !important;
+}
+
+/* Disabled */
+:host ::ng-deep button.submit-button.mat-mdc-unelevated-button:disabled {
+  background-color: #D6EFE0 !important;
+  color: #A0A0A0 !important;
+  border-color: #B0D6C5 !important;
+  opacity: 0.8;
+  cursor: not-allowed;
+}

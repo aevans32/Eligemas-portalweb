@@ -29,14 +29,27 @@
         </mat-form-field>
 
         <mat-form-field class="span-1" appearance="outline">
-          <mat-label>DNI</mat-label>
+          <mat-label>Tipo de documento</mat-label>
+          <mat-select formControlName="tipoDocumentoId">
+            <mat-option [value]="null">-- Selecciona --</mat-option>
+            <mat-option *ngFor="let t of tiposDocumento" [value]="t.id">
+              {{ t.codigo }} - {{ t.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="span-1" appearance="outline">
+          <mat-label>N° de documento</mat-label>
           <input matInput formControlName="dni" />
         </mat-form-field>
 
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Estado Civil</mat-label>
-          <mat-select formControlName="estadoCivil">
-            <mat-option *ngFor="let e of estadoCivilOptions" [value]="e">{{ e }}</mat-option>
+          <mat-select formControlName="estadoCivilCodigo">
+            <mat-option [value]="null">-- Selecciona --</mat-option>
+            <mat-option *ngFor="let e of estadosCiviles" [value]="e.codigo">
+              {{ e.nombre }}
+            </mat-option>
           </mat-select>
         </mat-form-field>
 
@@ -45,7 +58,7 @@
           <input matInput formControlName="celular" />
         </mat-form-field>
 
-        <mat-form-field class="span-1" appearance="outline">
+        <mat-form-field class="span-1 center-single" appearance="outline">
           <mat-label>Fecha de nacimiento</mat-label>
           <input matInput type="date" formControlName="fechaNacimiento" />
         </mat-form-field>
@@ -56,11 +69,16 @@
         </mat-form-field>
 
         <mat-form-field class="span-1" appearance="outline">
-          <mat-label>Ciudad</mat-label>
-          <input matInput formControlName="ciudad" />
+          <mat-label>Provincia</mat-label>
+          <input matInput formControlName="provincia" />
         </mat-form-field>
 
         <mat-form-field class="span-1" appearance="outline">
+          <mat-label>Distrito</mat-label>
+          <input matInput formControlName="distrito" />
+        </mat-form-field>
+
+        <mat-form-field class="span-1 center-single" appearance="outline">
           <mat-label>Departamento</mat-label>
           <mat-select formControlName="departamentoCode">
             <mat-option *ngFor="let d of departamentos" [value]="d.code">{{ d.nombre }}</mat-option>
@@ -83,7 +101,7 @@
         </div>
 
 
-        <button class="span-2" mat-flat-button type="submit" [disabled]="form.invalid">
+        <button class="span-2 submit-button" mat-flat-button type="submit" [disabled]="form.invalid">
           REGISTRARME
         </button>
       </form>

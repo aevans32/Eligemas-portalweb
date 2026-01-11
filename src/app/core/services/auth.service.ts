@@ -33,6 +33,8 @@ export class AuthService {
         return this._session$.value;
     }
 
+
+
     async signUp(email: string, password: string) {
         const redirectTo = `${window.location.origin}/basic-info`;
         return supabase.auth.signUp({ 
@@ -60,6 +62,22 @@ export class AuthService {
     /** Read departments list for a dropdown */
     getDepartamentos() {
         return supabase.from('departamentos').select('code,nombre').order('nombre');
+    }
+
+    /** Read estado civil list for dropdown */
+    getEstadosCiviles() {
+    return supabase
+        .from('estados_civiles')
+        .select('codigo,nombre')
+        .order('nombre');
+    }
+
+    /** Read tipos de documento list for dropdown */
+    getTiposDocumento() {
+    return supabase
+        .from('tipos_documento')
+        .select('id,codigo,nombre')
+        .order('id');
     }
 
 }

@@ -3,7 +3,6 @@ import { Header } from "../shared/components/header/header";
 import { Footer } from "../shared/components/footer/footer";
 import { AuthService } from '../core/services/auth.service';
 import { Router, RouterModule } from '@angular/router';
-import { EstadoCivil } from '../shared/models/profile-insert';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';

@@ -2,13 +2,20 @@ export interface ProfileInsert {
   id: string; // uuid
   nombres: string;
   apellidos: string;
-  dni: string; // 8 digits
-  estado_civil: EstadoCivil;
+
+  tipo_documento_id: number;
+  dni: string; // por ahora; luego quizá numero_documento
+
+  // ahora es codigo text (FK a estados_civiles.codigo)
+  estado_civil: string;
+
   celular: string; // 9 digits
   fecha_nacimiento: string; // YYYY-MM-DD
+
   direccion: string;
-  ciudad: string;
+  provincia: string;
+  distrito: string;
+
   departamento_code: string; // must exist in departamentos table
 }
 
-export type EstadoCivil = 'soltero' | 'casado' | 'divorciado' | 'viudo' | 'conviviente';
