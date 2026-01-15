@@ -111,16 +111,69 @@
   color: #6b7280;
 }
 
-/* Estado as a pill badge */
+/* Estado as a BIG pill (button-like) - BASE */
 .state {
-  font-size: 12px;
-  font-weight: 600;
-  color: #111827;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 
-  background: rgba(16, 61, 81, 0.10);
-  padding: 4px 10px;
+  padding: 12px 22px;
+  min-width: 140px;
+  height: 44px;
   border-radius: 999px;
+
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1;
+
+  border: 2px solid transparent;
+  color: #ffffff;
+
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
+
+/* Default (fallback) */
+.state--default {
+  background: #9ca3af;        /* gris */
+  border-color: #6b7280;
+}
+
+/* Ver ofertas (verde) */
+.state--ofertas {
+  background: #16a34a;
+  border-color: #065f46;
+}
+
+/* En Proceso (amarillo) */
+.state--proceso {
+  background: #f59e0b;
+  border-color: #b45309;
+  color: #111827;             /* texto oscuro para contraste */
+}
+
+/* Rechaz linked (rojo) */
+.state--rechazado {
+  background: #dc2626;
+  border-color: #7f1d1d;
+}
+
+/* Finalizado (gris) */
+.state--finalizado {
+  background: #6b7280;
+  border-color: #374151;
+}
+
+
+
+.solicitudes-table tr.mat-mdc-row:hover .state {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.16);
+}
+
+
+
 
 /* Messages */
 .error {
@@ -175,3 +228,4 @@
     max-width: 360px;
   }
 }
+

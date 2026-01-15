@@ -44,7 +44,10 @@
                                             '—' }}
                                         </strong>
 
-                                        <span class="state">{{ s.estado?.nombre ?? '-' }}</span>
+                                        <span 
+                                            class="state"
+                                            [ngClass]="estadoClass(s.estado?.nombre)"
+                                            >{{ s.estado?.nombre ?? '-' }}</span>
                                     </div>
 
                                     <div class="row-sub">

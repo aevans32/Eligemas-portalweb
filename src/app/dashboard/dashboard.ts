@@ -35,7 +35,22 @@ export class Dashboard implements OnInit{
 
   // Material table - no headers
   displayedColumns = ['row'];
-  
+
+  estadoClass(nombre?: string | null): string {
+  switch ((nombre ?? '').toLowerCase()) {
+    case 'ver ofertas':
+      return 'state--ofertas';
+    case 'en proceso':
+      return 'state--proceso';
+    case 'rechazado':
+      return 'state--rechazado';
+    case 'finalizado':
+      return 'state--finalizado';
+    default:
+      return 'state--default';
+  }
+}
+
 
   async ngOnInit() {
 
