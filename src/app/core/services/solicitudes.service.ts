@@ -41,25 +41,69 @@ export type SolicitudRow = {
   moneda_id: number | null;
   entidad_financiera_id: number | null;
   monto_actual_credito: number | null;
+
+  placa_vehiculo: string | null;
+  tcea: number | null;
 };
+
+export type SolicitudListItem = {
+  id: number;
+  created_at: string;
+  monto_actual_credito: number | null;
+  placa_vehiculo: string | null;
+  tcea: number | null;
+  estado: {
+    id: number;
+    nombre: string;
+    mensaje: string;
+  } | null;
+};
+
+
+
 
 @Injectable({ providedIn: 'root' })
 export class SolicitudesService {
 
-    createSolicitud(payload: SolicitudInsert) {
-        return supabase
-        .from('solicitud')
-        .insert(payload)
-        .select('id')
-        .single();
+  createSolicitud(payload: SolicitudInsert) {
+    return supabase
+      .from('solicitud')
+      .insert(payload)
+      .select('id')
+      .single();
+  }
+
+  getMisSolicitudes(userId: string) {
+    return supabase
+      .from('solicitud')
+      .select(`
+        id,
+        created_at,
+        monto_actual_credito,
+        placa_vehiculo,
+        tcea,
+        estado:estado_id (
+          id,
+          nombre,
+          mensaje
+        )
+      `)
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .returns<SolicitudListItem[]>(); // <- importante para tipado
+  }
+
+
+
+  async hasMySolicitud(): Promise<boolean> {
+    const { data, error } = await supabase.rpc('has_my_solicitud');
+
+    if (error) {
+      console.error(error);
+      return false;
     }
 
-    getMisSolicitudes(userId: string) {
-        //TODO: minimal fields, expand later
-        return supabase
-            .from('solicitud')
-            .select('id, estado, created_at, moneda_id, entidad_financiera_id, monto_actual_credito')
-            .eq('user_id', userId)
-            .order('created_at', { ascending: false });
-    }
+    return data === true;
+  }
+
 }

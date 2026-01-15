@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { AuthService } from '../core/services/auth.service';
-import { SolicitudesService, SolicitudRow } from '../core/services/solicitudes.service';
+import { SolicitudesService, SolicitudListItem } from '../core/services/solicitudes.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -26,13 +26,16 @@ export class Dashboard implements OnInit{
   private auth = inject(AuthService);
   private solicitudesService = inject(SolicitudesService);
 
+  hasSolicitud = false;
+
   loading = true;
   errorMsg: string | null = null;
 
-  solicitudes: SolicitudRow[] = [];
+  solicitudes: SolicitudListItem[] = [];
 
   // Material table - no headers
   displayedColumns = ['row'];
+  
 
   async ngOnInit() {
 
@@ -56,6 +59,10 @@ export class Dashboard implements OnInit{
     }
 
     this.solicitudes = data ?? [];
+    
+
+    this.hasSolicitud = await this.solicitudesService.hasMySolicitud();
+
     this.loading = false;
   }
 
