@@ -23,12 +23,17 @@
             {{ userName ?? 'Mi Cuenta' }}
           </button>
 
-          <button
-            matButton
-            class="accent"
-            routerLink="/nueva-solicitud">
-            Nueva Solicitud
-          </button>
+          @if (!hasSolicitud) {
+            <button
+              matButton
+              class="accent"
+              routerLink="/nueva-solicitud">
+              Nueva Solicitud
+            </button>
+          } @else {
+            <span class="header-hint">Solicitud Registrada.</span>
+          }
+          
         } @else {
           <!-- Usuario no logueado -->
           <button

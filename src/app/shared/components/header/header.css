@@ -124,3 +124,25 @@ header {
 *::after {
   box-sizing: border-box;
 }
+
+
+.header-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  height: 36px;                 /* similar a mat-button */
+  padding: 0 16px;
+
+  /* border-radius: 999px;         pill */
+  font-size: 14px;
+  font-weight: 500;
+
+  color: #004B8D;
+  /* background-color: #E6F2FF; */
+  /* border: 1px solid #004B8D; */
+
+  white-space: nowrap;
+  cursor: default;
+  user-select: none;
+}

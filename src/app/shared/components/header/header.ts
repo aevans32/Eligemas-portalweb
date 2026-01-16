@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { SolicitudesService } from '../../../core/services/solicitudes.service';
 
 @Component({
   selector: 'app-header',
@@ -13,13 +14,18 @@ import { AuthService } from '../../../core/services/auth.service';
 })
 export class Header implements OnInit {
   private auth = inject(AuthService);
+  private solicitudesService = inject(SolicitudesService);
 
   isLoggedIn = false;
   userName: string | null = null;
 
+  hasSolicitud = false;
+
   async ngOnInit() {
-    // 🔹 1. Pintar inmediatamente desde cache (UX perfecta)
+    //  1. Pintar inmediatamente desde cache (UX perfecta)
     this.userName = this.auth.getCachedUserName();
+
+    
 
     await this.auth.init();
 
@@ -30,6 +36,14 @@ export class Header implements OnInit {
       this.userName = null;
       this.auth.setCachedUserName(null);
       return;
+    }
+
+    if (this.isLoggedIn) {
+      this.hasSolicitud = await this.solicitudesService.hasMySolicitud();
+      console.log('solicitud encontrada');
+    } else {
+      this.hasSolicitud = false;
+      console.log('sin solicitudes');
     }
 
     // 2. Si ya hay nombre cacheado, no dispares la query
@@ -45,6 +59,8 @@ export class Header implements OnInit {
     } else {
       this.userName = session?.user.email ?? 'Mi cuenta';
     }
+
+    
   }
 }
 
