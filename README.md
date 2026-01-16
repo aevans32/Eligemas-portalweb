@@ -1,136 +1,218 @@
-# Elige+ — MVP de Reestructuración de Deudas
+# **Elige+**
 
-## Descripción general
-
-**Elige+** es un MVP (Minimum Viable Product) de una plataforma web que permite a los usuarios
-**centralizar, evaluar y refinanciar sus deudas** mediante propuestas ofrecidas por entidades financieras.
-
-El objetivo principal del proyecto es servir como un **hub digital de comparación y selección de ofertas de refinanciamiento**, simplificando el proceso para el usuario final y permitiendo escalar gradualmente el número de entidades financieras participantes.
+### MVP de Plataforma Digital para Reestructuración de Deudas
 
 ---
 
-## Problema que resuelve
+## 📌 Descripción general
 
-Actualmente, los usuarios con créditos (por ejemplo, vehiculares) deben:
-- Contactar múltiples entidades financieras
-- Comparar manualmente tasas, plazos y cuotas
-- Repetir el mismo proceso de evaluación crediticia varias veces
+**Elige+** es un **MVP (Minimum Viable Product)** de una plataforma web que permite a los usuarios **centralizar, evaluar y comparar opciones de refinanciamiento de deudas** a través de propuestas emitidas por distintas entidades financieras.
 
-Elige+ centraliza este flujo permitiendo:
-- Registrar una **solicitud única**
-- Recibir **múltiples propuestas**
-- Elegir la mejor alternativa desde un solo lugar
+El proyecto busca funcionar como un **hub digital de intermediación**, donde el usuario registra una sola solicitud y recibe múltiples ofertas, reduciendo fricción, duplicidad de procesos y asimetrías de información.
 
 ---
 
-## Arquitectura del MVP
+## 🎯 Problema que resuelve
+
+Actualmente, un usuario que desea refinanciar un crédito (por ejemplo, vehicular) debe:
+
+* Contactar individualmente a varias entidades financieras
+* Repetir procesos de evaluación crediticia
+* Comparar manualmente tasas, cuotas, plazos y condiciones
+* Afrontar procesos lentos y poco transparentes
+
+**Elige+** centraliza este flujo permitiendo:
+
+* Registrar **una única solicitud**
+* Obtener **múltiples propuestas comparables**
+* Elegir la alternativa más conveniente desde un solo canal digital
+
+---
+
+## 🧩 Alcance del MVP
+
+Este MVP está diseñado para validar:
+
+* La experiencia de usuario
+* El flujo completo de solicitud → evaluación → propuestas
+* La arquitectura técnica base
+* La escalabilidad futura del modelo
+
+No busca replicar un sistema bancario completo, sino **probar el valor del concepto**.
+
+---
+
+## 🏗️ Arquitectura del MVP
 
 ### Frontend
-- **Angular (Standalone Components)**
-- **Angular Material** para formularios y UI básica
-- Formularios reactivos (`FormGroup`, `FormControl`)
-- Control Flow moderno (`@if`, `@for`)
-- Hosting previsto en **Vercel**
 
-### Backend / Data
-- **Supabase**
-  - PostgreSQL como base de datos
-  - Auth (usuarios con UUID)
-  - Row Level Security (RLS) orientado a `user_id`
-- Hosting de backend y base de datos en **Render / Supabase**
+* **Angular** (Standalone Components)
+* **Angular Material** para UI y formularios
+* Formularios reactivos (`FormGroup`, `FormControl`)
+* Control Flow moderno (`@if`, `@for`)
+* Arquitectura basada en servicios
+* Hosting previsto en **Vercel**
+
+### Backend / Datos
+
+* **Supabase**
+
+  * **PostgreSQL** como base de datos
+  * **Supabase Auth** para autenticación (UUID)
+  * **Row Level Security (RLS)** basada en `user_id`
+* Backend y base de datos alojados en **Supabase / Render**
 
 ---
 
-## Modelo de datos (alto nivel)
+## 🗄️ Modelo de datos (alto nivel)
 
 ### Entidades principales
 
-- **profiles**
-  - Usuarios autenticados (UUID)
-- **solicitud**
-  - Representa una solicitud de refinanciamiento
-  - Pertenece a un usuario (`user_id`)
-- **propuesta**
-  - Ofertas realizadas por entidades financieras
-  - Relación 1:N con `solicitud`
+* **profiles**
+
+  * Información del usuario autenticado
+  * Relación 1:1 con Supabase Auth (`UUID`)
+
+* **solicitud**
+
+  * Representa una solicitud de refinanciamiento
+  * Pertenece a un usuario (`user_id`)
+  * Contiene datos del crédito y perfil crediticio
+
+* **propuesta**
+
+  * Ofertas generadas por entidades financieras
+  * Relación **1:N** con `solicitud`
 
 ### Tablas de catálogo
-- `entidad_financiera`
-- `moneda`
-- `condicion_laboral`
-- `fuente_ingresos`
 
-Estas tablas permiten crecimiento futuro sin cambios estructurales.
+* `entidad_financiera`
+* `moneda`
+* `condicion_laboral`
+* `fuente_ingresos`
+
+Estas tablas permiten **escalabilidad sin cambios estructurales** en el core del sistema.
 
 ---
 
-## Flujo funcional del usuario
+## 🔄 Flujo funcional del usuario
 
-### 1. Autenticación
-- Registro e inicio de sesión usando Supabase Auth
-- El usuario queda identificado por un `UUID`
+### 1️⃣ Autenticación
 
-### 2. Dashboard — “Mis Solicitudes”
-- Lista todas las solicitudes del usuario autenticado
-- Cada fila representa una solicitud creada previamente
-- Opción para crear una nueva solicitud
+* Registro e inicio de sesión mediante **Supabase Auth**
+* Identificación única por `UUID`
+* Acceso a datos protegido por RLS
 
-### 3. Nueva Solicitud
-Formulario dividido en **dos secciones dentro del mismo módulo**:
+---
+
+### 2️⃣ Dashboard — *Mis Solicitudes*
+
+* Visualización de todas las solicitudes del usuario
+* Cada fila representa una solicitud creada previamente
+* Acceso al detalle y estado de cada solicitud
+* Opción para crear una nueva solicitud
+
+---
+
+### 3️⃣ Nueva Solicitud
+
+Formulario dividido en **dos secciones dentro de un mismo módulo**, con navegación controlada:
 
 #### 3.1 Datos del Crédito
-- Entidad financiera actual
-- Moneda
-- Montos (total, actual, bien)
-- Plazo, cuotas pagadas, TCEA
-- Placa del vehículo
 
-#### 3.2 Datos del Perfil Crediticio
-- Condición laboral
-- Datos del empleador
-- Antigüedad laboral
-- Fuente principal de ingresos
+* Entidad financiera actual
+* Moneda del crédito
+* Monto total original
+* Monto actual
+* Valor del bien
+* Plazo total
+* Cuotas pagadas
+* TCEA
+* Placa del vehículo
 
-El formulario se envía como **una sola transacción**, creando un registro en la tabla `solicitud`.
+#### 3.2 Perfil Crediticio
+
+* Condición laboral
+* Datos del empleador
+* Antigüedad laboral
+* Fuente principal de ingresos
+
+📌 El formulario se envía como **una única transacción**, generando un registro en la tabla `solicitud`.
 
 ---
 
-## Estado actual del MVP
+## 🚦 Estado actual del MVP
 
 ### Implementado ✅
-- Autenticación de usuarios
-- Creación de perfiles
-- Catálogos base (moneda, entidades financieras, etc.)
-- Creación de solicitudes
-- Dashboard con listado de solicitudes por usuario
-- Persistencia en PostgreSQL (Supabase)
+
+* Autenticación de usuarios
+* Creación automática de perfiles
+* Catálogos base
+* Creación de solicitudes
+* Dashboard por usuario
+* Persistencia en PostgreSQL
+* Seguridad mediante RLS
 
 ### Pendiente / Próximos pasos 🚧
-- Simulación de entidades financieras
-- Generación automática de propuestas
-- Selección de propuesta por el usuario
-- Cierre de solicitudes
-- Mejoras visuales y UX
-- Validaciones avanzadas
-- Auditoría y trazabilidad
+
+* Simulación de entidades financieras
+* Motor de generación de propuestas
+* Comparación visual de ofertas
+* Selección de propuesta por el usuario
+* Cierre y estados de solicitudes
+* Validaciones avanzadas
+* Auditoría y trazabilidad
+* Optimización UX/UI
 
 ---
 
-## Principios del diseño
+## 🧠 Principios de diseño
 
-- **MVP-first**: priorizar funcionalidad sobre estilo
-- **Escalabilidad**: catálogos y relaciones extensibles
-- **Seguridad**: acceso a datos basado en `user_id`
-- **Separación clara de responsabilidades** (UI, servicios, datos)
+* **MVP-first**: funcionalidad antes que estética
+* **Escalabilidad**: modelo extensible desde el inicio
+* **Seguridad por diseño**: acceso basado en `user_id`
+* **Separación de responsabilidades**:
+
+  * UI
+  * Servicios
+  * Persistencia
+* **Iteración rápida** y bajo acoplamiento
 
 ---
 
-## Notas finales
+## 👨‍💻 Equipo y contexto académico
 
-Este proyecto está diseñado como una base sólida para:
-- Pruebas de concepto
-- Iteraciones rápidas
-- Escalamiento funcional y técnico
+**Desarrollador principal**
 
-La estructura actual permite incorporar nuevas entidades financieras, reglas de negocio y flujos más complejos sin refactorizaciones mayores.
+* Andrés Evans
 
+**Product Owners**
+
+* Marcela Aparicio
+* Manuel Ruiz
+* Ayrton Mercado
+
+📘 Proyecto desarrollado como parte de la
+**Maestría en Negocios Digitales – UTEC**
+
+---
+
+## 🌐 Enlaces
+
+* **Repositorio:** *(por definir)*
+* **Producción (futuro):** [https://eligeplus.app](https://eligeplus.app) *(placeholder)*
+
+---
+
+## 📎 Notas finales
+
+**Elige+** está diseñado como una base sólida para:
+
+* Pruebas de concepto
+* Iteraciones ágiles
+* Evaluación de modelos de negocio
+* Escalamiento técnico y funcional
+
+La arquitectura actual permite incorporar nuevas entidades financieras, reglas de negocio y flujos avanzados **sin refactorizaciones mayores**.
+
+---
