@@ -199,7 +199,7 @@ Formulario dividido en **dos secciones dentro de un mismo módulo**, con navegac
 
 ## 🌐 Enlaces
 
-* **Repositorio:** *(por definir)*
+* **Repositorio:** [https://github.com/aevans32/Eligemas-portalweb](https://github.com/aevans32/Eligemas-portalweb)
 * **Producción (futuro):** [https://eligemas.vercel.app/](https://eligemas.vercel.app/)
 
 ---
