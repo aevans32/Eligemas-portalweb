@@ -200,7 +200,7 @@ Formulario dividido en **dos secciones dentro de un mismo módulo**, con navegac
 ## 🌐 Enlaces
 
 * **Repositorio:** *(por definir)*
-* **Producción (futuro):** [https://eligeplus.app](https://eligeplus.app) *(placeholder)*
+* **Producción (futuro):** [https://eligemas.vercel.app/](https://eligemas.vercel.app/)
 
 ---
 
