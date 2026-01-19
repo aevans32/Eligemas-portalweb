@@ -205,7 +205,7 @@ export class NuevaSolicitud implements OnInit {
 
       const payload: SolicitudInsert = {
         user_id: userId,
-        estado: 'ACTIVA',
+        estado_id: 3,
 
         entidad_financiera_id: v.entidad_financiera_id!,
         moneda_id: v.moneda_id!,

@@ -30,13 +30,13 @@ export type SolicitudInsert = {
   moneda_ingreso_id: number;
   ingreso_bruto: number;
 
-  estado?: string; // 'ACTIVA'
+  estado_id?: number;
 };
 
 
 export type SolicitudRow = {
   id: number;
-  estado: string | null;
+  estado_id: number | null;
   created_at: string;
   moneda_id: number | null;
   entidad_financiera_id: number | null;
