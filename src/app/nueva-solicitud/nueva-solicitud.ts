@@ -279,13 +279,11 @@ export class NuevaSolicitud implements OnInit {
         panelClass: ['success-snackbar']
       });
 
-
       const { data, error } = await this.solicitudes.createSolicitud(payload);
 
       if (error) throw error;
 
-      // listo: vuelve al dashboard (puedes pasar el id si quieres)
-      // this.router.navigateByUrl(`/dashboard?solicitud=${data.id}`);
+      // navegar al dashboard
       this.router.navigateByUrl(`/dashboard`);
     } catch (err: any) {
       this.errorMsg = err?.message ?? 'Error enviando solicitud';
