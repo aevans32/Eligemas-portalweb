@@ -21,11 +21,36 @@
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Nombres</mat-label>
           <input matInput formControlName="nombres" />
+
+          <mat-error *ngIf="form.controls.nombres.hasError('required') && form.controls.nombres.touched">
+            Los nombres son obligatorios.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.nombres.hasError('minlength') && form.controls.nombres.touched">
+            Ingresa al menos 2 caracteres.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.nombres.hasError('pattern') && form.controls.nombres.touched">
+            Solo letras y espacios.
+          </mat-error>
+
         </mat-form-field>
 
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Apellidos</mat-label>
           <input matInput formControlName="apellidos" />
+
+          <mat-error *ngIf="form.controls.apellidos.hasError('required') && form.controls.apellidos.touched">
+            Los apellidos son obligatorios.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.apellidos.hasError('minlength') && form.controls.apellidos.touched">
+            Ingresa al menos 2 caracteres.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.apellidos.hasError('pattern') && form.controls.apellidos.touched">
+            Solo letras y espacios.
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field class="span-1" appearance="outline">
@@ -36,12 +61,48 @@
               {{ t.codigo }} - {{ t.nombre }}
             </mat-option>
           </mat-select>
+
+          <mat-error *ngIf="form.controls.tipoDocumentoId.hasError('required') && form.controls.tipoDocumentoId.touched">
+            Selecciona un tipo de documento.
+          </mat-error>
+
         </mat-form-field>
 
-        <mat-form-field class="span-1" appearance="outline">
+
+        <mat-form-field
+          class="span-1"
+          appearance="outline"
+          [matTooltip]="documentoTooltip"
+          matTooltipPosition="above"
+          matTooltipShowDelay="200"
+        >
           <mat-label>N° de documento</mat-label>
-          <input matInput formControlName="dni" />
+
+          <input matInput formControlName="num_documento" />
+
+          <mat-error *ngIf="form.controls.num_documento.hasError('required') && form.controls.num_documento.touched">
+            El número de documento es obligatorio.
+          </mat-error>
+
+          <mat-error
+            *ngIf="
+              (form.controls.num_documento.hasError('minlength') ||
+              form.controls.num_documento.hasError('maxlength')) &&
+              form.controls.num_documento.touched
+            "
+          >
+            Longitud inválida para el tipo de documento seleccionado.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.num_documento.hasError('pattern') && form.controls.num_documento.touched">
+            El formato del documento no es válido.
+          </mat-error>
         </mat-form-field>
+
+
+
+
+
 
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Estado Civil</mat-label>
@@ -51,39 +112,175 @@
               {{ e.nombre }}
             </mat-option>
           </mat-select>
+
+          <mat-error *ngIf="form.controls.estadoCivilCodigo.hasError('required') && form.controls.estadoCivilCodigo.touched">
+            Selecciona tu estado civil.
+          </mat-error>
+
         </mat-form-field>
+
+
 
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Celular</mat-label>
           <input matInput formControlName="celular" />
+
+          <mat-error *ngIf="form.controls.celular.hasError('required') && form.controls.celular.touched">
+            El celular es obligatorio.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.celular.hasError('pattern') && form.controls.celular.touched">
+            Ingresa un celular válido (9 dígitos).
+          </mat-error>
+
         </mat-form-field>
 
         <mat-form-field class="span-1 center-single" appearance="outline">
           <mat-label>Fecha de nacimiento</mat-label>
-          <input matInput type="date" formControlName="fechaNacimiento" />
+          <input 
+            matInput 
+            [matDatepicker]="picker" 
+            formControlName="fechaNacimiento"
+            placeholder="DD/MM/AAAA"
+            inputmode="numeric"
+            maxlength="10"
+            (keypress)="dateKeyPress($event)" 
+          />
+
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('required') && form.controls.fechaNacimiento.touched">
+            La fecha de nacimiento es obligatoria.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('matDatepickerParse') && form.controls.fechaNacimiento.touched">
+            La fecha ingresada no es válida. Usa el formato DD/MM/AAAA.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('invalidDate') && form.controls.fechaNacimiento.touched">
+            La fecha ingresada no es válida. Usa el formato DD/MM/AAAA.
+          </mat-error>
+
+
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('futureDate') && form.controls.fechaNacimiento.touched">
+            La fecha no puede ser futura.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('underAge') && form.controls.fechaNacimiento.touched">
+            Debes ser mayor de 18 años.
+          </mat-error>
+
         </mat-form-field>
 
-        <mat-form-field class="span-2" appearance="outline">
-          <mat-label>Dirección</mat-label>
-          <input matInput formControlName="direccion" />
-        </mat-form-field>
+        <!-- DIRECCIÓN -->
+        <div class="span-2 address-grid">
 
+          <!-- Tipo de vía -->
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="tipoDireccion">
+              <mat-option value="Av.">Avenida</mat-option>
+              <mat-option value="Jr.">Jirón</mat-option>
+              <mat-option value="Calle">Calle</mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="form.controls.tipoDireccion.hasError('required') && form.controls.tipoDireccion.touched">
+              Selecciona el tipo de vía.
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Nombre de la vía -->
+          <mat-form-field appearance="outline">
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="direccionTexto" />
+
+            <mat-error *ngIf="form.controls.direccionTexto.hasError('required') && form.controls.direccionTexto.touched">
+              La dirección es obligatoria.
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Número -->
+          <mat-form-field appearance="outline">
+            <mat-label>Número</mat-label>
+            <input
+              matInput
+              formControlName="numeroDireccion"
+              inputmode="numeric"
+              maxlength="8"
+            />
+
+            <mat-error *ngIf="form.controls.numeroDireccion.hasError('required') && form.controls.numeroDireccion.touched">
+              El número es obligatorio.
+            </mat-error>
+
+            <mat-error *ngIf="form.controls.numeroDireccion.hasError('pattern') && form.controls.numeroDireccion.touched">
+              Máximo 8 dígitos numéricos.
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Interior -->
+          <mat-form-field appearance="outline">
+            <mat-label>Interior</mat-label>
+            <input matInput formControlName="interior" />
+          </mat-form-field>
+
+          <!-- Urbanización -->
+          <mat-form-field appearance="outline">
+            <mat-label>Urbanización</mat-label>
+            <input matInput formControlName="urbanizacion" />
+          </mat-form-field>
+
+        </div>
+
+
+
+
+
+        <!--DEPARTEMENTO-->
         <mat-form-field class="span-1" appearance="outline">
-          <mat-label>Provincia</mat-label>
-          <input matInput formControlName="provincia" />
-        </mat-form-field>
-
-        <mat-form-field class="span-1" appearance="outline">
-          <mat-label>Distrito</mat-label>
-          <input matInput formControlName="distrito" />
-        </mat-form-field>
-
-        <mat-form-field class="span-1 center-single" appearance="outline">
           <mat-label>Departamento</mat-label>
           <mat-select formControlName="departamentoCode">
             <mat-option *ngFor="let d of departamentos" [value]="d.code">{{ d.nombre }}</mat-option>
           </mat-select>
+
+          <mat-error *ngIf="form.controls.departamentoCode.hasError('required') && form.controls.departamentoCode.touched">
+            Selecciona un departamento.
+          </mat-error>
         </mat-form-field>
+
+        <!--PROVINCIA-->
+        <mat-form-field class="span-1" appearance="outline">
+          <mat-label>Provincia</mat-label>
+
+          <mat-select formControlName="provinciaCode" [disabled]="!provincias.length">
+            <mat-option *ngFor="let p of provincias" [value]="p.code">
+              {{ p.nombre }}
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="form.controls.provinciaCode.hasError('required') && form.controls.provinciaCode.touched">
+            Selecciona una provincia.
+          </mat-error>
+        </mat-form-field>
+
+
+        <!--DISTRITO-->
+        <mat-form-field class="span-2" appearance="outline">
+          <mat-label>Distrito</mat-label>
+          <input matInput formControlName="distrito" />
+
+          <mat-error *ngIf="form.controls.distrito.hasError('required') && form.controls.distrito.touched">
+            El distrito es obligatorio.
+          </mat-error>
+
+          <mat-error *ngIf="form.controls.distrito.hasError('pattern') && form.controls.distrito.touched">
+            Solo letras y espacios.
+          </mat-error>
+        </mat-form-field>
+
+
+        
 
         <div class="privacy-text span-2">
             <span>

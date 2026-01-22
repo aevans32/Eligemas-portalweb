@@ -6,6 +6,9 @@ import { ProfileInsert } from "../../shared/models/profile-insert";
 
 type ProfileMini = { nombres: string | null };
 
+
+
+
 export const LS_USER_NAME = 'eligeplus.userName';
 
 
@@ -44,6 +47,7 @@ export class AuthService {
 
     async signUp(email: string, password: string) {
         const redirectTo = `${window.location.origin}/basic-info`;
+
         return supabase.auth.signUp({ 
             email, 
             password,
@@ -66,26 +70,7 @@ export class AuthService {
         return supabase.from('profiles').insert(profile).select().single();
     }
 
-    /** Read departments list for a dropdown */
-    getDepartamentos() {
-        return supabase.from('departamentos').select('code,nombre').order('nombre');
-    }
-
-    /** Read estado civil list for dropdown */
-    getEstadosCiviles() {
-    return supabase
-        .from('estados_civiles')
-        .select('codigo,nombre')
-        .order('nombre');
-    }
-
-    /** Read tipos de documento list for dropdown */
-    getTiposDocumento() {
-    return supabase
-        .from('tipos_documento')
-        .select('id,codigo,nombre')
-        .order('id');
-    }
+/////
 
     async getMyProfile() {
         const uid = this.session?.user.id;

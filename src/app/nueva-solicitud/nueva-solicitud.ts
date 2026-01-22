@@ -12,6 +12,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatRadioModule } from '@angular/material/radio';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ConfirmationSnackbarComponent } from './confirmation-snackbar';
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -25,7 +28,8 @@ import { MatRadioModule } from '@angular/material/radio';
     MatInputModule,
     MatSelectModule,
     MatButtonModule,
-    MatRadioModule
+    MatRadioModule,
+    MatTooltipModule
   ],
   templateUrl: './nueva-solicitud.html',
   styleUrl: './nueva-solicitud.css',
@@ -36,6 +40,7 @@ export class NuevaSolicitud implements OnInit {
   private router = inject(Router);
   private catalogos = inject(CatalogosService);
   private solicitudes = inject(SolicitudesService);
+  private snackBar = inject(MatSnackBar);
 
   @ViewChild('creditoSection') creditoSection!: ElementRef<HTMLElement>;
   @ViewChild('perfilSection') perfilSection!: ElementRef<HTMLElement>;
@@ -55,6 +60,37 @@ export class NuevaSolicitud implements OnInit {
     // optional: scroll to top of wrapper for nicer UX
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
+
+
+
+  tooltips = {
+    // Step 1 - Crédito
+    entidad_financiera_id: 'Selecciona el banco/financiera donde tienes el crédito que deseas refinanciar.',
+    moneda_id: 'Moneda en la que está el crédito actual (PEN / USD).',
+    monto_total_credito: 'Monto original desembolsado al inicio del crédito.',
+    monto_actual_credito: 'Saldo aproximado pendiente de pago hoy.',
+    plazo_total_meses: 'Plazo total pactado al inicio del crédito (en meses).',
+    numero_cuotas_pagadas: 'Cuotas ya pagadas hasta la fecha (aprox).',
+    tea: 'Tasa Efectiva Anual (sin comisiones). Ej: 25.50',
+    tcea: 'Tasa de Costo Efectivo Anual (incluye comisiones/seguros si aplica).',
+    placa_vehiculo: 'Si el crédito está asociado a un vehículo, ingresa la placa (6 caracteres).',
+
+    // Step 2 - Perfil
+    es_dependiente: 'Dependiente: planilla. Independiente: recibos por honorarios/negocio.',
+    ruc_empleador: 'RUC de tu empleador (solo si eres dependiente).',
+    razon_social_empleador: 'Nombre legal del empleador (opcional, recomendado).',
+    ruc_titular: 'RUC del negocio o del titular (solo si eres independiente).',
+    ocupacion: 'Actividad/ocupación principal (máx. 50 caracteres).',
+    moneda_ingreso_id: 'Moneda en la que recibes la mayor parte de tus ingresos.',
+    ingreso_bruto: 'Ingreso bruto mensual aproximado (antes de descuentos).',
+  } as const;
+
+  tooltipPos: 'above' | 'below' | 'left' | 'right' = 'above';
+  tooltipDelay = 200;
+
+
+
+
 
 
 
@@ -205,7 +241,7 @@ export class NuevaSolicitud implements OnInit {
 
       const payload: SolicitudInsert = {
         user_id: userId,
-        estado_id: 3,
+        estado_id: 3,   // 3 = en proceso, o revisar tabla 'solicitud-estado'
 
         entidad_financiera_id: v.entidad_financiera_id!,
         moneda_id: v.moneda_id!,
@@ -231,6 +267,17 @@ export class NuevaSolicitud implements OnInit {
         moneda_ingreso_id: v.moneda_ingreso_id!,
         ingreso_bruto: v.ingreso_bruto!,
       };
+
+      this.snackBar.openFromComponent(ConfirmationSnackbarComponent, {
+        data: {
+          title: 'Solicitud enviada',
+          message: 'Estamos evaluando tus opciones de refinanciamiento.'
+        },
+        duration: 6000,
+        horizontalPosition: 'center',
+        verticalPosition: 'top',
+        panelClass: ['success-snackbar']
+      });
 
 
       const { data, error } = await this.solicitudes.createSolicitud(payload);

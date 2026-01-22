@@ -21,6 +21,7 @@ export const routes: Routes = [
   },
   {
     path: 'basic-info',
+    //TODO: uncoment next line
     canMatch: [authGuard],
     loadComponent: () => import('./basic-info/basic-info').then(m => m.BasicInfo),
   },

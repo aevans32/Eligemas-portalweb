@@ -246,3 +246,39 @@
   opacity: 0.8;
   cursor: not-allowed;
 }
+
+
+.snackbar-success {
+  --mdc-snackbar-container-color: #2e7d32;
+  --mdc-snackbar-supporting-text-color: white;
+  --mdc-snackbar-action-label-text-color: #c8e6c9;
+}
+
+
+.address-grid {
+  display: grid;
+  grid-template-columns: 140px minmax(0, 1fr) 120px; /* Tipo | Dirección | Número */
+  gap: 12px;
+  width: 100%;
+}
+
+/* Haz que Interior y Urbanización bajen a la segunda fila con buen balance */
+.address-grid mat-form-field:nth-child(4) { /* Interior */
+  grid-column: 1 / 2;
+}
+
+.address-grid mat-form-field:nth-child(5) { /* Urbanización */
+  grid-column: 2 / 4; /* ocupa 2 columnas (Dirección+Número) */
+}
+
+/* En pantallas chicas, 1 columna para todo */
+@media (max-width: 600px) {
+  .address-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .address-grid mat-form-field:nth-child(5) {
+    grid-column: auto;
+  }
+}
+

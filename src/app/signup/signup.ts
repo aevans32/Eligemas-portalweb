@@ -42,12 +42,20 @@ export class Signup {
     const email = this.form.controls.email.value!;
     const password = this.form.controls.password.value!;
 
+    //TODO: version con email
     const { error } = await this.auth.signUp(email, password);
+    // const { data, error } = await this.auth.signUp(email, password);
 
     if (error) {
       console.error('SignUp error:', error.message);
       return;
     }
+
+    // if (data.session) {
+    //   alert('Cuenta creada. Revisa tu correo para confirmar y continuar con tu registro.');
+    //   this.router.navigateByUrl('/basic-info');
+    //   return;
+    // }
 
     alert('Cuenta creada. Revisa tu correo para confirmar y continuar con tu registro.');
     

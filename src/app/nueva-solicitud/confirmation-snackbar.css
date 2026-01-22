@@ -1,0 +1,23 @@
+.snackbar-container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 24px;
+  min-width: 420px;
+}
+
+.icon {
+  font-size: 32px;
+}
+
+.content h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.content p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
