@@ -69,22 +69,17 @@
         </mat-form-field>
 
 
-        <mat-form-field class="span-1" appearance="outline">
+        <mat-form-field
+          class="span-1"
+          appearance="outline"
+          [matTooltip]="documentoTooltip"
+          matTooltipPosition="above"
+          matTooltipShowDelay="200"
+        >
           <mat-label>N° de documento</mat-label>
 
           <input matInput formControlName="num_documento" />
 
-          <!-- Hint  -->
-          <mat-hint *ngIf="selectedTipoDocumento">
-            {{ selectedTipoDocumento.codigo }}:
-            {{ selectedTipoDocumento.min_len }}
-            <ng-container *ngIf="selectedTipoDocumento.min_len !== selectedTipoDocumento.max_len">
-              – {{ selectedTipoDocumento.max_len }}
-            </ng-container>
-            caracteres
-          </mat-hint>
-
-          <!-- Errors override hint automatically when invalid -->
           <mat-error *ngIf="form.controls.num_documento.hasError('required') && form.controls.num_documento.touched">
             El número de documento es obligatorio.
           </mat-error>
@@ -103,6 +98,8 @@
             El formato del documento no es válido.
           </mat-error>
         </mat-form-field>
+
+
 
 
 
@@ -140,26 +137,40 @@
 
         <mat-form-field class="span-1 center-single" appearance="outline">
           <mat-label>Fecha de nacimiento</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fechaNacimiento" />
+          <input 
+            matInput 
+            [matDatepicker]="picker" 
+            formControlName="fechaNacimiento"
+            placeholder="DD/MM/AAAA"
+            inputmode="numeric"
+            maxlength="10"
+            (keypress)="dateKeyPress($event)" 
+          />
 
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
 
-          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('required')">
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('required') && form.controls.fechaNacimiento.touched">
             La fecha de nacimiento es obligatoria.
           </mat-error>
 
-          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('invalidDate')">
-            La fecha ingresada no es válida.
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('matDatepickerParse') && form.controls.fechaNacimiento.touched">
+            La fecha ingresada no es válida. Usa el formato DD/MM/AAAA.
           </mat-error>
 
-          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('futureDate')">
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('invalidDate') && form.controls.fechaNacimiento.touched">
+            La fecha ingresada no es válida. Usa el formato DD/MM/AAAA.
+          </mat-error>
+
+
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('futureDate') && form.controls.fechaNacimiento.touched">
             La fecha no puede ser futura.
           </mat-error>
 
-          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('underAge')">
+          <mat-error *ngIf="form.controls.fechaNacimiento.hasError('underAge') && form.controls.fechaNacimiento.touched">
             Debes ser mayor de 18 años.
           </mat-error>
+
         </mat-form-field>
 
 
@@ -176,20 +187,35 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="span-1" appearance="outline">
-          <mat-label>Provincia</mat-label>
-          <input matInput formControlName="provincia" />
+        <!--DEPARTEMENTO-->
+        <mat-form-field class="span-1 center-single" appearance="outline">
+          <mat-label>Departamento</mat-label>
+          <mat-select formControlName="departamentoCode">
+            <mat-option *ngFor="let d of departamentos" [value]="d.code">{{ d.nombre }}</mat-option>
+          </mat-select>
 
-          <mat-error *ngIf="form.controls.provincia.hasError('required') && form.controls.provincia.touched">
-            La provincia es obligatoria.
+          <mat-error *ngIf="form.controls.departamentoCode.hasError('required') && form.controls.departamentoCode.touched">
+            Selecciona un departamento.
           </mat-error>
-
-          <mat-error *ngIf="form.controls.provincia.hasError('pattern') && form.controls.provincia.touched">
-            Solo letras y espacios.
-          </mat-error>
-
         </mat-form-field>
 
+        <!--PROVINCIA-->
+        <mat-form-field class="span-1" appearance="outline">
+          <mat-label>Provincia</mat-label>
+
+          <mat-select formControlName="provinciaCode" [disabled]="!provincias.length">
+            <mat-option *ngFor="let p of provincias" [value]="p.code">
+              {{ p.nombre }}
+            </mat-option>
+          </mat-select>
+
+          <mat-error *ngIf="form.controls.provinciaCode.hasError('required') && form.controls.provinciaCode.touched">
+            Selecciona una provincia.
+          </mat-error>
+        </mat-form-field>
+
+
+        <!--DISTRITO-->
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Distrito</mat-label>
           <input matInput formControlName="distrito" />
@@ -203,17 +229,8 @@
           </mat-error>
         </mat-form-field>
 
-        <mat-form-field class="span-1 center-single" appearance="outline">
-          <mat-label>Departamento</mat-label>
-          <mat-select formControlName="departamentoCode">
-            <mat-option *ngFor="let d of departamentos" [value]="d.code">{{ d.nombre }}</mat-option>
-          </mat-select>
 
-          <mat-error *ngIf="form.controls.departamentoCode.hasError('required') && form.controls.departamentoCode.touched">
-            Selecciona un departamento.
-          </mat-error>
-
-        </mat-form-field>
+        
 
         <div class="privacy-text span-2">
             <span>

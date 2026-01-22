@@ -11,6 +11,11 @@ export type TipoDocumentoRow = {
   max_len: number;
 };
 
+export type ProvinciaRow = {
+  departamento_code: string;
+  code: string;
+  nombre: string;
+};
 
 
 
@@ -62,5 +67,14 @@ export class CatalogosService {
         .select('id,codigo,nombre,min_len,max_len')
         .order('id')
         .returns<TipoDocumentoRow[]>();
+    }
+
+    getProvinciasByDepartamento(departamentoCode: string) {
+    return supabase
+        .from('provincias')
+        .select('departamento_code,code,nombre')
+        .eq('departamento_code', departamentoCode)
+        .order('nombre')
+        .returns<ProvinciaRow[]>();
     }
 }

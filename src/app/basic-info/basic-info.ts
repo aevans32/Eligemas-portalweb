@@ -11,12 +11,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { adultMinAgeValidator } from '../core/validators/adult.validator';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { CatalogosService, TipoDocumentoRow } from '../core/services/catalogos.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+
 
 
 type EstadoCivilRow = { codigo: string; nombre: string };
+type ProvinciaRow = { code: string; nombre: string; departamento_code: string };
+
 
 export const ES_DATE_FORMATS = {
   parse: {
@@ -29,6 +33,17 @@ export const ES_DATE_FORMATS = {
     monthYearA11yLabel: 'MMMM YYYY',
   },
 };
+
+export function validDateValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const v = control.value;
+
+    if (v === null || v === undefined || v === '') return null; // let "required" handle empty
+    if (v instanceof Date && !isNaN(v.getTime())) return null;
+
+    return { invalidDate: true };
+  };
+}
 
 @Component({
   selector: 'app-basic-info',
@@ -43,11 +58,14 @@ export const ES_DATE_FORMATS = {
     MatSelectModule, 
     MatButtonModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatTooltipModule
   ],
   templateUrl: './basic-info.html',
   styleUrl: './basic-info.css',
-  providers: [{ provide: MAT_DATE_LOCALE, useValue: 'es-PE' }, { provide: 'MAT_DATE_FORMATS', useValue: ES_DATE_FORMATS }],
+  providers: [
+    { provide: MAT_DATE_LOCALE, useValue: 'es-PE' }, 
+    { provide: MAT_DATE_FORMATS, useValue: ES_DATE_FORMATS }],
 })
 export class BasicInfo {
 
@@ -59,6 +77,8 @@ export class BasicInfo {
 
 
   departamentos: Array<{ code: string; nombre: string }> = [];
+  provincias: Array<{ code: string; nombre: string }> = [];
+
 
   estadosCiviles: EstadoCivilRow[] = [];
   tiposDocumento: TipoDocumentoRow[] = [];
@@ -76,15 +96,26 @@ export class BasicInfo {
 
     celular: new FormControl('', [Validators.required, Validators.pattern(/^9\d{8}$/)]),
     
-    fechaNacimiento: new FormControl<Date | null>(null, [Validators.required, adultMinAgeValidator(18)]),
+    fechaNacimiento: new FormControl<Date | null>(
+      null,
+      [Validators.required, validDateValidator(), adultMinAgeValidator(18)]
+    ),
 
     direccion: new FormControl('', [Validators.required, Validators.minLength(5)]),
     // ciudad: new FormControl('', [Validators.required, Validators.minLength(2)]),
-    provincia: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    provinciaCode: new FormControl<string | null>(null, [Validators.required]),
+    // (distrito por ahora sigue como texto, luego lo hacemos dependiente también)
     distrito: new FormControl('', [Validators.required, Validators.minLength(2)]),
-
     departamentoCode: new FormControl('', [Validators.required]),
+
   });
+
+  dateKeyPress(e: KeyboardEvent) {
+    const allowed = /[0-9/]/;
+    if (!allowed.test(e.key)) {
+      e.preventDefault();
+    }
+  }
 
 
   async ngOnInit() {
@@ -101,6 +132,7 @@ export class BasicInfo {
         this.catalog.getDepartamentos(),
         this.catalog.getEstadosCiviles(),
         this.catalog.getTiposDocumento(),
+        this.setupProvinciaDropdown(),
     ]);
 
     if (depsErr) console.error('Error loading departamentos:', depsErr.message);
@@ -116,7 +148,6 @@ export class BasicInfo {
       console.error('Error loading departamentos:', error.message);
       return;
     }
-    this.departamentos = data ?? [];
 
     this.setupDynamicValidators();
   }
@@ -147,7 +178,7 @@ export class BasicInfo {
       fecha_nacimiento: this.form.controls.fechaNacimiento.value!,
 
       direccion: this.form.controls.direccion.value!.trim(),
-      provincia: this.form.controls.provincia.value!.trim(),
+      provincia: this.form.controls.provinciaCode.value!, // o guarda provincia_code en DB si prefieres
       distrito: this.form.controls.distrito.value!.trim(),
 
       departamento_code: this.form.controls.departamentoCode.value!,
@@ -221,10 +252,50 @@ export class BasicInfo {
     });
   }
 
+  private setupProvinciaDropdown() {
+  const depCtrl = this.form.controls.departamentoCode;
+  const provCtrl = this.form.controls.provinciaCode;
+
+  // cada vez que cambie el departamento:
+  depCtrl.valueChanges.subscribe(async (depCode) => {
+    // reset provincia y lista
+    provCtrl.setValue(null, { emitEvent: false });
+    provCtrl.markAsUntouched();
+    this.provincias = [];
+
+    if (!depCode) return;
+
+    const { data, error } = await this.catalog.getProvinciasByDepartamento(depCode);
+    if (error) {
+      console.error('Error loading provincias:', error.message);
+      return;
+    }
+
+    this.provincias = data ?? [];
+  });
+}
+
+
   get selectedTipoDocumento(): TipoDocumentoRow | null {
     const id = this.form.controls.tipoDocumentoId.value;
     return this.tiposDocumento.find(t => t.id === id) ?? null;
   }
+
+  get documentoTooltip(): string {
+  const tipo = this.selectedTipoDocumento;
+
+  if (!tipo) {
+    return 'Longitud requerida varia según el tipo de documento.';
+  }
+
+  const lengthText =
+    tipo.min_len === tipo.max_len
+      ? `${tipo.min_len}`
+      : `${tipo.min_len}–${tipo.max_len}`;
+
+  return `${tipo.codigo}: ${lengthText} caracteres`;
+}
+
 
 
 }
