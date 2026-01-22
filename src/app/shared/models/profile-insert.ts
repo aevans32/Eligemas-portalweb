@@ -1,21 +1,15 @@
 export interface ProfileInsert {
-  id: string; // uuid
+  id: string;
   nombres: string;
   apellidos: string;
-
   tipo_documento_id: number;
-  dni: string; // por ahora; luego quizá numero_documento
-
-  // ahora es codigo text (FK a estados_civiles.codigo)
+  num_documento: string;
   estado_civil: string;
-
-  celular: string; // 9 digits
-  fecha_nacimiento: string; // YYYY-MM-DD
-
+  celular: string;
+  fecha_nacimiento: string | Date; // whatever you are using
   direccion: string;
+  departamento_code: string;
   provincia: string;
   distrito: string;
-
-  departamento_code: string; // must exist in departamentos table
 }
 
