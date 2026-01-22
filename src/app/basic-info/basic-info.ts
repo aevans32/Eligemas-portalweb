@@ -101,10 +101,19 @@ export class BasicInfo {
       [Validators.required, validDateValidator(), adultMinAgeValidator(18)]
     ),
 
-    direccion: new FormControl('', [Validators.required, Validators.minLength(5)]),
-    // ciudad: new FormControl('', [Validators.required, Validators.minLength(2)]),
+
+    // direccion: new FormControl('', [Validators.required, Validators.minLength(5)]),
+    tipoDireccion: new FormControl(null, Validators.required),
+    direccionTexto: new FormControl('', Validators.required),
+    numeroDireccion: new FormControl(null, [
+      Validators.required,
+      Validators.max(99999999) // máximo 8 dígitos
+    ]),
+    interior: new FormControl(''),
+    urbanizacion: new FormControl(''),
+
+    
     provinciaCode: new FormControl<string | null>(null, [Validators.required]),
-    // (distrito por ahora sigue como texto, luego lo hacemos dependiente también)
     distrito: new FormControl('', [Validators.required, Validators.minLength(2)]),
     departamentoCode: new FormControl('', [Validators.required]),
 
@@ -164,6 +173,17 @@ export class BasicInfo {
       return;
     }
 
+    const v = this.form.getRawValue();
+
+    const direccionFinal = [
+      v.tipoDireccion,                // "Av." | "Jr." | "Calle"
+      v.direccionTexto?.trim(),
+      v.numeroDireccion != null ? String(v.numeroDireccion).trim() : null,
+      v.interior?.trim() ? `Int. ${v.interior.trim()}` : null,
+      v.urbanizacion?.trim() ? `Urb. ${v.urbanizacion.trim()}` : null,
+    ].filter(Boolean).join(' ');
+
+
     const profileInsert = {
       id: session.user.id,
       nombres: this.form.controls.nombres.value!.trim(),
@@ -177,7 +197,7 @@ export class BasicInfo {
       celular: this.form.controls.celular.value!,
       fecha_nacimiento: this.form.controls.fechaNacimiento.value!,
 
-      direccion: this.form.controls.direccion.value!.trim(),
+      direccion: direccionFinal,
       provincia: this.form.controls.provinciaCode.value!, // o guarda provincia_code en DB si prefieres
       distrito: this.form.controls.distrito.value!.trim(),
 

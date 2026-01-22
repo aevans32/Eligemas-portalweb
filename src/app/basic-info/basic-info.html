@@ -173,22 +173,72 @@
 
         </mat-form-field>
 
+        <!-- DIRECCIÓN -->
+        <div class="span-2 address-grid">
 
-        <mat-form-field class="span-2" appearance="outline">
-          <mat-label>Dirección</mat-label>
-          <input matInput formControlName="direccion" />
+          <!-- Tipo de vía -->
+          <mat-form-field appearance="outline">
+            <mat-label>Tipo</mat-label>
+            <mat-select formControlName="tipoDireccion">
+              <mat-option value="Av.">Avenida</mat-option>
+              <mat-option value="Jr.">Jirón</mat-option>
+              <mat-option value="Calle">Calle</mat-option>
+            </mat-select>
 
-          <mat-error *ngIf="form.controls.direccion.hasError('required') && form.controls.direccion.touched">
-            La dirección es obligatoria.
-          </mat-error>
+            <mat-error *ngIf="form.controls.tipoDireccion.hasError('required') && form.controls.tipoDireccion.touched">
+              Selecciona el tipo de vía.
+            </mat-error>
+          </mat-form-field>
 
-          <mat-error *ngIf="form.controls.direccion.hasError('minlength') && form.controls.direccion.touched">
-            Ingresa una dirección más completa.
-          </mat-error>
-        </mat-form-field>
+          <!-- Nombre de la vía -->
+          <mat-form-field appearance="outline">
+            <mat-label>Dirección</mat-label>
+            <input matInput formControlName="direccionTexto" />
+
+            <mat-error *ngIf="form.controls.direccionTexto.hasError('required') && form.controls.direccionTexto.touched">
+              La dirección es obligatoria.
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Número -->
+          <mat-form-field appearance="outline">
+            <mat-label>Número</mat-label>
+            <input
+              matInput
+              formControlName="numeroDireccion"
+              inputmode="numeric"
+              maxlength="8"
+            />
+
+            <mat-error *ngIf="form.controls.numeroDireccion.hasError('required') && form.controls.numeroDireccion.touched">
+              El número es obligatorio.
+            </mat-error>
+
+            <mat-error *ngIf="form.controls.numeroDireccion.hasError('pattern') && form.controls.numeroDireccion.touched">
+              Máximo 8 dígitos numéricos.
+            </mat-error>
+          </mat-form-field>
+
+          <!-- Interior -->
+          <mat-form-field appearance="outline">
+            <mat-label>Interior</mat-label>
+            <input matInput formControlName="interior" />
+          </mat-form-field>
+
+          <!-- Urbanización -->
+          <mat-form-field appearance="outline">
+            <mat-label>Urbanización</mat-label>
+            <input matInput formControlName="urbanizacion" />
+          </mat-form-field>
+
+        </div>
+
+
+
+
 
         <!--DEPARTEMENTO-->
-        <mat-form-field class="span-1 center-single" appearance="outline">
+        <mat-form-field class="span-1" appearance="outline">
           <mat-label>Departamento</mat-label>
           <mat-select formControlName="departamentoCode">
             <mat-option *ngFor="let d of departamentos" [value]="d.code">{{ d.nombre }}</mat-option>
@@ -216,7 +266,7 @@
 
 
         <!--DISTRITO-->
-        <mat-form-field class="span-1" appearance="outline">
+        <mat-form-field class="span-2" appearance="outline">
           <mat-label>Distrito</mat-label>
           <input matInput formControlName="distrito" />
 
