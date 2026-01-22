@@ -14,6 +14,8 @@
           <span>INICIO DE SESIÓN</span>
         </div> -->
         <form [formGroup]="loginForm">
+          
+          <!-- Apartado de texto email -->
           <mat-form-field class="email" appearance="outline">
             <mat-label>Email</mat-label>
             <input type="email" matInput formControlName="email" />
@@ -24,6 +26,8 @@
               <mat-error>Ingresa un email valido</mat-error>
             }
           </mat-form-field>
+
+          <!-- Apartado de texto password -->
           <mat-form-field appearance="outline">
             <mat-label>Contraseña</mat-label>
             <input type="password" matInput formControlName="password" />
@@ -33,6 +37,7 @@
             <mat-error>La contraseña debe tener al menos 8 caracteres</mat-error>
             }
           </mat-form-field>
+
           <div class="forgot-password">
             <span routerLink="/signup">¿No tienes una cuenta? Regístrate!</span>
           </div>

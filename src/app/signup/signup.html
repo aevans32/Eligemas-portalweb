@@ -12,14 +12,27 @@
     <div class="content-container">
       <form [formGroup]="form" (ngSubmit)="signup()">
 
+        <!-- Apartado de texto email -->
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
           <input matInput type="email" formControlName="email" />
+          @if(form.controls.email.hasError('required')){
+              <mat-error>Email es requerido</mat-error>
+            } 
+            @if(form.controls.email.hasError('email')){
+              <mat-error>Ingresa un email valido</mat-error>
+            }
         </mat-form-field>
 
+        <!-- Apartado de texto password -->
         <mat-form-field appearance="outline">
           <mat-label>Contraseña</mat-label>
           <input matInput type="password" formControlName="password" />
+          @if(form.controls.password.hasError('required')){
+            <mat-error>Contraseña es requerida</mat-error>
+            } @if(form.controls.password.hasError('minlength')){
+            <mat-error>La contraseña debe tener al menos 8 caracteres</mat-error>
+            }
         </mat-form-field>
 
         <div class="instructions">
