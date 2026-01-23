@@ -131,17 +131,18 @@ export class BasicInfo {
     // Must be logged in to complete this
     if (!this.auth.session) {
       // If user opens this page directly without coming from email confirmation
-      //TODO: uncoment next 2 lines
       await this.router.navigateByUrl('/login');
       return;
     }
+
+
+    this.setupProvinciaDropdown();
 
     const [{ data: deps, error: depsErr }, { data: ec, error: ecErr }, { data: td, error: tdErr }] =
       await Promise.all([
         this.catalog.getDepartamentos(),
         this.catalog.getEstadosCiviles(),
-        this.catalog.getTiposDocumento(),
-        this.setupProvinciaDropdown(),
+        this.catalog.getTiposDocumento()
     ]);
 
     if (depsErr) console.error('Error loading departamentos:', depsErr.message);
@@ -152,9 +153,9 @@ export class BasicInfo {
     this.estadosCiviles = ec ?? [];
     this.tiposDocumento = td ?? [];
 
-    const { data, error } = await this.catalog.getDepartamentos();
-    if (error) {
-      console.error('Error loading departamentos:', error.message);
+    
+    if (depsErr) {
+      console.error('Error loading departamentos:', depsErr.message);
       return;
     }
 

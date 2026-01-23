@@ -1,12 +1,16 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { Header } from "../shared/components/header/header";
-import { Footer } from "../shared/components/footer/footer";
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTableModule } from '@angular/material/table';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../core/services/auth.service';
 import { SolicitudesService, SolicitudListItem } from '../core/services/solicitudes.service';
+import { Footer } from "../shared/components/footer/footer";
+import { Header } from "../shared/components/header/header";
 
 @Component({
   selector: 'app-dashboard',
@@ -16,7 +20,12 @@ import { SolicitudesService, SolicitudListItem } from '../core/services/solicitu
     RouterLink,
     CommonModule,
     MatButtonModule,
-    MatTableModule
+    MatTableModule,
+    MatMenuModule,
+    MatIconModule,
+    MatButtonModule,
+    MatDialogModule,
+    MatSnackBarModule
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
@@ -25,6 +34,9 @@ export class Dashboard implements OnInit{
 
   private auth = inject(AuthService);
   private solicitudesService = inject(SolicitudesService);
+  private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
 
   hasSolicitud = false;
 
@@ -37,19 +49,28 @@ export class Dashboard implements OnInit{
   displayedColumns = ['row'];
 
   estadoClass(nombre?: string | null): string {
-  switch ((nombre ?? '').toLowerCase()) {
-    case 'ver ofertas':
-      return 'state--ofertas';
-    case 'en proceso':
-      return 'state--proceso';
-    case 'rechazado':
-      return 'state--rechazado';
-    case 'finalizado':
-      return 'state--finalizado';
-    default:
-      return 'state--default';
+    switch ((nombre ?? '').toLowerCase()) {
+      case 'ver ofertas':
+        return 'state--ofertas';
+      case 'en proceso':
+        return 'state--proceso';
+      case 'rechazado':
+        return 'state--rechazado';
+      case 'finalizado':
+        return 'state--finalizado';
+      default:
+        return 'state--default';
+    }
   }
-}
+
+  verSolicitud(s: any) {
+    this.router.navigate(['/solicitud', s.id]); // ej: /solicitud/123
+  }
+
+  editarSolicitud(s: any) {
+    this.router.navigate(['/solicitud', s.id, 'editar']); // ej: /solicitud/123/editar
+  }
+
 
 
   async ngOnInit() {
@@ -89,6 +110,33 @@ export class Dashboard implements OnInit{
       return iso;
     }
   }
+
+  async confirmarBorrarSolicitud(s: any) {
+  const ok = confirm('¿Seguro que deseas borrar esta solicitud?');
+  if (!ok) return;
+
+  const res = await this.solicitudesService.deleteSolicitud(s.id);
+
+  const { data, error } = res;
+
+  if (error) {
+    this.snackBar.open(
+      `No se pudo borrar. ${error.message ?? ''}`.trim(),
+      'Cerrar',
+      { duration: 6000 }
+    );
+    return;
+  }
+
+  if (data === true) {
+    this.snackBar.open('Solicitud borrada.', 'Cerrar', { duration: 3000 });
+    this.solicitudes = this.solicitudes.filter(x => x.id !== s.id);
+    this.hasSolicitud = this.solicitudes.length > 0;
+  } else {
+    this.snackBar.open('No se encontró la solicitud o no tienes permiso.', 'Cerrar', { duration: 5000 });
+  }
+}
+
 
 
 

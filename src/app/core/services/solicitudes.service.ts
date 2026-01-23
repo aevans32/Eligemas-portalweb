@@ -93,6 +93,13 @@ export class SolicitudesService {
       .returns<SolicitudListItem[]>(); // <- importante para tipado
   }
 
+  // Llama a la función Postgre que elimina una solicitud por su ID
+  async deleteSolicitud(id: number) {
+    return supabase.rpc('delete_solicitud', {
+      p_id: id
+    });
+  }
+
 
 
   async hasMySolicitud(): Promise<boolean> {
