@@ -108,7 +108,13 @@ export class NuevaSolicitud implements OnInit {
     tcea: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
     tea: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
 
-    placa_vehiculo: new FormControl<string | null>(null, [Validators.required, Validators.maxLength(6)]),
+    placa_vehiculo: new FormControl<string | null>(null, [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.maxLength(6),
+      Validators.pattern(/^[A-Za-z0-9]{6}$/)
+    ]),
+
 
     // Perfil (condicion_laboral_id NOT NULL)
     // condicion_laboral_id: new FormControl<number | null>(null, [Validators.required]),
@@ -116,11 +122,11 @@ export class NuevaSolicitud implements OnInit {
 
 
     // Opcionales
-    ruc_empleador: new FormControl<string | null>(null, [Validators.maxLength(11)]),
+    ruc_empleador: new FormControl<string | null>(null),
     razon_social_empleador: new FormControl<string | null>(null),
 
-    ruc_titular: new FormControl<string | null>(null, [Validators.maxLength(11)]),
-    ocupacion: new FormControl<string | null>(null, [Validators.maxLength(50)]),
+    ruc_titular: new FormControl<string | null>(null),
+    ocupacion: new FormControl<string | null>(null),
 
     // NOT NULL
     moneda_ingreso_id: new FormControl<number | null>(null, [Validators.required]),
@@ -149,18 +155,59 @@ export class NuevaSolicitud implements OnInit {
       this.monedas = m.data ?? [];
 
       this.form.controls.es_dependiente.valueChanges.subscribe((v) => {
+        const rucEmp = this.form.controls.ruc_empleador;
+        const rsEmp  = this.form.controls.razon_social_empleador;
+
+        const rucTit = this.form.controls.ruc_titular;
+        const ocu    = this.form.controls.ocupacion;
+
         if (v === true) {
-          // Dependiente → limpiar independiente
-          this.form.controls.ruc_titular.reset(null);
-          this.form.controls.ocupacion.reset(null);
+          // DEPENDIENTE → (ya tienes) ruc_empleador + razon_social_empleador
+
+          // desactivar independiente
+          rucTit.clearValidators();
+          rucTit.reset(null, { emitEvent: false });
+          rucTit.updateValueAndValidity({ emitEvent: false });
+
+          ocu.clearValidators();
+          ocu.reset(null, { emitEvent: false });
+          ocu.updateValueAndValidity({ emitEvent: false });
+
+          // reset visual
+          rucTit.markAsUntouched();
+          ocu.markAsUntouched();
         }
 
         if (v === false) {
-          // Independiente → limpiar dependiente
-          this.form.controls.ruc_empleador.reset(null);
-          this.form.controls.razon_social_empleador.reset(null);
+          // INDEPENDIENTE → validar ruc_titular + ocupacion
+          rucTit.setValidators([Validators.required, Validators.pattern(/^\d{11}$/)]);
+          rucTit.updateValueAndValidity({ emitEvent: false });
+
+          ocu.setValidators([
+            Validators.required,
+            Validators.minLength(2),
+            Validators.maxLength(50),
+            Validators.pattern(/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .&\-\/]+$/)
+          ]);
+          ocu.updateValueAndValidity({ emitEvent: false });
+
+          // desactivar dependiente
+          rucEmp.clearValidators();
+          rucEmp.reset(null, { emitEvent: false });
+          rucEmp.updateValueAndValidity({ emitEvent: false });
+
+          rsEmp.clearValidators();
+          rsEmp.reset(null, { emitEvent: false });
+          rsEmp.updateValueAndValidity({ emitEvent: false });
+
+          // reset visual
+          rucTit.markAsUntouched();
+          ocu.markAsUntouched();
         }
       });
+
+
+
 
 
       
@@ -292,4 +339,12 @@ export class NuevaSolicitud implements OnInit {
       this.submitting = false;
     }
   }
+
+  onlyNumbers(e: KeyboardEvent) {
+    if (!/[0-9]/.test(e.key)) {
+      e.preventDefault();
+    }
+  }
+
+
 }

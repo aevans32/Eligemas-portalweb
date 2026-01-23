@@ -11,6 +11,8 @@ export const authGuard: CanMatchFn = (_route, segments) => {
   const auth = inject(AuthService);
   const router = inject(Router);
 
+  auth.init(); 
+
   const attemptedUrl = '/' + segments.map(s => s.path).join('/');
 
   return auth.loaded$.pipe(

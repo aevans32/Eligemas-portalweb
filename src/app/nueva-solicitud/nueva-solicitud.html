@@ -59,7 +59,15 @@
                     </mat-option>
                   }
                 </mat-select>
+
+                @if (
+                  form.controls.entidad_financiera_id.touched &&
+                  form.controls.entidad_financiera_id.hasError('required')
+                ) {
+                  <mat-error>Selecciona una entidad financiera.</mat-error>
+                }
               </mat-form-field>
+
 
               <mat-form-field 
                 appearance="outline"
@@ -76,6 +84,13 @@
                     </mat-option>
                   }
                 </mat-select>
+
+                @if (
+                  form.controls.moneda_id.touched &&
+                  form.controls.moneda_id.hasError('required')
+                ) {
+                  <mat-error>Selecciona una moneda.</mat-error>
+                }
               </mat-form-field>
 
               
@@ -89,7 +104,7 @@
                 <mat-label>Monto Total de Crédito (original)</mat-label>
                 <input matInput type="number" step="0.01" formControlName="monto_total_credito" />
                 @if (form.controls.monto_total_credito.touched && form.controls.monto_total_credito.hasError('required')) {
-                  <mat-error>Campo requerido.</mat-error>
+                  <mat-error>El monto total es obligatorio.</mat-error>
                 }
               </mat-form-field>
 
@@ -103,7 +118,7 @@
                 <mat-label>Monto Actual de Crédito</mat-label>
                 <input matInput type="number" step="0.01" formControlName="monto_actual_credito" />
                 @if (form.controls.monto_actual_credito.touched && form.controls.monto_actual_credito.hasError('required')) {
-                  <mat-error>Campo requerido.</mat-error>
+                  <mat-error>El monto actual es obligatorio.</mat-error>
                 }
               </mat-form-field>
 
@@ -114,7 +129,20 @@
                 [matTooltipShowDelay]="tooltipDelay"
                 >
                 <mat-label>Plazo Total de Crédito (meses)</mat-label>
-                <input matInput type="number" formControlName="plazo_total_meses" />
+                <input 
+                  matInput 
+                  type="number" 
+                  min="1"
+                  step="1"
+                  formControlName="plazo_total_meses" />
+
+                @if (form.controls.plazo_total_meses.touched && form.controls.plazo_total_meses.hasError('required')) {
+                  <mat-error>Campo requerido.</mat-error>
+                }
+
+                @if (form.controls.plazo_total_meses.touched && form.controls.plazo_total_meses.hasError('min')) {
+                  <mat-error>Debe ser mayor a 0.</mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field 
@@ -124,7 +152,20 @@
                 [matTooltipShowDelay]="tooltipDelay"
                 >
                 <mat-label>Número de Cuotas Pagadas a la Fecha</mat-label>
-                <input matInput type="number" formControlName="numero_cuotas_pagadas" />
+                <input 
+                  matInput 
+                  type="number" 
+                  min="1"
+                  step="1"
+                  formControlName="numero_cuotas_pagadas" />
+
+                @if (form.controls.numero_cuotas_pagadas.touched && form.controls.numero_cuotas_pagadas.hasError('required')) {
+                  <mat-error>Campo requerido.</mat-error>
+                }
+
+                @if (form.controls.numero_cuotas_pagadas.touched && form.controls.numero_cuotas_pagadas.hasError('min')) {
+                  <mat-error>Debe ser mayor a 0.</mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field 
@@ -135,6 +176,7 @@
                 >
                 <mat-label>TEA (%)</mat-label>
                 <input matInput type="number" step="0.01" formControlName="tea" />
+
                 @if (form.controls.tea.touched && form.controls.tea.hasError('required')) {
                   <mat-error>Campo requerido.</mat-error>
                 }
@@ -151,6 +193,13 @@
                 >
                 <mat-label>TCEA (%)</mat-label>
                 <input matInput type="number" step="0.01" formControlName="tcea" />
+
+                @if (form.controls.tea.touched && form.controls.tea.hasError('required')) {
+                  <mat-error>Campo requerido.</mat-error>
+                }
+                @if (form.controls.tea.touched && form.controls.tea.hasError('min')) {
+                  <mat-error>No puede ser negativo.</mat-error>
+                }
               </mat-form-field>
 
               <mat-form-field 
@@ -160,14 +209,19 @@
                 [matTooltipShowDelay]="tooltipDelay"
                 >
                 <mat-label>Placa del Vehículo</mat-label>
-                <input matInput type="text" maxlength="6" formControlName="placa_vehiculo" />
+                <input 
+                  matInput 
+                  type="text" 
+                  maxlength="6" 
+                  formControlName="placa_vehiculo"
+                  style="text-transform: uppercase" />
                 @if (form.controls.placa_vehiculo.touched && form.controls.placa_vehiculo.hasError('maxlength')) {
                   <mat-error>Máximo 6 caracteres.</mat-error>
                 }
               </mat-form-field>
 
               <div class="actions">
-                <button mat-stroked-button type="button" (click)="goDashboard()">Anterior</button>
+                <button mat-stroked-button type="button" (click)="goDashboard()">Volver</button>
                 <button mat-flat-button type="button" (click)="goStep(2)">Siguiente</button>
               </div>
             </section>
@@ -206,7 +260,22 @@
                   [matTooltipShowDelay]="tooltipDelay"
                   >
                   <mat-label>RUC de Empleador</mat-label>
-                  <input matInput type="text" maxlength="11" formControlName="ruc_empleador" />
+                  <input 
+                    matInput 
+                    type="text" 
+                    inputmode="numeric" 
+                    pattern="[0-9]*"
+                    maxlength="11"
+                    (keypress)="onlyNumbers($event)"
+                    formControlName="ruc_empleador" />
+
+                    @if (form.controls.ruc_empleador.touched && form.controls.ruc_empleador.hasError('required')) {
+                      <mat-error>El RUC del empleador es obligatorio.</mat-error>
+                    }
+
+                    @if (form.controls.ruc_empleador.touched && form.controls.ruc_empleador.hasError('pattern')) {
+                      <mat-error>El RUC debe tener exactamente 11 dígitos numéricos.</mat-error>
+                    }
                 </mat-form-field>
 
                 <mat-form-field 
@@ -217,6 +286,22 @@
                   >
                   <mat-label>Razón Social de Empleador</mat-label>
                   <input matInput type="text" formControlName="razon_social_empleador" />
+
+                  @if (form.controls.razon_social_empleador.touched && form.controls.razon_social_empleador.hasError('required')) {
+                    <mat-error>La razón social es obligatoria.</mat-error>
+                  }
+
+                  @if (form.controls.razon_social_empleador.touched && form.controls.razon_social_empleador.hasError('minlength')) {
+                    <mat-error>Debe tener al menos 3 caracteres.</mat-error>
+                  }
+
+                  @if (form.controls.razon_social_empleador.touched && form.controls.razon_social_empleador.hasError('maxlength')) {
+                    <mat-error>Máximo 120 caracteres.</mat-error>
+                  }
+
+                  @if (form.controls.razon_social_empleador.touched && form.controls.razon_social_empleador.hasError('pattern')) {
+                    <mat-error>Solo letras, números, espacios y . &amp; - /</mat-error>
+                  }
                 </mat-form-field>
               }
 
@@ -230,7 +315,22 @@
                   [matTooltipShowDelay]="tooltipDelay"
                   >
                   <mat-label>RUC de Titular</mat-label>
-                  <input matInput type="text" maxlength="11" formControlName="ruc_titular" />
+                  <input 
+                    matInput 
+                    type="text"
+                    inputmode="numeric" 
+                    pattern="[0-9]*" 
+                    maxlength="11" 
+                    (keypress)="onlyNumbers($event)"
+                    formControlName="ruc_titular" />
+
+                    @if (form.controls.ruc_titular.touched && form.controls.ruc_titular.hasError('required')) {
+                      <mat-error>El RUC del titular es obligatorio.</mat-error>
+                    }
+
+                    @if (form.controls.ruc_titular.touched && form.controls.ruc_titular.hasError('pattern')) {
+                      <mat-error>El RUC debe tener exactamente 11 dígitos numéricos.</mat-error>
+                    }
                 </mat-form-field>
 
                 <mat-form-field 
@@ -241,6 +341,22 @@
                   >
                   <mat-label>Ocupación</mat-label>
                   <input matInput type="text" maxlength="50" formControlName="ocupacion" />
+
+                  @if (form.controls.ocupacion.touched && form.controls.ocupacion.hasError('required')) {
+                    <mat-error>La ocupación es obligatoria.</mat-error>
+                  }
+
+                  @if (form.controls.ocupacion.touched && form.controls.ocupacion.hasError('minlength')) {
+                    <mat-error>Debe tener al menos 2 caracteres.</mat-error>
+                  }
+
+                  @if (form.controls.ocupacion.touched && form.controls.ocupacion.hasError('maxlength')) {
+                    <mat-error>Máximo 50 caracteres.</mat-error>
+                  }
+
+                  @if (form.controls.ocupacion.touched && form.controls.ocupacion.hasError('pattern')) {
+                    <mat-error>Solo letras, números, espacios y . &amp; - /</mat-error>
+                  }
                 </mat-form-field>
               }
 
@@ -283,10 +399,19 @@
 
 
               <div class="actions">
+
+                <!--Boton Anterior-->
                 <button mat-stroked-button type="button" (click)="goStep(1)">Anterior</button>
-                <button mat-flat-button type="submit" [disabled]="submitting">
+
+                <!--BOTON ENVIAR-->
+                <button 
+                  mat-flat-button 
+                  type="submit" 
+                  [disabled]="submitting || form.invalid || step !== 2"
+                >
                   {{ submitting ? 'Enviando...' : 'Enviar' }}
                 </button>
+
               </div>
             </section>
           }

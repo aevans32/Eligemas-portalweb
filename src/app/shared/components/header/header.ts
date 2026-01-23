@@ -40,10 +40,8 @@ export class Header implements OnInit {
 
     if (this.isLoggedIn) {
       this.hasSolicitud = await this.solicitudesService.hasMySolicitud();
-      console.log('solicitud encontrada');
     } else {
       this.hasSolicitud = false;
-      console.log('sin solicitudes');
     }
 
     // 2. Si ya hay nombre cacheado, no dispares la query
