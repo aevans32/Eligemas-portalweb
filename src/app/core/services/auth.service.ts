@@ -46,7 +46,10 @@ export class AuthService {
 
 
     async signUp(email: string, password: string) {
+
         const redirectTo = `${window.location.origin}/basic-info`;
+
+        console.log('[signup redirectTo]', redirectTo);
 
         return supabase.auth.signUp({ 
             email, 
