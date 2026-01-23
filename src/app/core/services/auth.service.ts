@@ -67,10 +67,8 @@ export class AuthService {
 
     /** Insert profile row (requires authenticated user + RLS) */
     createProfile(profile: ProfileInsert) {
-        return supabase.from('profiles').insert(profile).select().single();
+        return supabase.from('profiles').insert(profile).select().maybeSingle();
     }
-
-/////
 
     async getMyProfile() {
         const uid = this.session?.user.id;
@@ -80,7 +78,7 @@ export class AuthService {
             .from('profiles')
             .select('nombres')
             .eq('id', uid)
-            .single<ProfileMini>();
+            .maybeSingle<ProfileMini>();
     }
 
     setCachedUserName(name: string | null) {
