@@ -15,7 +15,8 @@
       <div class="buttons-container">
 
         @if (isLoggedIn) {
-          <!-- Usuario logueado -->
+
+          <!-- Botón principal (nombre usuario) -->
           <button
             matButton
             class="primary"
@@ -23,18 +24,45 @@
             {{ userName ?? 'Mi Cuenta' }}
           </button>
 
-          @if (!hasSolicitud) {
-            <button
-              matButton
-              class="accent"
-              routerLink="/nueva-solicitud">
-              Nueva Solicitud
+          <!-- Menú hamburguesa -->
+          <button
+            mat-icon-button
+            [matMenuTriggerFor]="userMenu"
+            aria-label="Menú de usuario">
+            <mat-icon>menu</mat-icon>
+          </button>
+
+          <!-- Menú desplegable -->
+          <mat-menu #userMenu="matMenu">
+
+            <button mat-menu-item routerLink="/dashboard">
+              <mat-icon>account_circle</mat-icon>
+              <span>Mi cuenta</span>
             </button>
-          } @else {
-            <span class="header-hint">Solicitud Registrada.</span>
-          }
-          
+
+            @if (!hasSolicitud) {
+              <button mat-menu-item routerLink="/nueva-solicitud">
+                <mat-icon>add_circle</mat-icon>
+                <span>Nueva solicitud</span>
+              </button>
+            }
+
+            <button mat-menu-item routerLink="/dashboard">
+              <mat-icon>list_alt</mat-icon>
+              <span>Mis solicitudes</span>
+            </button>
+
+            <mat-divider></mat-divider>
+
+            <button mat-menu-item (click)="logout()">
+              <mat-icon color="warn">logout</mat-icon>
+              <span>Cerrar sesión</span>
+            </button>
+
+          </mat-menu>
+
         } @else {
+
           <!-- Usuario no logueado -->
           <button
             matButton
@@ -49,9 +77,14 @@
             routerLink="/signup">
             REGÍSTRATE
           </button>
+
         }
 
       </div>
+
+
+
+
     </div>
   </div>
 </header>
