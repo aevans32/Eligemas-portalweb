@@ -36,6 +36,11 @@ export const routes: Routes = [
     loadComponent: () => import('./nueva-solicitud/nueva-solicitud').then(m => m.NuevaSolicitud),
   },
   {
+    path: 'solicitud/:codigo',
+    canMatch: [authGuard],
+    loadComponent: () => import('./solicitud-info/solicitud-info').then(m => m.SolicitudInfoComponent),
+  },
+  {
     // wildcard route for a 404 page
     path: '**',
     redirectTo: '',

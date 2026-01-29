@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { supabase } from '../supabase.client';
+import { PropuestaListItem, SolicitudInfo } from '../../shared/models/solicitud-page';
 
 export type SolicitudInsert = {
   user_id: string;
@@ -64,6 +65,8 @@ export type SolicitudListItem = {
 
 
 
+
+
 @Injectable({ providedIn: 'root' })
 export class SolicitudesService {
 
@@ -95,6 +98,15 @@ export class SolicitudesService {
       .order('created_at', { ascending: false })
       .returns<SolicitudListItem[]>(); // <- importante para tipado
   }
+
+
+
+  getSolicitudDetalle(codigo: string) {
+    return supabase
+      .rpc('get_solicitud_detalle', { p_codigo: codigo });
+  }
+
+
 
 
   async cancelSolicitud(id: number) {

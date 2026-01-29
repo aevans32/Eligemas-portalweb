@@ -63,13 +63,18 @@ export class Dashboard implements OnInit{
     }
   }
 
-  verSolicitud(s: any) {
-    this.router.navigate(['/solicitud', s.id]); // ej: /solicitud/123
+  // verSolicitud(s: any) {
+  //   this.router.navigate(['/solicitud', s.id]); // ej: /solicitud/123
+  // }
+
+  verSolicitud(s: { codigo?: string | null; id: number }) {
+    const codigo = s.codigo ?? String(s.id);
+    this.router.navigate(['/solicitud', codigo]);
   }
 
-  editarSolicitud(s: any) {
-    this.router.navigate(['/solicitud', s.id, 'editar']); // ej: /solicitud/123/editar
-  }
+  // editarSolicitud(s: any) {
+  //   this.router.navigate(['/solicitud', s.id, 'editar']); // ej: /solicitud/123/editar
+  // }
 
 
 
