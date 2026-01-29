@@ -111,17 +111,17 @@ export class Dashboard implements OnInit{
     }
   }
 
-  async confirmarBorrarSolicitud(s: any) {
-  const ok = confirm('¿Seguro que deseas borrar esta solicitud?');
+  async confirmarCancelarSolicitud(s: any) {
+  const ok = confirm('¿Seguro que deseas cancelar esta solicitud?');
   if (!ok) return;
 
-  const res = await this.solicitudesService.deleteSolicitud(s.id);
+  const res = await this.solicitudesService.cancelSolicitud(s.id);
 
   const { data, error } = res;
 
   if (error) {
     this.snackBar.open(
-      `No se pudo borrar. ${error.message ?? ''}`.trim(),
+      `No se pudo cancelar. ${error.message ?? ''}`.trim(),
       'Cerrar',
       { duration: 6000 }
     );
@@ -129,7 +129,7 @@ export class Dashboard implements OnInit{
   }
 
   if (data === true) {
-    this.snackBar.open('Solicitud borrada.', 'Cerrar', { duration: 3000 });
+    this.snackBar.open('Solicitud cancelada.', 'Cerrar', { duration: 3000 });
     this.solicitudes = this.solicitudes.filter(x => x.id !== s.id);
     this.hasSolicitud = this.solicitudes.length > 0;
   } else {

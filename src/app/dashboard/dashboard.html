@@ -40,24 +40,29 @@
 
                                     <div></div>
                                     <div class="row-line">
-                                        <strong>
-                                            Placa: {{ (s.placa_vehiculo && s.placa_vehiculo.trim()) ? s.placa_vehiculo : '—' }}
-                                        </strong>
+                                        <div class="row-left">
+                                            <div class="row-title solicitud-codigo">
+                                                {{ s.codigo || '—' }}
+                                            </div>
+                                            <div class="row-caption">Código de solicitud</div>
+                                        </div>
 
                                         <div class="row-right">
                                             <span
-                                            class="state"
-                                            [ngClass]="estadoClass(s.estado?.nombre)"
-                                            >{{ s.estado?.nombre ?? '-' }}</span>
+                                                class="state"
+                                                [ngClass]="estadoClass(s.estado?.nombre)"
+                                            >
+                                                {{ s.estado?.nombre ?? '-' }}
+                                            </span>
 
                                             <!-- Botón de acciones -->
                                             <button
-                                            mat-icon-button
-                                            [matMenuTriggerFor]="menu"
-                                            aria-label="Acciones de la solicitud"
-                                            (click)="$event.stopPropagation()"
+                                                mat-icon-button
+                                                [matMenuTriggerFor]="menu"
+                                                aria-label="Acciones de la solicitud"
+                                                (click)="$event.stopPropagation()"
                                             >
-                                            <mat-icon>more_vert</mat-icon>
+                                                <mat-icon>more_vert</mat-icon>
                                             </button>
 
                                             <!-- Menú -->
@@ -72,7 +77,7 @@
                                                 <span>Editar</span>
                                             </button>
 
-                                            <button mat-menu-item (click)="confirmarBorrarSolicitud(s)">
+                                            <button mat-menu-item (click)="confirmarCancelarSolicitud(s)">
                                                 <mat-icon>delete</mat-icon>
                                                 <span>Borrar</span>
                                             </button>

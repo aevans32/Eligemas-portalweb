@@ -36,6 +36,7 @@ export type SolicitudInsert = {
 
 export type SolicitudRow = {
   id: number;
+  codigo: string;
   estado_id: number | null;
   created_at: string;
   moneda_id: number | null;
@@ -48,6 +49,7 @@ export type SolicitudRow = {
 
 export type SolicitudListItem = {
   id: number;
+  codigo: string;
   created_at: string;
   monto_actual_credito: number | null;
   placa_vehiculo: string | null;
@@ -69,7 +71,7 @@ export class SolicitudesService {
     return supabase
       .from('solicitud')
       .insert(payload)
-      .select('id')
+      .select('id,codigo')
       .single();
   }
 
@@ -78,6 +80,7 @@ export class SolicitudesService {
       .from('solicitud')
       .select(`
         id,
+        codigo,
         created_at,
         monto_actual_credito,
         placa_vehiculo,
@@ -93,11 +96,9 @@ export class SolicitudesService {
       .returns<SolicitudListItem[]>(); // <- importante para tipado
   }
 
-  // Llama a la función Postgre que elimina una solicitud por su ID
-  async deleteSolicitud(id: number) {
-    return supabase.rpc('delete_solicitud', {
-      p_id: id
-    });
+
+  async cancelSolicitud(id: number) {
+    return supabase.rpc('cancel_solicitud', { p_id: id });
   }
 
 
