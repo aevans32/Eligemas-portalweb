@@ -1,0 +1,198 @@
+<div class="page-container">
+  <app-header></app-header>
+
+  <div class="content-container">
+
+    <div class="title-container">
+      <div class="title">
+        <span>Detalle de Solicitud</span>
+      </div>
+    </div>
+
+    <div class="subtitle-container">
+      <span>Revisa la información registrada y las ofertas recibidas.</span>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content-inner">
+
+        @if (loading) {
+          <div class="loading-box">
+            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+            <span>Cargando...</span>
+          </div>
+        }
+        @else {
+          @if (errorMsg) {
+            <div class="error-card">
+              <mat-icon>error_outline</mat-icon>
+              <span>{{ errorMsg }}</span>
+            </div>
+          }
+
+          @if (solicitud) {
+
+            <!-- Card: Solicitud -->
+            <mat-card class="info-card">
+              <div class="card-header">
+                <div class="header-left">
+                  <div class="sol-codigo">{{ solicitud.codigo }}</div>
+                  <div class="sol-fecha">Registrada: {{ formatDate(solicitud.created_at) }}</div>
+                </div>
+
+                <div class="header-right">
+                  <span class="state" [ngClass]="estadoClass(solicitud.estado?.nombre)">
+                    {{ solicitud.estado?.nombre ?? '-' }}
+                  </span>
+                </div>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="grid">
+                <div class="kv">
+                  <div class="k">Monto actual</div>
+                  <div class="v">{{ formatMoney(solicitud.monto_actual_credito) }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Monto total</div>
+                  <div class="v">{{ formatMoney(solicitud.monto_total_credito) }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">TCEA</div>
+                  <div class="v">{{ formatPercent(solicitud.tcea) }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">TEA</div>
+                  <div class="v">{{ formatPercent(solicitud.tea) }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Plazo total</div>
+                  <div class="v">{{ solicitud.plazo_total_meses ?? '—' }} meses</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Cuotas pagadas</div>
+                  <div class="v">{{ solicitud.numero_cuotas_pagadas ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Placa</div>
+                  <div class="v">{{ solicitud.placa_vehiculo ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Ocupación</div>
+                  <div class="v">{{ solicitud.ocupacion ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Ingreso bruto</div>
+                  <div class="v">{{ formatMoney(solicitud.ingreso_bruto) }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Dependiente</div>
+                  <div class="v">{{ solicitud.es_dependiente === null ? '—' : (solicitud.es_dependiente ? 'Sí' : 'No') }}</div>
+                </div>
+              </div>
+
+              @if (solicitud.estado?.mensaje) {
+                <div class="estado-mensaje">
+                  <mat-icon>info</mat-icon>
+                  <span>{{ solicitud.estado?.mensaje }}</span>
+                </div>
+              }
+            </mat-card>
+
+            <!-- Card: Propuestas -->
+            <mat-card class="info-card">
+              <div class="section-title">
+                <mat-icon>local_offer</mat-icon>
+                <span>Ofertas recibidas</span>
+                <span class="count-chip">{{ propuestas.length }}</span>
+              </div>
+
+              <div class="table-container">
+                @if (propuestas.length === 0) {
+                  <div class="empty">
+                    <mat-icon>hourglass_empty</mat-icon>
+                    <span>Aún no hay ofertas para esta solicitud.</span>
+                  </div>
+                }
+                @else {
+                  <table mat-table [dataSource]="propuestas" class="propuestas-table">
+
+                    <ng-container matColumnDef="entidad">
+                      <th mat-header-cell *matHeaderCellDef>Entidad</th>
+                      <td mat-cell *matCellDef="let p">
+                        {{ p.entidad_financiera?.nombre ?? '—' }}
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="monto">
+                      <th mat-header-cell *matHeaderCellDef>Monto</th>
+                      <td mat-cell *matCellDef="let p">{{ formatMoney(p.monto_refinanciado ?? null) }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="tcea">
+                      <th mat-header-cell *matHeaderCellDef>TCEA</th>
+                      <td mat-cell *matCellDef="let p">{{ formatPercent(p.tcea ?? null) }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="plazo">
+                      <th mat-header-cell *matHeaderCellDef>Plazo</th>
+                      <td mat-cell *matCellDef="let p">{{ p.plazo_meses ?? '—' }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="cuota">
+                      <th mat-header-cell *matHeaderCellDef>Cuota</th>
+                      <td mat-cell *matCellDef="let p">{{ formatMoney(p.cuota_mensual ?? null) }}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="estado">
+                      <th mat-header-cell *matHeaderCellDef>Estado</th>
+                      <td mat-cell *matCellDef="let p">
+                        <span class="state small" [ngClass]="estadoClass(p.estado?.nombre)">
+                          {{ p.estado?.nombre ?? '-' }}
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="acciones">
+                      <th mat-header-cell *matHeaderCellDef></th>
+                      <td mat-cell *matCellDef="let p" class="actions-cell">
+                        <button mat-stroked-button (click)="verPropuesta(p)">
+                          Ver
+                        </button>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedPropuestasColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedPropuestasColumns;"></tr>
+                  </table>
+                }
+              </div>
+            </mat-card>
+
+            <div class="bottom-actions">
+              <button mat-button (click)="volver()">
+                <mat-icon>arrow_back</mat-icon>
+                Volver
+              </button>
+            </div>
+
+          }
+        }
+
+      </div>
+    </div>
+
+  </div>
+
+  <app-footer></app-footer>
+</div>
