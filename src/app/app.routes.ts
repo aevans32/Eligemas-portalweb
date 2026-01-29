@@ -21,7 +21,6 @@ export const routes: Routes = [
   },
   {
     path: 'basic-info',
-    //TODO: uncoment next line
     canMatch: [authGuard],
     loadComponent: () => import('./basic-info/basic-info').then(m => m.BasicInfo),
   },
@@ -39,6 +38,11 @@ export const routes: Routes = [
     path: 'solicitud/:codigo',
     canMatch: [authGuard],
     loadComponent: () => import('./solicitud-info/solicitud-info').then(m => m.SolicitudInfoComponent),
+  },
+  {
+    path: 'propuesta/:id',
+    canMatch: [authGuard],
+    loadComponent: () => import('./propuesta/propuesta').then(m => m.Propuesta),
   },
   {
     // wildcard route for a 404 page

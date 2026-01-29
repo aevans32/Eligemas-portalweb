@@ -75,11 +75,9 @@ export class SolicitudInfoComponent implements OnInit{
   }
 
   verPropuesta(p: PropuestaListItem) {
-    // en el siguiente módulo lo implementamos
-    // por ahora dejemos el hook:
-    // this.router.navigate(['/propuesta', p.id]);
-    console.log('[verPropuesta] propuestaId:', p.id);
+    this.router.navigate(['/propuesta', p.id]);
   }
+
 
   formatMoney(v: number | null | undefined) {
     if (v === null || v === undefined) return '—';

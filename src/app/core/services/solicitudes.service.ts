@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { supabase } from '../supabase.client';
 import { PropuestaListItem, SolicitudInfo } from '../../shared/models/solicitud-page';
+import { PropuestaDetalleRPC } from '../../shared/models/propuesta-page';
 
 export type SolicitudInsert = {
   user_id: string;
@@ -104,6 +105,18 @@ export class SolicitudesService {
   getSolicitudDetalle(codigo: string) {
     return supabase
       .rpc('get_solicitud_detalle', { p_codigo: codigo });
+  }
+
+  getPropuestaDetalle(id: number) {
+    return supabase.rpc('get_propuesta_detalle', { p_id: id });
+  }
+
+
+
+
+
+  elegirPropuesta(id: number) {
+    return supabase.rpc('elegir_propuesta', { p_propuesta_id: id });
   }
 
 

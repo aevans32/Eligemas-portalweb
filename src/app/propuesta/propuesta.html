@@ -1,0 +1,105 @@
+<div class="page-container">
+  <app-header></app-header>
+
+  <div class="content-container">
+    <div class="title-container">
+      <div class="title">
+        <span>Detalle de Oferta</span>
+      </div>
+    </div>
+
+    <div class="subtitle-container">
+      <span>Revisa la oferta y selecciónala si deseas continuar.</span>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content-inner">
+
+        @if (loading) {
+          <div class="loading-box">
+            <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+            <span>Cargando...</span>
+          </div>
+        } @else {
+
+          @if (errorMsg) {
+            <div class="error-card">
+              <mat-icon>error_outline</mat-icon>
+              <span>{{ errorMsg }}</span>
+            </div>
+          }
+
+          @if (propuesta) {
+            <mat-card class="info-card">
+              <div class="header-row">
+                <div>
+                  <div class="big">
+                    {{ propuesta.entidad_financiera?.nombre ?? 'Entidad' }}
+                  </div>
+                  <div class="small">
+                    Solicitud: {{ propuesta.solicitud.codigo }} • {{ formatDate(propuesta.created_at) }}
+                  </div>
+                </div>
+
+                <button mat-stroked-button (click)="volverSolicitud()">
+                  <mat-icon>arrow_back</mat-icon>
+                  Volver
+                </button>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="grid">
+                <div class="kv">
+                  <div class="k">Monto aprobado</div>
+                  <div class="v">{{ formatMoney(propuesta.monto_aprobado, propuesta.moneda?.simbolo ?? 'S/') }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Cuota estimada</div>
+                  <div class="v">{{ formatMoney(propuesta.cuota_estimada, propuesta.moneda?.simbolo ?? 'S/') }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Plazo</div>
+                  <div class="v">{{ propuesta.plazo_meses ?? '—' }} meses</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">TCEA</div>
+                  <div class="v">{{ formatPercent(propuesta.tcea) }}</div>
+                </div>
+              </div>
+
+              @if (propuesta.comentarios) {
+                <div class="comment">
+                  <mat-icon>chat</mat-icon>
+                  <span>{{ propuesta.comentarios }}</span>
+                </div>
+              }
+
+              <div class="actions">
+                <button
+                  mat-raised-button
+                  color="primary"
+                  (click)="elegir()"
+                  [disabled]="!!propuesta.solicitud.propuesta_elegida_id"
+                >
+                  <mat-icon>check_circle</mat-icon>
+                  Elegir oferta
+                </button>
+
+                @if (propuesta.solicitud.propuesta_elegida_id) {
+                  <span class="hint">Esta solicitud ya tiene una oferta elegida.</span>
+                }
+              </div>
+            </mat-card>
+          }
+        }
+
+      </div>
+    </div>
+  </div>
+
+  <app-footer></app-footer>
+</div>
