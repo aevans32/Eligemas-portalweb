@@ -39,6 +39,7 @@ export class Dashboard implements OnInit{
   private router = inject(Router);
 
   hasSolicitud = false;
+  profileComplete = false;
 
   loading = true;
   errorMsg: string | null = null;
@@ -79,7 +80,6 @@ export class Dashboard implements OnInit{
 
 
   async ngOnInit() {
-
     await this.auth.init();
 
     const session = this.auth.session;
@@ -91,7 +91,24 @@ export class Dashboard implements OnInit{
       return;
     }
 
-    const { data, error } = await this.solicitudesService.getMisSolicitudes(userId);
+    // 🔒 check profile completion FIRST
+    const { data: profile, error: profileErr } =
+      await this.auth.getMyProfileStatus();
+
+    this.profileComplete = !!profile?.is_complete;
+
+    // If profile is NOT complete, we still load dashboard,
+    // but we may skip solicitud-related calls if you want
+    if (!this.profileComplete) {
+      this.solicitudes = [];
+      this.hasSolicitud = false;
+      this.loading = false;
+      return;
+    }
+
+    //  profile complete → continue normal flow
+    const { data, error } =
+      await this.solicitudesService.getMisSolicitudes(userId);
 
     if (error) {
       this.errorMsg = error.message;
@@ -100,8 +117,6 @@ export class Dashboard implements OnInit{
     }
 
     this.solicitudes = data ?? [];
-    
-
     this.hasSolicitud = await this.solicitudesService.hasMySolicitud();
 
     this.loading = false;

@@ -256,7 +256,7 @@
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Provincia</mat-label>
 
-          <mat-select formControlName="provinciaCode" [disabled]="!provincias.length">
+          <mat-select formControlName="provinciaCode">
             <mat-option *ngFor="let p of provincias" [value]="p.code">
               {{ p.nombre }}
             </mat-option>

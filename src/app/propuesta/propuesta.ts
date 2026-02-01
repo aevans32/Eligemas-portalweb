@@ -68,7 +68,7 @@ export class Propuesta implements OnInit{
         return;
       }
 
-      this.propuesta = data; // ✅ listo
+      this.propuesta = data; 
 
 
 
@@ -126,6 +126,26 @@ export class Propuesta implements OnInit{
     if (!iso) return '—';
     return new Date(iso).toLocaleString('es-PE', { year: 'numeric', month: '2-digit', day: '2-digit' });
   }
+
+  logoSrc(ef: { codigo?: string | null } | null | undefined): string | null {
+    const code = (ef?.codigo ?? '').trim().toUpperCase();
+
+    const map: Record<string, string> = {
+      BCP: 'images/ef/bcp.jpeg',
+      BBVA: 'images/ef/bbva.png',
+      IBK: 'images/ef/ibk.jpeg',
+      SBK: 'images/ef/scotia.jpeg',
+      PICH: 'images/ef/pichincha.jpeg',
+      FALA: 'images/ef/falabella.jpeg',
+      RIP: 'images/ef/ripley.jpeg',
+      CAJA_AQP: 'images/ef/caja-aqp.jpeg',
+    };
+
+    return map[code] ?? null;
+  }
+
+
+
 
 
   

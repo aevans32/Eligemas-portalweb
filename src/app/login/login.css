@@ -126,3 +126,26 @@
     height: 420px;
   }
 }
+
+
+
+
+
+/* Snackbar error - Angular Material MDC */
+.snackbar-error.mat-mdc-snack-bar-container {
+  background-color: #d32f2f;
+  color: #fff;
+  min-width: 360px;
+  max-width: 90vw;
+}
+
+.snackbar-error .mdc-snackbar__surface {
+  background-color: #d32f2f;
+  padding: 16px 24px;
+}
+
+.snackbar-error .mdc-snackbar__label {
+  color: #fff;
+  font-size: 14px;
+  font-weight: 500;
+}

@@ -28,6 +28,21 @@
                         <p class="error">{{ errorMsg }}</p>
                         }
                         @else {
+
+                        @if (!profileComplete) {
+                        <div class="profile-warning">
+                            <p class="hint">
+                            No has terminado de llenar tus datos de perfil.
+                            </p>
+                            <button mat-button routerLink="/basic-info" class="action-button">
+                            Completar perfil
+                            </button>
+                        </div>
+                        }
+
+                        @else {
+                        
+
                         @if (solicitudes.length === 0) {
                         <p>No tienes solicitudes aún.</p>
                         }
@@ -49,8 +64,12 @@
 
                                         <div class="row-right">
                                             <span
-                                                class="state"
+                                                class="state clickable"
                                                 [ngClass]="estadoClass(s.estado?.nombre)"
+                                                role="button"
+                                                (click)="verSolicitud(s)"
+                                                (keydown.enter)="verSolicitud(s)"
+                                                (keydown.space)="verSolicitud(s)"
                                             >
                                                 {{ s.estado?.nombre ?? '-' }}
                                             </span>
@@ -109,6 +128,7 @@
                         }
                         }
                         }
+                        }
 
 
                     </div>
@@ -120,6 +140,19 @@
 
 
         <div class="action-button-container">
+
+        @if (!profileComplete) {
+            <div class="profile-cta">
+                <p class="hint">
+                    Completa tu perfil para poder registrar una solicitud.
+                </p>
+
+                <button mat-button routerLink="/basic-info" class="action-button">
+                    Completar perfil
+                </button>
+            </div>
+        }
+        @else {
             @if (!hasSolicitud) {
             <button mat-button routerLink="/nueva-solicitud" class="action-button">
                 Nueva Solicitud
@@ -130,7 +163,12 @@
                 Ya tienes una solicitud registrada.
             </p>
             }
+        }
+
         </div>
+
+
+
 
     </div>
 

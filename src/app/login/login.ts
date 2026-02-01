@@ -10,18 +10,27 @@ import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { Header } from "../shared/components/header/header";
 import { AuthService } from '../core/services/auth.service';
 import { Footer } from "../shared/components/footer/footer";
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
-  imports: [MatInputModule, Header, ReactiveFormsModule, RouterModule, Footer],
+  imports: [
+    MatInputModule, 
+    Header, 
+    ReactiveFormsModule, 
+    RouterModule, 
+    Footer,
+    MatSnackBarModule
+  ],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
 export class Login {
 
-  authService = inject(AuthService);
-  router = inject(Router);
-  route = inject(ActivatedRoute);
+  private authService = inject(AuthService);
+  private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private snackBar = inject(MatSnackBar);
   
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -29,7 +38,11 @@ export class Login {
   });
 
   async login() {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
+      this.showError('Completa correctamente el correo y contraseña.');
+      return;
+    }
 
     const email = this.loginForm.controls.email.value!;
     const password = this.loginForm.controls.password.value!;
@@ -38,11 +51,12 @@ export class Login {
 
     if (error) {
       console.error('Login error:', error.message);
+      this.showError(this.mapLoginError(error));
       return;
     }
 
-    // Ahora que ya hay sesión, trae profile y cachea nombre
-    const { data: profile, error: profileError } = await this.authService.getMyProfile();
+    const { data: profile, error: profileError } =
+      await this.authService.getMyProfile();
 
     if (profileError) {
       console.warn('getMyProfile error:', profileError.message);
@@ -55,5 +69,35 @@ export class Login {
       this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
 
     await this.router.navigateByUrl(returnUrl);
+  }
+
+
+
+  private showError(message: string) {
+    this.snackBar.open(message, 'Cerrar', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['snackbar-error'],
+    });
+  }
+
+
+  private mapLoginError(error: any): string {
+    const msg = (error?.message || '').toLowerCase();
+
+    if (msg.includes('invalid login credentials')) {
+      return 'Correo o contraseña incorrectos.';
+    }
+
+    if (msg.includes('email not confirmed')) {
+      return 'Debes confirmar tu correo antes de iniciar sesión.';
+    }
+
+    if (msg.includes('invalid email')) {
+      return 'El formato del correo es inválido.';
+    }
+
+    return 'No se pudo iniciar sesión. Inténtalo nuevamente.';
   }
 }

@@ -63,11 +63,6 @@ export type SolicitudListItem = {
   } | null;
 };
 
-
-
-
-
-
 @Injectable({ providedIn: 'root' })
 export class SolicitudesService {
 

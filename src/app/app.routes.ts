@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
+import { profileCompleteGuard } from './core/guards/profile-complete.guard';
 
 
 export const routes: Routes = [
@@ -29,9 +30,14 @@ export const routes: Routes = [
     canMatch: [authGuard],
     loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard),
   },
+  // {
+  //   path: 'nueva-solicitud',
+  //   canMatch: [authGuard],
+  //   loadComponent: () => import('./nueva-solicitud/nueva-solicitud').then(m => m.NuevaSolicitud),
+  // },
   {
     path: 'nueva-solicitud',
-    canMatch: [authGuard],
+    canActivate: [profileCompleteGuard],
     loadComponent: () => import('./nueva-solicitud/nueva-solicitud').then(m => m.NuevaSolicitud),
   },
   {

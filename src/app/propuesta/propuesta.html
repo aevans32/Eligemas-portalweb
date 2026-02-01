@@ -31,13 +31,25 @@
 
           @if (propuesta) {
             <mat-card class="info-card">
+
               <div class="header-row">
-                <div>
-                  <div class="big">
-                    {{ propuesta.entidad_financiera?.nombre ?? 'Entidad' }}
-                  </div>
-                  <div class="small">
-                    Solicitud: {{ propuesta.solicitud.codigo }} • {{ formatDate(propuesta.created_at) }}
+                <div class="header-left">
+                  @if (logoSrc(propuesta.entidad_financiera)) {
+                    <img
+                      class="ef-logo"
+                      [src]="logoSrc(propuesta.entidad_financiera)!"
+                      [alt]="'Logo ' + (propuesta.entidad_financiera?.nombre ?? '')"
+                      loading="lazy"
+                    />
+                  }
+
+                  <div>
+                    <div class="big">
+                      {{ propuesta.entidad_financiera?.nombre ?? 'Entidad' }}
+                    </div>
+                    <div class="small">
+                      Solicitud: {{ propuesta.solicitud.codigo }} • {{ formatDate(propuesta.created_at) }}
+                    </div>
                   </div>
                 </div>
 
@@ -46,6 +58,7 @@
                   Volver
                 </button>
               </div>
+
 
               <mat-divider></mat-divider>
 

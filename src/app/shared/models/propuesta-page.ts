@@ -7,7 +7,7 @@ export type PropuestaDetalle = {
   cuota_estimada: number | null;
   comentarios: string | null;
   moneda: { id: number; nombre: string; simbolo: string } | null;
-  entidad_financiera: { id: number; nombre: string } | null;
+  entidad_financiera: { id: number; nombre: string; codigo: string } | null;
   solicitud: { id: number; codigo: string; estado_id: number; propuesta_elegida_id: number | null; };
 };
 
