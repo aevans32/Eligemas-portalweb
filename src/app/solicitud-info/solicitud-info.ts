@@ -43,9 +43,13 @@ export class SolicitudInfoComponent implements OnInit{
   solicitud: SolicitudInfo | null = null;
   propuestas: PropuestaListItem[] = [];
 
-  displayedPropuestasColumns = ['entidad', 'monto', 'tcea', 'plazo', 'cuota', 'estado', 'acciones'];
+  displayedPropuestasColumns = ['logo', 'entidad', 'monto', 'tcea', 'plazo', 'cuota', 'estado', 'acciones'];
 
   async ngOnInit() {
+
+    
+
+
     const codigo = this.route.snapshot.paramMap.get('codigo');
     if (!codigo) {
       this.errorMsg = 'No se encontró el código de la solicitud.';
@@ -66,6 +70,8 @@ export class SolicitudInfoComponent implements OnInit{
 
     this.solicitud = data.solicitud;
     this.propuestas = data.propuestas;
+
+    console.log('Propuestas:', this.propuestas);
 
     this.loading = false;
   }
@@ -102,5 +108,31 @@ export class SolicitudInfoComponent implements OnInit{
     if (n.includes('pend')) return 'state--warn';
     return 'state--neutral';
   }
+
+
+  logoSrc(ef: { codigo?: string | null } | null | undefined): string | null {
+    const code = (ef?.codigo ?? '').trim().toUpperCase();
+
+    // mapping por código (más estable que el nombre)
+    const map: Record<string, string> = {
+      BCP: 'images/ef/bcp.jpeg',
+      BBVA: 'images/ef/bbva.png',
+      IBK: 'images/ef/ibk.jpeg',
+      SBK: 'images/ef/scotia.jpeg',
+      PICH: 'images/ef/pichincha.jpeg',
+      FALA: 'images/ef/falabella.jpeg',
+      RIP: 'images/ef/ripley.jpeg',
+      CAJA_AQP: 'images/ef/caja-aqp.jpeg',
+      
+    };
+
+    return map[code] ?? null;
+  }
+
+  logoClass(ef: { codigo?: string | null } | null | undefined): string {
+    const code = (ef?.codigo ?? '').trim().toLowerCase();
+    return code ? `ef-${code}` : 'ef-unknown';
+  }
+
 
 }

@@ -64,8 +64,12 @@
 
                                         <div class="row-right">
                                             <span
-                                                class="state"
+                                                class="state clickable"
                                                 [ngClass]="estadoClass(s.estado?.nombre)"
+                                                role="button"
+                                                (click)="verSolicitud(s)"
+                                                (keydown.enter)="verSolicitud(s)"
+                                                (keydown.space)="verSolicitud(s)"
                                             >
                                                 {{ s.estado?.nombre ?? '-' }}
                                             </span>

@@ -33,7 +33,7 @@
 .title-container {
   display: flex;
   justify-content: center;
-  margin-top: 6px;
+  margin-top: 26px;
   margin-bottom: 10px;
 }
 
@@ -145,34 +145,39 @@
 
 /* Default (fallback) */
 .state--default {
-  background: #9ca3af;        /* gris */
-  border-color: #6b7280;
+  background: #9ca3af;        /* gray-400 */
+  border-color: #6b7280;      /* gray-500 */
+  color: #111827;
 }
 
-/* Ver ofertas (verde) */
-.state--ofertas {
-  background: #16a34a;
-  border-color: #065f46;
-}
-
-/* En Proceso (amarillo) */
+/* En Proceso (azul - informativo) */
 .state--proceso {
-  background: #f59e0b;
-  border-color: #b45309;
-  color: #111827;             /* texto oscuro para contraste */
+  background: #3b82f6;        /* blue-500 */
+  border-color: #1d4ed8;      /* blue-700 */
+  color: #ffffff;
 }
 
-/* Rechaz linked (rojo) */
-.state--rechazado {
-  background: #dc2626;
-  border-color: #7f1d1d;
+/* Ver ofertas (verde - acción disponible) */
+.state--ofertas {
+  background: #16a34a;        /* green-600 */
+  border-color: #065f46;      /* green-800 */
+  color: #ffffff;
 }
 
-/* Finalizado (gris) */
+/* Finalizado (verde/gris - éxito cerrado) */
 .state--finalizado {
-  background: #6b7280;
-  border-color: #374151;
+  background: #047857;        /* emerald-700 */
+  border-color: #064e3b;      /* emerald-900 */
+  color: #ffffff;
 }
+
+/* Cancelada / Rechazada (rojo - terminal) */
+.state--rechazado {
+  background: #dc2626;        /* red-600 */
+  border-color: #7f1d1d;      /* red-900 */
+  color: #ffffff;
+}
+
 
 
 
@@ -288,4 +293,25 @@
   & .action-button {
     margin-top: 8px;
   }
+}
+
+
+.state.clickable {
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.05s ease, box-shadow 0.15s ease, filter 0.15s ease;
+}
+
+.state.clickable:hover {
+  filter: brightness(1.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.state.clickable:active {
+  transform: translateY(1px);
+}
+
+.state.clickable:focus-visible {
+  outline: 2px solid #2563eb; /* azul accesible */
+  outline-offset: 2px;
 }
