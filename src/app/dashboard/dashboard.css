@@ -201,6 +201,7 @@
   background-color: #EFF9F7;
   color: #103D51;
   padding: 12px 24px;
+
   font-size: 18px;
   font-weight: 600;
 
@@ -215,6 +216,7 @@
 
 .action-button-container .action-button:hover {
   background-color: #8DD2B5;
+  
 }
 
 /* MOBILE */
@@ -278,4 +280,12 @@
   border-radius: 12px;
   background: rgba(255, 193, 7, 0.12);
   margin-bottom: 12px;
+}
+
+.profile-cta {
+  text-align: center;
+
+  & .action-button {
+    margin-top: 8px;
+  }
 }

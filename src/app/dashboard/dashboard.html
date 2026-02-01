@@ -138,13 +138,15 @@
         <div class="action-button-container">
 
         @if (!profileComplete) {
-            <p class="hint">
-            Completa tu perfil para poder registrar una solicitud.
-            </p>
+            <div class="profile-cta">
+                <p class="hint">
+                    Completa tu perfil para poder registrar una solicitud.
+                </p>
 
-            <button mat-button routerLink="/basic-info" class="action-button">
-            Completar perfil
-            </button>
+                <button mat-button routerLink="/basic-info" class="action-button">
+                    Completar perfil
+                </button>
+            </div>
         }
         @else {
             @if (!hasSolicitud) {
