@@ -15,6 +15,80 @@ import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular
 import { CatalogosService, TipoDocumentoRow } from '../core/services/catalogos.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
+
+export class EsPeDateAdapter extends NativeDateAdapter {
+  override parse(value: any): Date | null {
+    if (value == null || value === '') return null;
+
+    // Si ya es Date
+    if (value instanceof Date && !isNaN(value.getTime())) return value;
+
+    if (typeof value !== 'string') return null;
+
+    const raw = value.trim();
+
+    // Permitir "DDMMYYYY" y "DD/MM/YYYY"
+    const digits = raw.replace(/\D/g, ''); // solo números
+
+    // Caso 8 dígitos: DDMMYYYY
+    if (digits.length === 8) {
+      const dd = Number(digits.slice(0, 2));
+      const mm = Number(digits.slice(2, 4));
+      const yyyy = Number(digits.slice(4, 8));
+      return this.buildDate(yyyy, mm, dd);
+    }
+
+    // Caso con separadores: DD/MM/YYYY
+    const m = raw.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+    if (m) {
+      const dd = Number(m[1]);
+      const mm = Number(m[2]);
+      const yyyy = Number(m[3]);
+      return this.buildDate(yyyy, mm, dd);
+    }
+
+    return null;
+  }
+
+  private buildDate(yyyy: number, mm: number, dd: number): Date | null {
+    // validaciones básicas
+    if (!yyyy || yyyy < 1900 || yyyy > 2100) return null;
+    if (!mm || mm < 1 || mm > 12) return null;
+    if (!dd || dd < 1 || dd > 31) return null;
+
+    // OJO: JS Date usa mes 0-11
+    const d = new Date(yyyy, mm - 1, dd);
+
+    // Validación fuerte (evita 31/02/2020, etc.)
+    if (
+      d.getFullYear() !== yyyy ||
+      d.getMonth() !== mm - 1 ||
+      d.getDate() !== dd
+    ) {
+      return null;
+    }
+
+    return d;
+  }
+}
+
+export function notFutureDateValidator(): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const v = control.value;
+    if (!v || !(v instanceof Date) || isNaN(v.getTime())) return null;
+
+    const today = new Date();
+    today.setHours(0,0,0,0);
+
+    const d = new Date(v);
+    d.setHours(0,0,0,0);
+
+    return d > today ? { futureDate: true } : null;
+  };
+}
+
+
 
 
 
@@ -64,7 +138,8 @@ export function validDateValidator(): ValidatorFn {
   templateUrl: './basic-info.html',
   styleUrl: './basic-info.css',
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'es-PE' }, 
+    { provide: MAT_DATE_LOCALE, useValue: 'es-PE' },
+    { provide: DateAdapter, useClass: EsPeDateAdapter, deps: [MAT_DATE_LOCALE] }, 
     { provide: MAT_DATE_FORMATS, useValue: ES_DATE_FORMATS }],
 })
 export class BasicInfo {
@@ -98,7 +173,7 @@ export class BasicInfo {
     
     fechaNacimiento: new FormControl<Date | null>(
       null,
-      [Validators.required, validDateValidator(), adultMinAgeValidator(18)]
+      [Validators.required, validDateValidator(), notFutureDateValidator(), adultMinAgeValidator(18)]
     ),
 
 
@@ -336,19 +411,32 @@ export class BasicInfo {
   }
 
   get documentoTooltip(): string {
-  const tipo = this.selectedTipoDocumento;
+    const tipo = this.selectedTipoDocumento;
 
-  if (!tipo) {
-    return 'Longitud requerida varia según el tipo de documento.';
+    if (!tipo) {
+      return 'Longitud requerida varia según el tipo de documento.';
+    }
+
+    const lengthText =
+      tipo.min_len === tipo.max_len
+        ? `${tipo.min_len}`
+        : `${tipo.min_len}–${tipo.max_len}`;
+
+    return `${tipo.codigo}: ${lengthText} caracteres`;
   }
 
-  const lengthText =
-    tipo.min_len === tipo.max_len
-      ? `${tipo.min_len}`
-      : `${tipo.min_len}–${tipo.max_len}`;
+  dateInput(e: Event) {
+    const input = e.target as HTMLInputElement;
+    const digits = input.value.replace(/\D/g, '').slice(0, 8);
 
-  return `${tipo.codigo}: ${lengthText} caracteres`;
-}
+    // Auto-formato: DD/MM/YYYY
+    let out = digits;
+    if (digits.length > 2) out = digits.slice(0, 2) + '/' + digits.slice(2);
+    if (digits.length > 4) out = out.slice(0, 5) + '/' + digits.slice(4);
+
+    if (out !== input.value) input.value = out;
+  }
+
 
 
 
