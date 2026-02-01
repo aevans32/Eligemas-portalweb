@@ -113,7 +113,8 @@ export class BasicInfo {
     urbanizacion: new FormControl(''),
 
     
-    provinciaCode: new FormControl<string | null>(null, [Validators.required]),
+    // provinciaCode: new FormControl<string | null>(null, [Validators.required]),
+    provinciaCode: new FormControl<string | null>({ value: null, disabled: true}, [Validators.required]), 
     distrito: new FormControl('', [Validators.required, Validators.minLength(2)]),
     departamentoCode: new FormControl('', [Validators.required]),
 
@@ -185,7 +186,29 @@ export class BasicInfo {
     ].filter(Boolean).join(' ');
 
 
-    const profileInsert = {
+    // const profileInsert = {
+    //   id: session.user.id,
+    //   nombres: this.form.controls.nombres.value!.trim(),
+    //   apellidos: this.form.controls.apellidos.value!.trim(),
+
+    //   tipo_documento_id: this.form.controls.tipoDocumentoId.value!,
+    //   num_documento: this.form.controls.num_documento.value!.trim(),
+
+    //   estado_civil: this.form.controls.estadoCivilCodigo.value!,
+
+    //   celular: this.form.controls.celular.value!,
+    //   fecha_nacimiento: this.form.controls.fechaNacimiento.value!,
+
+    //   direccion: direccionFinal,
+    //   provincia: this.form.controls.provinciaCode.value!, // o guarda provincia_code en DB si prefieres
+    //   distrito: this.form.controls.distrito.value!.trim(),
+
+    //   departamento_code: this.form.controls.departamentoCode.value!,
+    // };
+
+    // const { error } = await this.auth.createProfile(profileInsert);
+
+    const profileUpdate = {
       id: session.user.id,
       nombres: this.form.controls.nombres.value!.trim(),
       apellidos: this.form.controls.apellidos.value!.trim(),
@@ -194,18 +217,19 @@ export class BasicInfo {
       num_documento: this.form.controls.num_documento.value!.trim(),
 
       estado_civil: this.form.controls.estadoCivilCodigo.value!,
-
       celular: this.form.controls.celular.value!,
       fecha_nacimiento: this.form.controls.fechaNacimiento.value!,
 
       direccion: direccionFinal,
-      provincia: this.form.controls.provinciaCode.value!, // o guarda provincia_code en DB si prefieres
+      provincia: this.form.controls.provinciaCode.value!,
       distrito: this.form.controls.distrito.value!.trim(),
-
       departamento_code: this.form.controls.departamentoCode.value!,
+
+      is_complete: true, // ✅ key
     };
 
-    const { error } = await this.auth.createProfile(profileInsert);
+    const { error } = await this.auth.upsertOrUpdateProfile(profileUpdate);
+
 
     if (error) {
       console.error('Profile insert error:', error.message);
@@ -274,27 +298,36 @@ export class BasicInfo {
   }
 
   private setupProvinciaDropdown() {
-  const depCtrl = this.form.controls.departamentoCode;
-  const provCtrl = this.form.controls.provinciaCode;
+    const depCtrl = this.form.controls.departamentoCode;
+    const provCtrl = this.form.controls.provinciaCode;
 
-  // cada vez que cambie el departamento:
-  depCtrl.valueChanges.subscribe(async (depCode) => {
-    // reset provincia y lista
-    provCtrl.setValue(null, { emitEvent: false });
-    provCtrl.markAsUntouched();
-    this.provincias = [];
+    // start disabled until we have provincias to show
+    provCtrl.disable({ emitEvent: false});
 
-    if (!depCode) return;
+    // cada vez que cambie el departamento:
+    depCtrl.valueChanges.subscribe(async (depCode) => {
+      // reset provincia y lista
+      provCtrl.setValue(null, { emitEvent: false });
+      provCtrl.markAsUntouched();
+      this.provincias = [];
 
-    const { data, error } = await this.catalog.getProvinciasByDepartamento(depCode);
-    if (error) {
-      console.error('Error loading provincias:', error.message);
-      return;
-    }
+      if (!depCode) return;
 
-    this.provincias = data ?? [];
-  });
-}
+      const { data, error } = await this.catalog.getProvinciasByDepartamento(depCode);
+      if (error) {
+        console.error('Error loading provincias:', error.message);
+        return;
+      }
+
+      this.provincias = data ?? [];
+
+      // enable only if we have options
+      if (this.provincias.length > 0) {
+        provCtrl.enable({ emitEvent: false});
+      }
+
+    });
+  }
 
 
   get selectedTipoDocumento(): TipoDocumentoRow | null {

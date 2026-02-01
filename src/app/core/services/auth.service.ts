@@ -6,6 +6,7 @@ import { ProfileInsert } from "../../shared/models/profile-insert";
 
 type ProfileMini = { nombres: string | null };
 
+type ProfileStatus = { is_complete: boolean | null };
 
 
 
@@ -118,6 +119,26 @@ export class AuthService {
             .select('nombres')
             .eq('id', uid)
             .maybeSingle<ProfileMini>();
+    }
+
+    async getMyProfileStatus() {
+      const uid = this.session?.user.id;
+      
+      if (!uid) return { data: null as ProfileStatus | null, error: null as any };
+
+      return supabase
+        .from('profiles')
+        .select('is_complete')
+        .eq('id', uid)
+        .maybeSingle<ProfileStatus>();
+    }
+
+    async upsertOrUpdateProfile(profile: any) {
+      return supabase
+        .from('profiles')
+        .upsert(profile, { onConflict: 'id' })
+        .select()
+        .maybeSingle();
     }
 
     setCachedUserName(name: string | null) {
