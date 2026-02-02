@@ -3,26 +3,57 @@
 
     <div class="content-container">
         
-    <div class="hero">
-        <div class="hero-image">
-                <img src="images/home/hero1.png" alt="Elige Plus" />
+    <div class="hero" (mouseenter)="stopAutoPlay()" (mouseleave)="startAutoPlay()">
+
+        <div class="hero-image" aria-label="Hero carousel">
+            <div
+            class="hero-slide"
+            *ngFor="let s of slides; let i = index"
+            [ngClass]="{ active: i === currentIndex }"
+            aria-hidden="{{ i === currentIndex ? 'false' : 'true' }}"
+            >
+            <img [src]="s.src" [alt]="s.alt" />
+            </div>
+
+            <!-- Opcional: flechas -->
+            <button type="button" class="hero-nav prev" (click)="prev()" aria-label="Anterior">
+            ‹
+            </button>
+            <button type="button" class="hero-nav next" (click)="next()" aria-label="Siguiente">
+            ›
+            </button>
+
+            <!-- Opcional: dots -->
+            <div class="hero-dots" role="tablist" aria-label="Slides">
+            <button
+                type="button"
+                class="dot"
+                *ngFor="let _ of slides; let i = index"
+                [ngClass]="{ active: i === currentIndex }"
+                (click)="goTo(i)"
+                aria-label="Ir al slide {{ i + 1 }}"
+            ></button>
+            </div>
         </div>
 
         <div class="hero-overlay"></div>
 
-        <div class="hero-content">
-            <h1>Bienvenido a Elige +</h1>
-            <!-- <p>Tu aliado en la gestión y mejora de tus condiciones de deuda.</p> -->
-        
-            <h2>Decide dónde pagar menos por el mismo préstamo. Transparente, fácil y 100% digital</h2>
-        
-            <!--TODO: change the router from dashboard to signup-->
+        <div class="hero-content"
+                [ngClass]="{
+                'align-left': currentSlide.align === 'left',
+                'align-right': currentSlide.align === 'right'
+                }">
+
+            <h1>{{ currentSlide.title }}</h1>
+            <h2>{{ currentSlide.subtitle }}</h2>
+
             <div class="action-button-container">
                 <button mat-button routerLink="/dashboard" class="action-button">Obtén tu Oferta</button>
-            </div> 
-
+            </div>
         </div>
-    </div> <!-- End hero -->
+
+    </div>
+
 
     <div class="floor2-container">
         <ol>
@@ -55,7 +86,7 @@
 
     <div class="floor3-container">
         <div class="piggy-image-container">
-                <img src="images/home/piggy.png" alt="Elige Plus" />
+                <img src="images/home/piggy2.png" alt="Elige Plus" />
         </div>
         <div class="floor3-content-container">
             <h2>¿Por qué Elige +?</h2>
