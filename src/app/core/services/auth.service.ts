@@ -4,9 +4,11 @@ import { BehaviorSubject } from "rxjs";
 import { supabase } from "../supabase.client";
 import { ProfileInsert } from "../../shared/models/profile-insert";
 
-type ProfileMini = { nombres: string | null };
+type ProfileMini = { nombres: string | null; is_admin: boolean | null };
 
 type ProfileStatus = { is_complete: boolean | null };
+
+type ProfileAdmin = { is_admin: boolean | null };
 
 
 
@@ -25,52 +27,57 @@ export class AuthService {
     private initialized = false;
     private authSub?: { unsubscribe: () => void };
 
+    private _isAdmin$ = new BehaviorSubject<boolean | null>(null);
+    isAdmin$ = this._isAdmin$.asObservable();
+
+
     async init() {
-  if (this.initialized) return;
-  this.initialized = true;
+      if (this.initialized) return;
+      this.initialized = true;
 
-  // 1) Listener
-  const { data: listener } = supabase.auth.onAuthStateChange(
-    (event: AuthChangeEvent, session: Session | null) => {
-      this._session$.next(session ?? null);
+      // 1) Listener
+      const { data: listener } = supabase.auth.onAuthStateChange(
+        (event: AuthChangeEvent, session: Session | null) => {
+          this._session$.next(session ?? null);
+          this._isAdmin$.next(null);
 
-      if (event === 'INITIAL_SESSION' && !this._loaded$.value) {
-        this._loaded$.next(true);
-      }
-    }
-  );
-  this.authSub = listener.subscription;
+          if (event === 'INITIAL_SESSION' && !this._loaded$.value) {
+            this._loaded$.next(true);
+          }
+        }
+      );
+      this.authSub = listener.subscription;
 
-  // 2) Rehidrata con retry (por si hay lock race)
-  const isLockError = (e: unknown) => {
-    const msg = String((e as any)?.message ?? e ?? '');
-    return msg.includes('NavigatorLockAcquireTimeoutError') || msg.includes('LockManager');
-  };
+      // 2) Rehidrata con retry (por si hay lock race)
+      const isLockError = (e: unknown) => {
+        const msg = String((e as any)?.message ?? e ?? '');
+        return msg.includes('NavigatorLockAcquireTimeoutError') || msg.includes('LockManager');
+      };
 
-  const getSessionWithRetry = async (retries = 5, delayMs = 150) => {
-    for (let i = 0; i < retries; i++) {
-      try {
+      const getSessionWithRetry = async (retries = 5, delayMs = 150) => {
+        for (let i = 0; i < retries; i++) {
+          try {
+            return await supabase.auth.getSession();
+          } catch (e) {
+            if (!isLockError(e)) throw e;
+            await new Promise((r) => setTimeout(r, delayMs));
+          }
+        }
         return await supabase.auth.getSession();
+      };
+
+      try {
+        const { data } = await getSessionWithRetry();
+        this._session$.next(data.session ?? null);
       } catch (e) {
-        if (!isLockError(e)) throw e;
-        await new Promise((r) => setTimeout(r, delayMs));
+        console.warn('getSession failed:', e);
       }
+
+      // 3) Fallback loaded
+      setTimeout(() => {
+        if (!this._loaded$.value) this._loaded$.next(true);
+      }, 1500);
     }
-    return await supabase.auth.getSession();
-  };
-
-  try {
-    const { data } = await getSessionWithRetry();
-    this._session$.next(data.session ?? null);
-  } catch (e) {
-    console.warn('getSession failed:', e);
-  }
-
-  // 3) Fallback loaded
-  setTimeout(() => {
-    if (!this._loaded$.value) this._loaded$.next(true);
-  }, 1500);
-}
 
 
   
@@ -110,13 +117,14 @@ export class AuthService {
         return supabase.from('profiles').insert(profile).select().maybeSingle();
     }
 
+    // Metodo para Login
     async getMyProfile() {
         const uid = this.session?.user.id;
         if (!uid) return { data: null as ProfileMini | null, error: null as any };
 
         return supabase
             .from('profiles')
-            .select('nombres')
+            .select('nombres, is_admin')
             .eq('id', uid)
             .maybeSingle<ProfileMini>();
     }
@@ -140,6 +148,48 @@ export class AuthService {
         .select()
         .maybeSingle();
     }
+
+    async refreshIsAdmin() {
+      const uid = this.session?.user.id;
+      if (!uid) {
+        this._isAdmin$.next(false);
+        return { data: false, error: null as any };
+      }
+
+      const res = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', uid)
+        .maybeSingle<ProfileAdmin>();
+
+      if (res.error) {
+        this._isAdmin$.next(false);
+        return { data: false, error: res.error };
+      }
+
+      const isAdmin = res.data?.is_admin === true;
+      this._isAdmin$.next(isAdmin);
+      return { data: isAdmin, error: null as any };
+    }
+
+    /** Returns cached value if available; otherwise fetches once */
+    async isAdmin(): Promise<boolean> {
+      const cached = this._isAdmin$.value;
+      if (cached !== null) return cached;
+
+      const { data } = await this.refreshIsAdmin();
+      return data === true;
+    }
+
+    async refreshSession() {
+      const { data, error } = await supabase.auth.getSession();
+      if (!error) {
+        this._session$.next(data.session ?? null);
+      }
+      return { data, error };
+    }
+
+
 
     setCachedUserName(name: string | null) {
         if (name) {

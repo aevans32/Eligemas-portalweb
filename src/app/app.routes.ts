@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/guards/auth.guard';
 import { profileCompleteGuard } from './core/guards/profile-complete.guard';
+import { adminGuard } from './admin/guards/adminGuard';
 
 
 export const routes: Routes = [
@@ -30,11 +31,6 @@ export const routes: Routes = [
     canMatch: [authGuard],
     loadComponent: () => import('./dashboard/dashboard').then(m => m.Dashboard),
   },
-  // {
-  //   path: 'nueva-solicitud',
-  //   canMatch: [authGuard],
-  //   loadComponent: () => import('./nueva-solicitud/nueva-solicitud').then(m => m.NuevaSolicitud),
-  // },
   {
     path: 'nueva-solicitud',
     canActivate: [profileCompleteGuard],
@@ -49,6 +45,11 @@ export const routes: Routes = [
     path: 'propuesta/:id',
     canMatch: [authGuard],
     loadComponent: () => import('./propuesta/propuesta').then(m => m.Propuesta),
+  },
+  {
+    path: 'admin-dashboard',
+    canMatch: [authGuard, adminGuard],
+    loadChildren: () => import('./admin/routes/admin.routes').then(m => m.ADMIN_ROUTES),
   },
   {
     // wildcard route for a 404 page

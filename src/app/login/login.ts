@@ -55,6 +55,8 @@ export class Login {
       return;
     }
 
+    await this.authService.refreshSession();
+
     const { data: profile, error: profileError } =
       await this.authService.getMyProfile();
 
@@ -65,10 +67,13 @@ export class Login {
     const nombre = profile?.nombres?.trim() || null;
     this.authService.setCachedUserName(nombre);
 
-    const returnUrl =
-      this.route.snapshot.queryParamMap.get('returnUrl') || '/dashboard';
+    const returnUrl = this.route.snapshot.queryParamMap.get('returnUrl');
 
-    await this.router.navigateByUrl(returnUrl);
+    const isAdmin = profile?.is_admin === true;
+
+    const targetUrl = returnUrl ?? (isAdmin ? '/admin-dashboard' : '/dashboard');
+
+    await this.router.navigateByUrl(targetUrl);
   }
 
 

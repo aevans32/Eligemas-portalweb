@@ -1,0 +1,187 @@
+<div class="page-container">
+  <app-header></app-header>
+
+  <div class="content-container">
+    <div class="title-container">
+      <div class="title">
+        <span>Admin • Solicitudes</span>
+      </div>
+    </div>
+
+    <div class="subtitle-container">
+      <span>Vista general de solicitudes de todos los usuarios.</span>
+    </div>
+
+    <div class="content-wrapper">
+      <div class="content-inner">
+        <div class="table-card">
+
+          <!-- TOOLBAR -->
+          <div class="admin-toolbar">
+            <div class="toolbar-left">
+              <div class="search">
+                <mat-icon class="search-icon">search</mat-icon>
+                <input
+                  type="text"
+                  placeholder="Buscar por código, usuario o entidad…"
+                  class="search-input"
+                />
+              </div>
+
+              <div class="filters">
+                <button mat-stroked-button class="filter-btn">
+                  <mat-icon>tune</mat-icon>
+                  Estado
+                </button>
+
+                <button mat-stroked-button class="filter-btn">
+                  <mat-icon>event</mat-icon>
+                  Fecha
+                </button>
+              </div>
+            </div>
+
+            <div class="toolbar-right">
+                <div class="stat-chip stat-chip--neutral">
+                    <span class="stat-num">{{ totalCount }}</span>
+                    <span class="stat-label">Total</span>
+                </div>
+
+                <div class="stat-chip stat-chip--proceso">
+                    <span class="stat-num">{{ enProcesoCount }}</span>
+                    <span class="stat-label">En proceso</span>
+                </div>
+
+                <div class="stat-chip stat-chip--ofertas">
+                    <span class="stat-num">{{ verOfertasCount }}</span>
+                    <span class="stat-label">Ver ofertas</span>
+                </div>
+
+                <div class="stat-chip stat-chip--finalizado">
+                    <span class="stat-num">{{ finalizadasCount }}</span>
+                    <span class="stat-label">Finalizadas</span>
+                </div>
+            </div>
+
+          </div>
+
+          <div class="divider"></div>
+
+          <!-- TABLE -->
+          <div class="table-container">
+            @if (loading) {
+              <p>Cargando...</p>
+            } @else {
+              @if (errorMsg) {
+                <p class="error">{{ errorMsg }}</p>
+              } @else {
+
+                @if (solicitudes.length === 0) {
+                  <p>No hay solicitudes aún.</p>
+                } @else {
+
+                  <table mat-table [dataSource]="solicitudes" class="solicitudes-table">
+
+                    <ng-container matColumnDef="row">
+                      <td mat-cell *matCellDef="let s" class="row-cell">
+
+                        <div class="row-line">
+                          <div class="row-left">
+
+                            <div class="row-title">
+                              <span class="solicitud-codigo">{{ s.codigo || '—' }}</span>
+                            </div>
+
+                            <div class="row-caption">
+                              <span class="caption-strong">{{ s.usuario_nombre ?? 'Usuario' }}</span>
+                              <span class="caption-sep">•</span>
+                              <span class="caption-muted">{{ s.usuario_email ?? 'usuario@correo.com' }}</span>
+                            </div>
+
+                          </div>
+
+                          <div class="row-right">
+                            <span
+                              class="state clickable"
+                              [ngClass]="estadoClass(s.estado?.nombre)"
+                              role="button"
+                              (click)="verSolicitud(s)"
+                              (keydown.enter)="verSolicitud(s)"
+                              (keydown.space)="verSolicitud(s)"
+                            >
+                              {{ s.estado?.nombre ?? '-' }}
+                            </span>
+
+                            <button
+                              mat-icon-button
+                              [matMenuTriggerFor]="menu"
+                              aria-label="Acciones"
+                              (click)="$event.stopPropagation()"
+                            >
+                              <mat-icon>more_vert</mat-icon>
+                            </button>
+
+                            <mat-menu #menu="matMenu">
+                              <button mat-menu-item (click)="verSolicitud(s)">
+                                <mat-icon>visibility</mat-icon>
+                                <span>Ver</span>
+                              </button>
+
+                              <button mat-menu-item (click)="verPerfil(s)">
+                                <mat-icon>person</mat-icon>
+                                <span>Ver usuario</span>
+                              </button>
+
+                              <button mat-menu-item (click)="verPropuestas(s)">
+                                <mat-icon>assignment</mat-icon>
+                                <span>Ver propuestas</span>
+                              </button>
+                            </mat-menu>
+                          </div>
+                        </div>
+
+                        <div class="row-sub">
+                          <span>{{ formatDate(s.created_at) }}</span>
+
+                          @if (s.entidad_financiera?.nombre) {
+                            <span>• EF: {{ s.entidad_financiera?.nombre }}</span>
+                          }
+
+                          @if (s.monto_actual_credito !== null && s.monto_actual_credito !== undefined) {
+                            <span>• Monto actual: {{ s.monto_actual_credito }}</span>
+                          }
+
+                          @if (s.tcea !== null && s.tcea !== undefined) {
+                            <span>• TCEA: {{ s.tcea }}%</span>
+                          }
+                        </div>
+
+                      </td>
+                    </ng-container>
+
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+
+                }
+              }
+            }
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <!-- <div class="action-button-container">
+      <button mat-button class="action-button">
+        Exportar (CSV)
+      </button>
+
+      <button mat-button class="action-button action-button--secondary">
+        Actualizar
+      </button>
+    </div> -->
+  </div>
+
+  <app-footer></app-footer>
+</div>

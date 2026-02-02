@@ -1,7 +1,7 @@
 import { inject } from "@angular/core";
 import { CanMatchFn, Router, UrlTree } from "@angular/router";
 import { AuthService } from "../services/auth.service";
-import { filter, map, take } from "rxjs";
+import { filter, map, switchMap, take } from "rxjs";
 
 /**
  * Route guard: allows access only when user is authenticated.
@@ -18,6 +18,7 @@ export const authGuard: CanMatchFn = (_route, segments) => {
   return auth.loaded$.pipe(
     filter(loaded => loaded), // wait until init() finishes at least once
     take(1),
+    switchMap(() => auth.session$.pipe(take(1))),
     map((): boolean | UrlTree => {
       if (auth.session) return true;
 
