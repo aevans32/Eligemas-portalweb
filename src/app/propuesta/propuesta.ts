@@ -11,6 +11,9 @@ import { Footer } from '../shared/components/footer/footer';
 import { Header } from '../shared/components/header/header';
 import { SolicitudesService } from '../core/services/solicitudes.service';
 import { PropuestaDetalleRPC } from '../shared/models/propuesta-page';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModal } from '../shared/components/confirm-modal/confirm-modal';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-propuesta',
@@ -35,6 +38,7 @@ export class Propuesta implements OnInit{
   private router = inject(Router);
   private service = inject(SolicitudesService);
   private snack = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   loading = true;
   errorMsg = '';
@@ -95,7 +99,25 @@ export class Propuesta implements OnInit{
         return;
       }
 
-      this.snack.open('Oferta seleccionada ✅', 'OK', { duration: 2500 });
+      // con snackbar
+      // this.snack.open('Oferta seleccionada ✅', 'OK', { duration: 2500 });
+
+      // con modal
+      const ref = this.dialog.open(ConfirmModal, {
+        data: {
+          title: '¡Felicitaciones!',
+          message: 'El banco elegido te contactará en el más breve plazo.',
+          primaryText: 'Entendido',
+          icon: 'check_circle',
+        },
+        panelClass: 'elige-modal-panel',
+        backdropClass: 'elige-modal-backdrop',
+        autoFocus: false,
+        disableClose: true,
+      });
+
+      // Esperar a que el usuario cierre el modal
+      await firstValueFrom(ref.afterClosed());
 
       // Volver al detalle de solicitud
       const codigo = this.propuesta.solicitud?.codigo;
@@ -143,11 +165,5 @@ export class Propuesta implements OnInit{
 
     return map[code] ?? null;
   }
-
-
-
-
-
-  
 
 }
