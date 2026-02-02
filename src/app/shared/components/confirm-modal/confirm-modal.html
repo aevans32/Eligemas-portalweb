@@ -1,0 +1,16 @@
+<div class="modal-wrap">
+    <div class="icon">
+        <mat-icon>{{ data.icon ?? 'check_circle' }}</mat-icon>
+    </div>
+
+    <div class="title">{{ data.title }}</div>
+    <div class="message">{{ data.message }}</div>
+
+    <button 
+        mat-flat-button 
+        class="primary" 
+        (click)="close()"
+    >
+        {{ data.primaryText ?? 'Continuar' }}
+    </button>
+</div>

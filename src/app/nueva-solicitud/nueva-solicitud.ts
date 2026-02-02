@@ -15,6 +15,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ConfirmationSnackbarComponent } from './confirmation-snackbar';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModal } from '../shared/components/confirm-modal/confirm-modal';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -41,6 +44,7 @@ export class NuevaSolicitud implements OnInit {
   private catalogos = inject(CatalogosService);
   private solicitudes = inject(SolicitudesService);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
   @ViewChild('creditoSection') creditoSection!: ElementRef<HTMLElement>;
   @ViewChild('perfilSection') perfilSection!: ElementRef<HTMLElement>;
@@ -315,18 +319,36 @@ export class NuevaSolicitud implements OnInit {
         ingreso_bruto: v.ingreso_bruto!,
       };
 
-      this.snackBar.openFromComponent(ConfirmationSnackbarComponent, {
+      const { data, error } = await this.solicitudes.createSolicitud(payload);
+
+
+      // Confirmacion con Snackbar
+      // this.snackBar.openFromComponent(ConfirmationSnackbarComponent, {
+      //   data: {
+      //     title: 'Solicitud enviada',
+      //     message: 'Estamos evaluando tus opciones de refinanciamiento.'
+      //   },
+      //   duration: 6000,
+      //   horizontalPosition: 'center',
+      //   verticalPosition: 'top',
+      //   panelClass: ['success-snackbar']
+      // });
+
+      // COnfirmacion con modal
+      const ref = this.dialog.open(ConfirmModal, {
         data: {
-          title: 'Solicitud enviada',
-          message: 'Estamos evaluando tus opciones de refinanciamiento.'
+          title: '¡Muchas gracias por el registro de tu solicitud!',
+          message: 'Muy pronto te contactaremos, estamos evaluando tu solicitud. Recuerda que debes estar al día en el pago del 100% de tus deudas.',
+          primaryText: 'Volver a mis solicitudes',
+          icon: 'assignment_turned_in',
         },
-        duration: 6000,
-        horizontalPosition: 'center',
-        verticalPosition: 'top',
-        panelClass: ['success-snackbar']
+        panelClass: 'elige-modal-panel',
+        backdropClass: 'elige-modal-backdrop',
+        autoFocus: false,
+        disableClose: true,
       });
 
-      const { data, error } = await this.solicitudes.createSolicitud(payload);
+      await firstValueFrom(ref.afterClosed());      
 
       if (error) throw error;
 

@@ -103,10 +103,7 @@
         </mat-form-field>
 
 
-
-
-
-
+        <!--ESTADO CIVIL-->
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Estado Civil</mat-label>
           <mat-select formControlName="estadoCivilCodigo">
@@ -123,7 +120,7 @@
         </mat-form-field>
 
 
-
+        <!--CELULAR-->
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Celular</mat-label>
           <input matInput formControlName="celular" />
@@ -138,6 +135,8 @@
 
         </mat-form-field>
 
+
+        <!--FECHA DE NACIMIENTO-->
         <mat-form-field class="span-1 center-single" appearance="outline">
           <mat-label>Fecha de nacimiento</mat-label>
           <input 
@@ -147,8 +146,9 @@
             placeholder="DD/MM/AAAA"
             inputmode="numeric"
             maxlength="10"
-            (keypress)="dateKeyPress($event)" 
+            (input)="dateInput($event)"
           />
+          <!-- (keypress)="dateKeyPress($event)"  -->
 
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
@@ -176,6 +176,7 @@
 
         </mat-form-field>
 
+        
         <!-- DIRECCIÓN -->
         <div class="span-2 address-grid">
 
