@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-signup',
@@ -21,6 +22,8 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule, 
     MatInputModule, 
     MatSelectModule, 
+    MatButtonModule,
+    MatIconModule,
     MatButtonModule
   ],
   templateUrl: './signup.html',
@@ -30,6 +33,8 @@ export class Signup {
 
   private auth = inject(AuthService);
   private router = inject(Router);
+
+  hidePassword = true;
 
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),

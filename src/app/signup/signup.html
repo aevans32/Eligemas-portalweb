@@ -25,15 +25,35 @@
         </mat-form-field>
 
         <!-- Apartado de texto password -->
-        <mat-form-field appearance="outline">
+        <mat-form-field appearance="outline" class="password-field">
           <mat-label>Contraseña</mat-label>
-          <input matInput type="password" formControlName="password" />
+          
+          <input 
+            matInput 
+            [type]="hidePassword ? 'password' : 'text'" 
+            formControlName="password" 
+          />
+
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="hidePassword = !hidePassword"
+            [attr.aria-label]="hidePassword ? 'Mostrar contraseña' : 'Ocultar contraseña'"
+            [attr.aria-pressed]="!hidePassword"
+          >
+            <mat-icon>
+                {{ hidePassword ? 'visibility' : 'visibility_off' }}
+              </mat-icon>
+          </button>
+
           @if(form.controls.password.hasError('required')){
             <mat-error>Contraseña es requerida</mat-error>
             } @if(form.controls.password.hasError('minlength')){
             <mat-error>La contraseña debe tener al menos 8 caracteres</mat-error>
             }
         </mat-form-field>
+
 
         <div class="instructions">
             <span routerLink="/signup">Registra tu correo y te enviaremos un mensaje a tu buzón.</span>

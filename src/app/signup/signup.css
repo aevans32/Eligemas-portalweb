@@ -95,3 +95,14 @@
     height: 420px;
   }
 }
+
+/* Centra verticalmente el icono del matSuffix en outline (MDC) */
+:host ::ng-deep .password-field .mat-mdc-form-field-icon-suffix {
+  display: flex;
+  align-items: center;
+}
+
+/* Opcional: micro-ajuste si aún lo ves un pelín bajo */
+:host ::ng-deep .password-field .mat-mdc-icon-button {
+  transform: translateY(-8px);
+}

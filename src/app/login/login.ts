@@ -11,6 +11,8 @@ import { Header } from "../shared/components/header/header";
 import { AuthService } from '../core/services/auth.service';
 import { Footer } from "../shared/components/footer/footer";
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-login',
@@ -20,7 +22,9 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     ReactiveFormsModule, 
     RouterModule, 
     Footer,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatIconModule,
+    MatButtonModule
   ],
   templateUrl: './login.html',
   styleUrl: './login.css',
@@ -31,10 +35,12 @@ export class Login {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private snackBar = inject(MatSnackBar);
+
+  hidePassword = true;
   
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required, Validators.minLength(6),]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8),]),
   });
 
   async login() {
