@@ -35,7 +35,7 @@ export class Home implements OnInit, OnDestroy {
       alt: 'Elige Plus - Hero 3',
       align: 'left',
       title: 'Refinancia tu deuda desde un solo lugar',
-      subtitle: 'Compara ofertas y elige la que más te conviene en minutos, sin papeleo y desde tu celular.',
+      subtitle: 'Gestiona el traslado de tu Crédito Vehicular desde un solo lugar.',
     },
     {
       src: 'images/home/hero4.png',
