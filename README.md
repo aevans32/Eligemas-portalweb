@@ -212,6 +212,7 @@ Formulario dividido en **dos secciones dentro de un mismo módulo**, con navegac
 * Iteraciones ágiles
 * Evaluación de modelos de negocio
 * Escalamiento técnico y funcional
+* Seguridad en la información de los clientes
 
 La arquitectura actual permite incorporar nuevas entidades financieras, reglas de negocio y flujos avanzados **sin refactorizaciones mayores**.
 
