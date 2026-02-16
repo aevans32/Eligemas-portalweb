@@ -10,22 +10,26 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltip } from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-signup',
   imports: [
-    Header, 
-    Footer, 
-    CommonModule, 
-    ReactiveFormsModule, 
-    RouterModule, 
-    MatFormFieldModule, 
-    MatInputModule, 
-    MatSelectModule, 
+    Header,
+    Footer,
+    CommonModule,
+    ReactiveFormsModule,
+    RouterModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatIconModule,
-    MatButtonModule
-  ],
+    MatButtonModule,
+    MatCheckboxModule,
+    MatTooltip
+],
   templateUrl: './signup.html',
   styleUrl: './signup.css',
 })
@@ -39,7 +43,15 @@ export class Signup {
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
+    acceptTerms: new FormControl(false, [Validators.requiredTrue])
   });
+
+  // Tooltips para password
+  passwordTooltip =
+    'La contraseña debe tener al menos 8 caracteres. Recomendado: 1 mayúscula, 1 minúscula, 1 número y 1 símbolo.';
+
+  tooltipPos: 'above' | 'below' | 'left' | 'right' = 'above';
+  tooltipDelay = 200;
 
   async signup() {
     if (this.form.invalid) return;
@@ -55,12 +67,6 @@ export class Signup {
       console.error('SignUp error:', error.message);
       return;
     }
-
-    // if (data.session) {
-    //   alert('Cuenta creada. Revisa tu correo para confirmar y continuar con tu registro.');
-    //   this.router.navigateByUrl('/basic-info');
-    //   return;
-    // }
 
     alert('Cuenta creada. Revisa tu correo para confirmar y continuar con tu registro.');
     

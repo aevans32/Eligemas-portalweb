@@ -12,6 +12,8 @@ export type SolicitudInsert = {
   monto_total_credito: number;
   monto_actual_credito: number;
 
+  monto_cuota_mensual: number,
+
   plazo_total_meses: number;
   numero_cuotas_pagadas: number;
 
@@ -45,6 +47,8 @@ export type SolicitudRow = {
   entidad_financiera_id: number | null;
   monto_actual_credito: number | null;
 
+  monto_cuota_mensual?: number | null;
+
   placa_vehiculo: string | null;
   tcea: number | null;
 };
@@ -54,6 +58,7 @@ export type SolicitudListItem = {
   codigo: string;
   created_at: string;
   monto_actual_credito: number | null;
+  monto_cuota_mensual?: number | null;
   placa_vehiculo: string | null;
   tcea: number | null;
   estado: {
@@ -61,6 +66,11 @@ export type SolicitudListItem = {
     nombre: string;
     mensaje: string;
   } | null;
+};
+
+export type SolicitudDetalleRPC = {
+  solicitud: SolicitudInfo;      // Asegúrate que SolicitudInfo incluya monto_cuota_mensual
+  propuestas: PropuestaListItem[];
 };
 
 @Injectable({ providedIn: 'root' })
@@ -82,6 +92,7 @@ export class SolicitudesService {
         codigo,
         created_at,
         monto_actual_credito,
+        monto_cuota_mensual,
         placa_vehiculo,
         tcea,
         estado:estado_id (

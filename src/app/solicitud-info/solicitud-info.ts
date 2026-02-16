@@ -12,6 +12,7 @@ import { SolicitudesService } from '../core/services/solicitudes.service';
 import { Footer } from "../shared/components/footer/footer";
 import { Header } from "../shared/components/header/header";
 import { PropuestaListItem, SolicitudInfo } from '../shared/models/solicitud-page';
+import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-solicitud-info',
@@ -36,9 +37,12 @@ export class SolicitudInfoComponent implements OnInit{
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private solicitudService = inject(SolicitudesService);
+  private auth = inject(AuthService);
 
   loading = true;
   errorMsg = '';
+
+  profile: any = null;
 
   solicitud: SolicitudInfo | null = null;
   propuestas: PropuestaListItem[] = [];
@@ -71,7 +75,18 @@ export class SolicitudInfoComponent implements OnInit{
     this.solicitud = data.solicitud;
     this.propuestas = data.propuestas;
 
-    console.log('Propuestas:', this.propuestas);
+    // const userId = this.solicitud?.id;
+
+    // console.log('Solicitud user_id:', this.solicitud?.id);
+
+
+    // const resProfile = await this.auth.getProfileForSolicitud(codigo);
+    // if (resProfile.error) {
+    //   console.warn('No se pudo cargar profile:', resProfile.error);
+    // } else {
+    //   this.profile = resProfile.data;
+    // }
+
 
     this.loading = false;
   }

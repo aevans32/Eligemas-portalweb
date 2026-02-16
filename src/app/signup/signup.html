@@ -12,6 +12,10 @@
     <div class="content-container">
       <form [formGroup]="form" (ngSubmit)="signup()">
 
+        <div class="instructions">
+            <span routerLink="/signup">Registra tu correo y te enviaremos un mensaje a tu buzón.</span>
+        </div>
+
         <!-- Apartado de texto email -->
         <mat-form-field appearance="outline">
           <mat-label>Email</mat-label>
@@ -25,7 +29,14 @@
         </mat-form-field>
 
         <!-- Apartado de texto password -->
-        <mat-form-field appearance="outline" class="password-field">
+        <mat-form-field 
+          appearance="outline" 
+          class="password-field"
+          [matTooltip]="passwordTooltip"
+          [matTooltipPosition]="tooltipPos"
+          [matTooltipShowDelay]="tooltipDelay"
+        >
+
           <mat-label>Contraseña</mat-label>
           
           <input 
@@ -54,10 +65,23 @@
             }
         </mat-form-field>
 
+        <mat-checkbox formControlName="acceptTerms" class="terms-checkbox">
+            Acepto los 
+          <a 
+            routerLink="/politica-privacidad"
+            target="_blank"
+            rel="noopener" 
+            class="link" 
+            (click)="$event.stopPropagation()"
+          >
+            términos y condiciones
+          </a>
+        </mat-checkbox>
 
-        <div class="instructions">
-            <span routerLink="/signup">Registra tu correo y te enviaremos un mensaje a tu buzón.</span>
-        </div>
+        @if (form.controls.acceptTerms.touched && form.controls.acceptTerms.hasError('required')) {
+          <mat-error>Debes aceptar los términos para continuar</mat-error>
+        }
+        
 
         <button mat-flat-button type="submit" [disabled]="form.invalid">
           CONTINUAR

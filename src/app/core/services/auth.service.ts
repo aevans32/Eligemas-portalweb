@@ -10,7 +10,22 @@ type ProfileStatus = { is_complete: boolean | null };
 
 type ProfileAdmin = { is_admin: boolean | null };
 
-
+type ProfileDetalle = {
+  id: string;
+  nombres: string | null;
+  apellidos: string | null;
+  estado_civil: string | null;
+  celular: string | null;
+  fecha_nacimiento: string | null;
+  direccion: string | null;
+  departamento_code: string | null;
+  provincia: string | null;
+  distrito: string | null;
+  num_documento: string | null;
+  tipo_documento_id: number | null;
+  is_complete: boolean | null;
+  is_admin: boolean | null;
+};
 
 export const LS_USER_NAME = 'eligeplus.userName';
 
@@ -188,6 +203,13 @@ export class AuthService {
       }
       return { data, error };
     }
+
+    async getProfileForSolicitud(codigo: string) {
+      return supabase
+        .rpc('get_profile_for_solicitud', { p_codigo: codigo })
+        .maybeSingle();
+    }
+
 
 
 
