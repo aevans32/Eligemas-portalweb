@@ -1,20 +1,45 @@
 <header>
   <div class="banner">
     <span class="banner-text">
-      <span>¡Te brindamos las mejores opciones</span>
-      <span>para mejorar las condiciones de tu deuda!</span>
+      <span>¡Te ayudamos con la compra de deuda de tu crédito vehicular,</span>
+      <span>sin costo alguno!</span>
     </span>
   </div>
 
   <div class="logo-header">
-    <div class="container">
+    <div class="container header-content">
       <div routerLink="/" class="logo-container">
         <img src="images/logo/Elige_mas_logo.png" alt="Elige Plus" />
       </div>
 
-      <div class="buttons-container">
+      <!-- Contenedor general de botones HEADER-->
+      
 
-        @if (isLoggedIn) {
+        <!--Botones prevalentes-->
+        <div class="nav-links">
+          <button mat-button routerLink="/quienes-somos">
+            ¿Quiénes Somos?
+          </button>
+
+          <button mat-button routerLink="/proposito">
+            Propósito
+          </button>
+
+          <button mat-button routerLink="/preguntas-frecuentes">
+            Preguntas Frecuentes
+          </button>
+
+          <button mat-button routerLink="/contacto">
+            Contacto
+          </button>
+
+        </div>
+
+
+        <!--BLoque botones LOGIN / USER-->
+        <div class="auth-buttons">
+
+          @if (isLoggedIn) {
 
           <!-- Botón principal (nombre usuario) -->
           <button
@@ -80,7 +105,11 @@
 
         }
 
-      </div>
+        </div> <!-- Fin de bloque botones login-->
+
+        
+
+      
 
 
 
