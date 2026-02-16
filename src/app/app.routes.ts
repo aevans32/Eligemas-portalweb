@@ -18,8 +18,39 @@ export const routes: Routes = [
     loadComponent: () => import('./signup/signup').then(m => m.Signup),
   },
   {
-    path: 'privacy-policy',
+    path: 'politica-privacidad',
     loadComponent: () => import('./privacy-policy/privacy-policy').then(m => m.PrivacyPolicy),
+  },
+  {
+    path: 'preguntas-frecuentes',
+    loadComponent: () => import('./preguntas-frecuentes/preguntas-frecuentes').then(m => m.PreguntasFrecuentes),
+  },
+  // {
+  //   path: 'quienes-somos',
+  //   loadComponent: () => import('./quienes-somos/quienes-somos').then(m => m.QuienesSomos),
+  // },
+  // {
+  //   path: 'proposito',
+  //   loadComponent: () => import('./proposito/proposito').then(m => m.Proposito),
+  // },
+  // {
+  //   path: 'contacto',
+  //   loadComponent: () => import('./contacto/contacto').then(m => m.Contacto),
+  // },
+  {
+  path: 'quienes-somos',
+    redirectTo: '',
+    pathMatch: 'full'
+  },
+  {
+    path: 'proposito',
+    redirectTo: '',
+    pathMatch: 'full'
+  },
+  {
+    path: 'contacto',
+    redirectTo: '',
+    pathMatch: 'full'
   },
   {
     path: 'basic-info',

@@ -93,12 +93,33 @@ header {
 
 .buttons-container {
       display: flex;
-      justify-content: center;
+      align-items: center;
+      justify-content: space-between;
       gap: 10px;
+      width: 100%;
     }
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
     .logo-container {
   cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+  justify-content: center;
+  flex: 1;
+}
+
+.auth-buttons {
+  display: flex;
+  
+  gap: 16px;
 }
 
 .logo-container img {

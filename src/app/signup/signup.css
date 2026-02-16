@@ -61,7 +61,7 @@
 
 /* INSTRUCTIONS */
 .page-container .instructions {
-  margin-top: 12px;
+  margin-top: 0px;
   margin-bottom: 20px;
   text-align: center;
 }
@@ -105,4 +105,14 @@
 /* Opcional: micro-ajuste si aún lo ves un pelín bajo */
 :host ::ng-deep .password-field .mat-mdc-icon-button {
   transform: translateY(-8px);
+}
+
+.link {
+  color: #1976d2;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.link:hover {
+  opacity: 0.8;
 }

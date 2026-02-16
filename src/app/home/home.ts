@@ -28,21 +28,21 @@ export class Home implements OnInit, OnDestroy {
       alt: 'Elige Plus - Hero 2',
       align: 'right',
       title: 'Bienvenido a Elige +',
-      subtitle: 'Decide dónde pagar menos por el mismo préstamo. Transparente, fácil y 100% digital',
+      subtitle: '¿Tienes un crédito vehicular y quieres pagar menos intereses? Gestiona el traslado de tu deuda de manera fácil y 100% digital.',
     },
-    {
-      src: 'images/home/hero3.png',
-      alt: 'Elige Plus - Hero 3',
-      align: 'left',
-      title: 'Refinancia tu deuda desde un solo lugar',
-      subtitle: 'Gestiona el traslado de tu Crédito Vehicular desde un solo lugar.',
-    },
+    // {
+    //   src: 'images/home/hero3.png',
+    //   alt: 'Elige Plus - Hero 3',
+    //   align: 'left',
+    //   title: 'Refinancia tu deuda desde un solo lugar',
+    //   subtitle: 'Gestiona el traslado de tu Crédito Vehicular desde un solo lugar.',
+    // },
     {
       src: 'images/home/hero4.png',
       alt: 'Elige Plus - Hero 4',
       align: 'right',
       title: 'Tu información, siempre protegida',
-      subtitle: 'Trabajamos con estándares de seguridad para cuidar tus datos mientras buscas mejores condiciones.',
+      subtitle: 'Trabajamos con entidades supervisadas por la SBS y estándares de seguridad para cuidar tus datos.',
     },
   ];
 

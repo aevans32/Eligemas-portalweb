@@ -73,10 +73,11 @@ export class NuevaSolicitud implements OnInit {
     moneda_id: 'Moneda en la que está el crédito actual (PEN / USD).',
     monto_total_credito: 'Monto original desembolsado al inicio del crédito.',
     monto_actual_credito: 'Saldo aproximado pendiente de pago hoy.',
+    monto_cuota_mensual: 'Monto aproximado de tu cuota mensual actual (mínimo 0.01).',
     plazo_total_meses: 'Plazo total pactado al inicio del crédito (en meses).',
     numero_cuotas_pagadas: 'Cuotas ya pagadas hasta la fecha (aprox).',
-    tea: 'Tasa Efectiva Anual (sin comisiones). Ej: 25.50',
-    tcea: 'Tasa de Costo Efectivo Anual (incluye comisiones/seguros si aplica).',
+    tea: 'Este dato es muy importante, asegúrate que es el correcto. Puedes encontrarlo en tu cronograma, estado de cuenta o preguntarlo a tu entidad financiera.',
+    tcea: 'Este dato es muy importante, asegúrate que es el correcto. Puedes encontrarlo en tu cronograma, estado de cuenta o preguntarlo a tu entidad financiera.',
     placa_vehiculo: 'Si el crédito está asociado a un vehículo, ingresa la placa (6 caracteres).',
 
     // Step 2 - Perfil
@@ -105,6 +106,12 @@ export class NuevaSolicitud implements OnInit {
 
     monto_total_credito: new FormControl<number | null>(null, [Validators.required]),
     monto_actual_credito: new FormControl<number | null>(null, [Validators.required]),
+
+    monto_cuota_mensual: new FormControl<number | null>(null, [
+      Validators.required,
+      Validators.min(0.01),
+    ]),
+
 
     plazo_total_meses: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
     numero_cuotas_pagadas: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
@@ -209,16 +216,14 @@ export class NuevaSolicitud implements OnInit {
           ocu.markAsUntouched();
         }
       });
-
-
-
-
-
       
     } catch (err: any) {
       this.errorMsg = err?.message ?? 'Error cargando catálogos';
     } finally {
       this.loading = false;
+
+      // mostrar popup al abrir la página
+      this.openOnLoadModalOnce();
     }
   }
 
@@ -300,6 +305,8 @@ export class NuevaSolicitud implements OnInit {
         monto_total_credito: v.monto_total_credito!,
         monto_actual_credito: v.monto_actual_credito!,
 
+        monto_cuota_mensual: v.monto_cuota_mensual!,
+
         plazo_total_meses: v.plazo_total_meses!,
         numero_cuotas_pagadas: v.numero_cuotas_pagadas!,
 
@@ -367,6 +374,31 @@ export class NuevaSolicitud implements OnInit {
       e.preventDefault();
     }
   }
+
+  private openOnLoadModalOnce() {
+    const KEY = 'elige_nueva_solicitud_modal_v1';
+
+    // evita que se abra cada vez que vuelven a la pantalla
+    if (sessionStorage.getItem(KEY) === '1') return;
+    sessionStorage.setItem(KEY, '1');
+
+    this.dialog.open(ConfirmModal, {
+      data: {
+        title: 'Antes de empezar',
+        message:
+          'Con la finalidad de agilizar el llenado de la solicitud, ' +
+          'agradeceremos que tenga a la mano los datos de su TEA y TCEA ' +
+          'de su crédito vehicular vigente.',
+        primaryText: 'Entendido',
+        icon: 'info',
+      },
+      panelClass: 'elige-modal-panel',
+      backdropClass: 'elige-modal-backdrop',
+      autoFocus: false,
+      disableClose: false, // acá normalmente NO lo bloquearía
+    });
+  }
+
 
 
 }

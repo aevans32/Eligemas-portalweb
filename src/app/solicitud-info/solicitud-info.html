@@ -30,7 +30,80 @@
             </div>
           }
 
+
+
+
+
           @if (solicitud) {
+
+            
+            <!-- Card: Datos del solicitante -->
+            <mat-card class="info-card" *ngIf="profile">
+              <div class="section-title">
+                <mat-icon>person</mat-icon>
+                <span>Datos del solicitante</span>
+              </div>
+
+              <mat-divider></mat-divider>
+
+              <div class="grid">
+                <div class="kv">
+                  <div class="k">Nombres</div>
+                  <div class="v">{{ profile.nombres ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Apellidos</div>
+                  <div class="v">{{ profile.apellidos ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Tipo doc.</div>
+                  <div class="v">{{ profile.tipo_documento_id ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">N° documento</div>
+                  <div class="v">{{ profile.num_documento ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Estado civil</div>
+                  <div class="v">{{ profile.estado_civil ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Celular</div>
+                  <div class="v">{{ profile.celular ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Fecha nacimiento</div>
+                  <div class="v">{{ formatDate(profile.fecha_nacimiento) }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Dirección</div>
+                  <div class="v">{{ profile.direccion ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Departamento</div>
+                  <div class="v">{{ profile.departamento_code ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Provincia</div>
+                  <div class="v">{{ profile.provincia ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Distrito</div>
+                  <div class="v">{{ profile.distrito ?? '—' }}</div>
+                </div>
+              </div>
+            </mat-card>
+
 
             <!-- Card: Solicitud -->
             <mat-card class="info-card">
@@ -48,6 +121,11 @@
               </div>
 
               <mat-divider></mat-divider>
+
+              <div class="kv">
+                <div class="k">Cuota mensual</div>
+                <div class="v">{{ formatMoney(solicitud.monto_cuota_mensual ?? null) }}</div>
+              </div>
 
               <div class="grid">
                 <div class="kv">
@@ -83,11 +161,6 @@
                 <div class="kv">
                   <div class="k">Placa</div>
                   <div class="v">{{ solicitud.placa_vehiculo ?? '—' }}</div>
-                </div>
-
-                <div class="kv">
-                  <div class="k">Ocupación</div>
-                  <div class="v">{{ solicitud.ocupacion ?? '—' }}</div>
                 </div>
 
                 <div class="kv">
