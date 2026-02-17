@@ -44,6 +44,6 @@ export interface PropuestaListItem {
   tea?: number | null;
   tcea?: number | null;
   plazo_meses?: number | null;
-  cuota_mensual?: number | null;
+  cuota_estimada?: number | null;
   estado?: { id: number; nombre: string } | null;
 }

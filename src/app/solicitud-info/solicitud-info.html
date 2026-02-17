@@ -260,15 +260,16 @@
                       <td mat-cell *matCellDef="let p">{{ formatMoney(p.cuota_estimada ?? null) }}</td>
                     </ng-container>
 
-                    <!-- ESTADO -->
-                    <ng-container matColumnDef="estado">
-                      <th mat-header-cell *matHeaderCellDef>Estado</th>
+                    <!-- DIFERENCIA -->
+                    <ng-container matColumnDef="diferencia">
+                      <th mat-header-cell *matHeaderCellDef>Diferencia</th>
                       <td mat-cell *matCellDef="let p">
-                        <span class="state small" [ngClass]="estadoClass(p.estado?.nombre)">
-                          {{ p.estado?.nombre ?? '-' }}
+                        <span class="delta-chip" [ngClass]="cuotaDeltaClass(p)">
+                          {{ getCuotaDeltaLabel(p) }}
                         </span>
                       </td>
                     </ng-container>
+
 
                     <!-- ACCIONES -->
                     <ng-container matColumnDef="acciones">

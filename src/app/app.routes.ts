@@ -25,28 +25,20 @@ export const routes: Routes = [
     path: 'preguntas-frecuentes',
     loadComponent: () => import('./preguntas-frecuentes/preguntas-frecuentes').then(m => m.PreguntasFrecuentes),
   },
-  // {
-  //   path: 'quienes-somos',
-  //   loadComponent: () => import('./quienes-somos/quienes-somos').then(m => m.QuienesSomos),
-  // },
-  // {
-  //   path: 'proposito',
-  //   loadComponent: () => import('./proposito/proposito').then(m => m.Proposito),
-  // },
+  {
+    path: 'quienes-somos',
+    loadComponent: () => import('./quienes-somos/quienes-somos').then(m => m.QuienesSomos),
+  },
+  {
+    path: 'proposito',
+    loadComponent: () => import('./proposito/proposito').then(m => m.Proposito),
+  },
   // {
   //   path: 'contacto',
   //   loadComponent: () => import('./contacto/contacto').then(m => m.Contacto),
   // },
-  {
-  path: 'quienes-somos',
-    redirectTo: '',
-    pathMatch: 'full'
-  },
-  {
-    path: 'proposito',
-    redirectTo: '',
-    pathMatch: 'full'
-  },
+  
+ 
   {
     path: 'contacto',
     redirectTo: '',
