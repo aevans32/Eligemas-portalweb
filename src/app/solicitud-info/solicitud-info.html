@@ -239,7 +239,7 @@
                     <!-- MONTO -->
                     <ng-container matColumnDef="monto">
                       <th mat-header-cell *matHeaderCellDef>Monto</th>
-                      <td mat-cell *matCellDef="let p">{{ formatMoney(p.monto_refinanciado ?? null) }}</td>
+                      <td mat-cell *matCellDef="let p">{{ formatMoney(p.monto_aprobado ?? null) }}</td>
                     </ng-container>
 
                     <!-- TCEA -->
@@ -257,7 +257,7 @@
                     <!-- CUOTA -->
                     <ng-container matColumnDef="cuota">
                       <th mat-header-cell *matHeaderCellDef>Cuota</th>
-                      <td mat-cell *matCellDef="let p">{{ formatMoney(p.cuota_mensual ?? null) }}</td>
+                      <td mat-cell *matCellDef="let p">{{ formatMoney(p.cuota_estimada ?? null) }}</td>
                     </ng-container>
 
                     <!-- ESTADO -->

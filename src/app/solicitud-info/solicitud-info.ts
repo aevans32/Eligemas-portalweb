@@ -47,7 +47,7 @@ export class SolicitudInfoComponent implements OnInit{
   solicitud: SolicitudInfo | null = null;
   propuestas: PropuestaListItem[] = [];
 
-  displayedPropuestasColumns = ['logo', 'entidad', 'monto', 'tcea', 'plazo', 'cuota', 'estado', 'acciones'];
+  displayedPropuestasColumns = ['logo', 'entidad', 'monto', 'tcea', 'plazo', 'cuota', 'acciones'];
 
   async ngOnInit() {
 
@@ -80,7 +80,7 @@ export class SolicitudInfoComponent implements OnInit{
     this.solicitud = data.solicitud;
     this.propuestas = data.propuestas;
 
-    // const userId = this.solicitud?.id;
+    console.log('Propuestas: ', data.propuestas);
 
     
 

@@ -48,6 +48,31 @@
   margin-bottom:14px;
 }
 
+.content-container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.content-wrapper {
+  width: 100%;
+}
+
+/* asegura que el inner ocupe el ancho del container */
+.content-inner {
+  width: 100%;
+}
+
+.table-container {
+  padding: 6px;
+  overflow-x: auto;
+}
+.propuestas-table {
+  min-width: 720px; /* opcional, para que no colapse columnas */
+}
+
+
 .info-card{
   border-radius: 18px;
   box-shadow: 0 10px 24px rgba(0,0,0,.06);
