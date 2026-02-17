@@ -13,8 +13,28 @@ export interface SolicitudInfo {
   ocupacion: string | null;
   ingreso_bruto: number | null;
   es_dependiente: boolean | null;
-  estado: { id: number; nombre: string; mensaje: string | null } | null;
+
+  estado: {
+    id: number;
+    nombre: string;
+    mensaje: string | null;
+  } | null;
+
+  
+  entidad_financiera: {
+    id: number;
+    codigo: string | null;
+    nombre: string | null;
+  } | null;
+
+  
+  moneda: {
+    id: number;
+    codigo: string | null;
+    nombre: string | null;
+  } | null;
 }
+
 
 export interface PropuestaListItem {
   id: string;              // muchas veces es uuid

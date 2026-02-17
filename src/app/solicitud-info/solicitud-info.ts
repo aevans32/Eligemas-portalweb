@@ -64,8 +64,13 @@ export class SolicitudInfoComponent implements OnInit{
     this.loading = true;
     this.errorMsg = '';
 
+    
+
     const { data, error } =
       await this.solicitudService.getSolicitudDetalle(codigo);
+
+    
+
 
     if (error) {
       this.errorMsg = error.message;
@@ -77,15 +82,20 @@ export class SolicitudInfoComponent implements OnInit{
 
     // const userId = this.solicitud?.id;
 
-    // console.log('Solicitud user_id:', this.solicitud?.id);
+    
 
 
-    // const resProfile = await this.auth.getProfileForSolicitud(codigo);
-    // if (resProfile.error) {
-    //   console.warn('No se pudo cargar profile:', resProfile.error);
-    // } else {
-    //   this.profile = resProfile.data;
-    // }
+
+    const resProfile = await this.auth.getProfileForSolicitud(codigo);
+
+    if (resProfile.error) {
+      console.warn('No se pudo cargar profile:', resProfile.error);
+      // opcional:
+      // this.errorMsg = 'No se pudo cargar los datos del solicitante.';
+    } else {
+      this.profile = resProfile.data;
+    }
+
 
 
     this.loading = false;

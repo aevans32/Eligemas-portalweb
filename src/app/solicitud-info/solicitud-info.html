@@ -59,7 +59,7 @@
 
                 <div class="kv">
                   <div class="k">Tipo doc.</div>
-                  <div class="v">{{ profile.tipo_documento_id ?? '—' }}</div>
+                  <div class="v">{{ profile.tipo_documento ?? '—' }}</div>
                 </div>
 
                 <div class="kv">
@@ -89,7 +89,7 @@
 
                 <div class="kv">
                   <div class="k">Departamento</div>
-                  <div class="v">{{ profile.departamento_code ?? '—' }}</div>
+                  <div class="v">{{ profile.departamento ?? '—' }}</div>
                 </div>
 
                 <div class="kv">
@@ -122,12 +122,25 @@
 
               <mat-divider></mat-divider>
 
-              <div class="kv">
-                <div class="k">Cuota mensual</div>
-                <div class="v">{{ formatMoney(solicitud.monto_cuota_mensual ?? null) }}</div>
-              </div>
+                <div class="grid">
+                <!-- NUEVO: Entidad financiera -->
+                <div class="kv">
+                  <div class="k">Entidad</div>
+                  <div class="v">{{ solicitud.entidad_financiera?.nombre ?? '—' }}</div>
+                </div>
 
-              <div class="grid">
+                <!-- NUEVO: Moneda del crédito -->
+                <div class="kv">
+                  <div class="k">Moneda</div>
+                  <div class="v">{{ solicitud.moneda?.codigo ?? solicitud.moneda?.nombre ?? '—' }}</div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Cuota mensual</div>
+                  <div class="v">{{ formatMoney(solicitud.monto_cuota_mensual ?? null) }}</div>
+                </div>
+
+              
                 <div class="kv">
                   <div class="k">Monto actual</div>
                   <div class="v">{{ formatMoney(solicitud.monto_actual_credito) }}</div>
