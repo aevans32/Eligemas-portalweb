@@ -62,6 +62,9 @@ export class Propuesta implements OnInit{
     try {
       const { data, error } = await this.service.getPropuestaDetalle(id);
 
+
+      console.log('Data: ', data)
+
       if (error) {
         this.errorMsg = error.message;
         return;

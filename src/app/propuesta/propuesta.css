@@ -162,7 +162,7 @@
 
 /* ===== Botón primario destacado ===== */
 button[color="primary"] {
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  background: linear-gradient(135deg, #8DD2B5, #6366f1);
   color: white;
 }
 
@@ -223,3 +223,22 @@ button[color="primary"]:disabled {
   border: 1px solid rgba(0,0,0,.08);
   flex: 0 0 auto;
 }
+
+.content-container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+/* opcional: el wrapper ya no necesita centrar con flex si no quieres */
+.content-wrapper {
+  width: 100%;
+}
+
+/* asegura que el inner ocupe el ancho del container */
+.content-inner {
+  width: 100%;
+}
+
+

@@ -47,7 +47,7 @@ export class SolicitudInfoComponent implements OnInit{
   solicitud: SolicitudInfo | null = null;
   propuestas: PropuestaListItem[] = [];
 
-  displayedPropuestasColumns = ['logo', 'entidad', 'monto', 'tcea', 'plazo', 'cuota', 'estado', 'acciones'];
+  displayedPropuestasColumns = ['logo', 'entidad', 'monto', 'tcea', 'plazo', 'cuota', 'diferencia', 'acciones'];
 
   async ngOnInit() {
 
@@ -64,8 +64,13 @@ export class SolicitudInfoComponent implements OnInit{
     this.loading = true;
     this.errorMsg = '';
 
+    
+
     const { data, error } =
       await this.solicitudService.getSolicitudDetalle(codigo);
+
+    
+
 
     if (error) {
       this.errorMsg = error.message;
@@ -75,17 +80,19 @@ export class SolicitudInfoComponent implements OnInit{
     this.solicitud = data.solicitud;
     this.propuestas = data.propuestas;
 
-    // const userId = this.solicitud?.id;
-
-    // console.log('Solicitud user_id:', this.solicitud?.id);
+    
 
 
-    // const resProfile = await this.auth.getProfileForSolicitud(codigo);
-    // if (resProfile.error) {
-    //   console.warn('No se pudo cargar profile:', resProfile.error);
-    // } else {
-    //   this.profile = resProfile.data;
-    // }
+    const resProfile = await this.auth.getProfileForSolicitud(codigo);
+
+    if (resProfile.error) {
+      console.warn('No se pudo cargar profile:', resProfile.error);
+      // opcional:
+      // this.errorMsg = 'No se pudo cargar los datos del solicitante.';
+    } else {
+      this.profile = resProfile.data;
+    }
+
 
 
     this.loading = false;
@@ -148,6 +155,34 @@ export class SolicitudInfoComponent implements OnInit{
     const code = (ef?.codigo ?? '').trim().toLowerCase();
     return code ? `ef-${code}` : 'ef-unknown';
   }
+
+  getCuotaDelta(p: PropuestaListItem): number | null {
+    const cuotaSolicitud = this.solicitud?.monto_cuota_mensual;
+    const cuotaPropuesta = p.cuota_estimada;
+
+    if (cuotaSolicitud == null || cuotaPropuesta == null) return null;
+    return Number(cuotaSolicitud) - Number(cuotaPropuesta);
+  }
+
+  getCuotaDeltaLabel(p: PropuestaListItem): string {
+    const delta = this.getCuotaDelta(p);
+    if (delta == null) return '—';
+
+    // ejemplo: "Ahorras S/ 50.00" o "Sube S/ 25.00"
+    const abs = Math.abs(delta);
+    const money = this.formatMoney(abs);
+
+    return delta >= 0 ? `Ahorras ${money}` : `Sube ${money}`;
+  }
+
+  cuotaDeltaClass(p: PropuestaListItem): string {
+    const delta = this.getCuotaDelta(p);
+    if (delta == null) return 'neutral';
+    return delta >= 0 ? 'good' : 'bad';
+  }
+
+
+  
 
 
 }

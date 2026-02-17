@@ -205,10 +205,26 @@ export class AuthService {
     }
 
     async getProfileForSolicitud(codigo: string) {
+      // Asegura que auth esté inicializado y que exista sesión (JWT) antes del RPC
+      await this.init();
+
+      if (!this.session) {
+        await this.refreshSession();
+      }
+
+      // Si aún no hay sesión, no tiene sentido llamar al RPC (auth.uid() sería null)
+      if (!this.session) {
+        return {
+          data: null as ProfileDetalle | null,
+          error: { message: 'No hay sesión activa (usuario no autenticado).' } as any
+        };
+      }
+
       return supabase
         .rpc('get_profile_for_solicitud', { p_codigo: codigo })
-        .maybeSingle();
+        .maybeSingle<ProfileDetalle>();
     }
+
 
 
 

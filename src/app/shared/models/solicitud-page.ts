@@ -13,8 +13,28 @@ export interface SolicitudInfo {
   ocupacion: string | null;
   ingreso_bruto: number | null;
   es_dependiente: boolean | null;
-  estado: { id: number; nombre: string; mensaje: string | null } | null;
+
+  estado: {
+    id: number;
+    nombre: string;
+    mensaje: string | null;
+  } | null;
+
+  
+  entidad_financiera: {
+    id: number;
+    codigo: string | null;
+    nombre: string | null;
+  } | null;
+
+  
+  moneda: {
+    id: number;
+    codigo: string | null;
+    nombre: string | null;
+  } | null;
 }
+
 
 export interface PropuestaListItem {
   id: string;              // muchas veces es uuid
@@ -24,6 +44,6 @@ export interface PropuestaListItem {
   tea?: number | null;
   tcea?: number | null;
   plazo_meses?: number | null;
-  cuota_mensual?: number | null;
+  cuota_estimada?: number | null;
   estado?: { id: number; nombre: string } | null;
 }

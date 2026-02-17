@@ -48,6 +48,31 @@
   margin-bottom:14px;
 }
 
+.content-container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.content-wrapper {
+  width: 100%;
+}
+
+/* asegura que el inner ocupe el ancho del container */
+.content-inner {
+  width: 100%;
+}
+
+.table-container {
+  padding: 6px;
+  overflow-x: auto;
+}
+.propuestas-table {
+  min-width: 720px; /* opcional, para que no colapse columnas */
+}
+
+
 .info-card{
   border-radius: 18px;
   box-shadow: 0 10px 24px rgba(0,0,0,.06);
@@ -199,4 +224,29 @@
   border-radius: 10px;
   object-fit: cover;
   display: block;
+}
+
+
+.delta-chip{
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.delta-chip.good{
+  background: rgba(34,197,94,.12);
+  color: rgb(22,163,74);
+}
+
+.delta-chip.bad{
+  background: rgba(239,68,68,.12);
+  color: rgb(220,38,38);
+}
+
+.delta-chip.neutral{
+  background: rgba(107,114,128,.12);
+  color: rgb(75,85,99);
 }
