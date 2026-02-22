@@ -6,33 +6,32 @@ import { PropuestaDetalleRPC } from '../../shared/models/propuesta-page';
 export type SolicitudInsert = {
   user_id: string;
 
-  entidad_financiera_id: number;
-  moneda_id: number;
+  // Permite envío incompleto: todos los campos opcionales salvo user_id
+  entidad_financiera_id?: number | null;
+  moneda_id?: number | null;
 
-  monto_total_credito: number;
-  monto_actual_credito: number;
+  monto_total_credito?: number | null;
+  monto_actual_credito?: number | null;
 
-  monto_cuota_mensual: number,
+  monto_cuota_mensual?: number | null;
 
-  plazo_total_meses: number;
-  numero_cuotas_pagadas: number;
+  plazo_total_meses?: number | null;
+  numero_cuotas_pagadas?: number | null;
 
-  tcea: number;
-  tea: number;
+  tcea?: number | null;
+  tea?: number | null;
 
-  placa_vehiculo: string;
+  placa_vehiculo?: string | null;
 
-  es_dependiente: boolean;
+  es_dependiente?: boolean | null;
 
-  // opcionales
   ruc_empleador?: string | null;
   razon_social_empleador?: string | null;
   ruc_titular?: string | null;
   ocupacion?: string | null;
 
-  // nuevos NOT NULL
-  moneda_ingreso_id: number;
-  ingreso_bruto: number;
+  moneda_ingreso_id?: number | null;
+  ingreso_bruto?: number | null;
 
   estado_id?: number;
 };

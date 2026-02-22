@@ -100,36 +100,31 @@ export class NuevaSolicitud implements OnInit {
 
 
   form = new FormGroup({
-    // Datos del Crédito (NOT NULL)
-    entidad_financiera_id: new FormControl<number | null>(null, [Validators.required]),
-    moneda_id: new FormControl<number | null>(null, [Validators.required]),
+    // Datos del Crédito (todos opcionales para permitir envío incompleto)
+    entidad_financiera_id: new FormControl<number | null>(null),
+    moneda_id: new FormControl<number | null>(null),
 
-    monto_total_credito: new FormControl<number | null>(null, [Validators.required]),
-    monto_actual_credito: new FormControl<number | null>(null, [Validators.required]),
+    monto_total_credito: new FormControl<number | null>(null, [Validators.min(0)]),
+    monto_actual_credito: new FormControl<number | null>(null, [Validators.min(0)]),
 
-    monto_cuota_mensual: new FormControl<number | null>(null, [
-      Validators.required,
-      Validators.min(0.01),
-    ]),
+    monto_cuota_mensual: new FormControl<number | null>(null, [Validators.min(0.01)]),
 
 
-    plazo_total_meses: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
-    numero_cuotas_pagadas: new FormControl<number | null>(null, [Validators.required, Validators.min(1)]),
+    plazo_total_meses: new FormControl<number | null>(null, [Validators.min(1)]),
+    numero_cuotas_pagadas: new FormControl<number | null>(null, [Validators.min(0)]),
 
-    tcea: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
-    tea: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    tcea: new FormControl<number | null>(null, [Validators.min(0)]),
+    tea: new FormControl<number | null>(null, [Validators.min(0)]),
 
     placa_vehiculo: new FormControl<string | null>(null, [
-      Validators.required,
       Validators.minLength(6),
       Validators.maxLength(6),
       Validators.pattern(/^[A-Za-z0-9]{6}$/)
     ]),
 
 
-    // Perfil (condicion_laboral_id NOT NULL)
-    // condicion_laboral_id: new FormControl<number | null>(null, [Validators.required]),
-    es_dependiente: new FormControl<boolean | null>(null, [Validators.required]),
+    // Perfil
+    es_dependiente: new FormControl<boolean | null>(null),
 
 
     // Opcionales
@@ -139,9 +134,8 @@ export class NuevaSolicitud implements OnInit {
     ruc_titular: new FormControl<string | null>(null),
     ocupacion: new FormControl<string | null>(null),
 
-    // NOT NULL
-    moneda_ingreso_id: new FormControl<number | null>(null, [Validators.required]),
-    ingreso_bruto: new FormControl<number | null>(null, [Validators.required, Validators.min(0)]),
+    moneda_ingreso_id: new FormControl<number | null>(null),
+    ingreso_bruto: new FormControl<number | null>(null, [Validators.min(0)]),
   });
 
 
@@ -190,12 +184,11 @@ export class NuevaSolicitud implements OnInit {
         }
 
         if (v === false) {
-          // INDEPENDIENTE → validar ruc_titular + ocupacion
-          rucTit.setValidators([Validators.required, Validators.pattern(/^\d{11}$/)]);
+          // INDEPENDIENTE → validación solo cuando hay valor
+          rucTit.setValidators([Validators.pattern(/^\d{11}$/)]);
           rucTit.updateValueAndValidity({ emitEvent: false });
 
           ocu.setValidators([
-            Validators.required,
             Validators.minLength(2),
             Validators.maxLength(50),
             Validators.pattern(/^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ0-9 .&\-\/]+$/)
@@ -263,14 +256,6 @@ export class NuevaSolicitud implements OnInit {
 
 
   async enviar() {
-
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      // this.logInvalidControls();
-      return;
-    }
-
-
     const session = this.auth.session;
     const userId = session?.user?.id;
 
@@ -285,45 +270,37 @@ export class NuevaSolicitud implements OnInit {
       this.errorMsg = null;
 
       const v = this.form.getRawValue();
-
       const placa = this.upperOrNull(v.placa_vehiculo);
-      if (!placa) {
-        // aunque tengas Validators.required, TS no lo sabe; y además esto refuerza UX
-        this.form.controls.placa_vehiculo.setErrors({ required: true });
-        this.form.controls.placa_vehiculo.markAsTouched();
-        // console.log('[NuevaSolicitud] placa inválida');
-        return;
-      }
 
       const payload: SolicitudInsert = {
         user_id: userId,
         estado_id: 3,   // 3 = en proceso, o revisar tabla 'solicitud-estado'
 
-        entidad_financiera_id: v.entidad_financiera_id!,
-        moneda_id: v.moneda_id!,
+        entidad_financiera_id: v.entidad_financiera_id ?? null,
+        moneda_id: v.moneda_id ?? null,
 
-        monto_total_credito: v.monto_total_credito!,
-        monto_actual_credito: v.monto_actual_credito!,
+        monto_total_credito: v.monto_total_credito ?? null,
+        monto_actual_credito: v.monto_actual_credito ?? null,
 
-        monto_cuota_mensual: v.monto_cuota_mensual!,
+        monto_cuota_mensual: v.monto_cuota_mensual ?? null,
 
-        plazo_total_meses: v.plazo_total_meses!,
-        numero_cuotas_pagadas: v.numero_cuotas_pagadas!,
+        plazo_total_meses: v.plazo_total_meses ?? null,
+        numero_cuotas_pagadas: v.numero_cuotas_pagadas ?? null,
 
-        tea: v.tea!,
-        tcea: v.tcea!,
+        tea: v.tea ?? null,
+        tcea: v.tcea ?? null,
 
-        placa_vehiculo: placa, // <-- ahora sí es string
+        placa_vehiculo: placa ?? null,
 
-        es_dependiente: v.es_dependiente!,
+        es_dependiente: v.es_dependiente ?? null,
 
         ruc_empleador: this.upperOrNull(v.ruc_empleador),
         razon_social_empleador: (v.razon_social_empleador ?? '').trim() || null,
         ruc_titular: this.upperOrNull(v.ruc_titular),
 
         ocupacion: (v.ocupacion ?? '').trim() || null,
-        moneda_ingreso_id: v.moneda_ingreso_id!,
-        ingreso_bruto: v.ingreso_bruto!,
+        moneda_ingreso_id: v.moneda_ingreso_id ?? null,
+        ingreso_bruto: v.ingreso_bruto ?? null,
       };
 
       const { data, error } = await this.solicitudes.createSolicitud(payload);

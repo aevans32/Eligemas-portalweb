@@ -436,7 +436,7 @@
                 <button 
                   mat-flat-button 
                   type="submit" 
-                  [disabled]="submitting || form.invalid || step !== 2"
+                  [disabled]="submitting || step !== 2"
                 >
                   {{ submitting ? 'Enviando...' : 'Enviar' }}
                 </button>
