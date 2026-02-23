@@ -225,6 +225,35 @@ export class AuthService {
         .maybeSingle<ProfileDetalle>();
     }
 
+      /**
+     * Envía correo de reset password usando Supabase.
+     * redirectTo debe apuntar a la página de tu app que hará el "set new password".
+     * Ojo: ese redirect URL debe estar permitido en Supabase Dashboard (Auth > URL Configuration).
+     */
+    async sendPasswordResetEmail(email: string) {
+      const redirectTo = `${window.location.origin}/reset-password`;
+
+      return supabase.auth.resetPasswordForEmail(email, {
+        redirectTo,
+      });
+    }
+
+      /**
+     * Cambia la contraseña del usuario (debe existir sesión válida, normalmente creada
+     * al entrar por el link de reset).
+     */
+    async updatePassword(newPassword: string, confirmPassword: string) {
+      if (!newPassword || newPassword.length < 8) {
+        return { data: null, error: { message: 'La contraseña debe tener al menos 8 caracteres.' } as any };
+      }
+      if (newPassword !== confirmPassword) {
+        return { data: null, error: { message: 'Las contraseñas no coinciden.' } as any };
+      }
+
+      // Importante: aquí Supabase requiere que haya sesión (normalmente la genera el link de reset)
+      return supabase.auth.updateUser({ password: newPassword });
+    }
+
 
 
 
