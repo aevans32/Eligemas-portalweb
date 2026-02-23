@@ -59,10 +59,20 @@
           </mat-form-field>
 
 
-
-          <!--Olvidaste password???-->
           <div class="forgot-password">
-            <span routerLink="/signup">¿No tienes una cuenta? Regístrate!</span>
+
+            <!-- Reset password -->
+            <span class="link" (click)="forgotPassword()">
+              ¿Olvidaste tu contraseña?
+            </span>
+
+            <br />
+
+            <!-- Signup -->
+            <span class="link" routerLink="/signup">
+              ¿No tienes una cuenta? Regístrate!
+            </span>
+
           </div>
 
           <div class="action-button-container">

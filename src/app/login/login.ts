@@ -111,4 +111,35 @@ export class Login {
 
     return 'No se pudo iniciar sesión. Inténtalo nuevamente.';
   }
+
+
+  async forgotPassword() {
+    const email = this.loginForm.get('email')?.value;
+
+    if (!email) {
+      this.showError('Ingresa tu email para enviar el enlace de recuperación.');
+      return;
+    }
+
+    // opcional: si quieres exigir formato válido
+    if (this.loginForm.get('email')?.invalid) {
+      this.showError('Ingresa un email válido.');
+      return;
+    }
+
+    const { error } = await this.authService.sendPasswordResetEmail(email);
+
+    if (error) {
+      this.showError(error.message);
+      return;
+    }
+
+    this.snackBar.open('Te enviamos un enlace para restablecer tu contraseña.', 'Cerrar', {
+      duration: 4000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      // opcional si quieres clase distinta
+      panelClass: ['snackbar-success'],
+    });
+  }
 }

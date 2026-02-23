@@ -75,6 +75,11 @@ export const routes: Routes = [
     loadChildren: () => import('./admin/routes/admin.routes').then(m => m.ADMIN_ROUTES),
   },
   {
+    path: 'reset-password',
+    loadComponent: () =>
+    import('./reset-password/reset-password').then(m => m.ResetPassword),
+  },
+  {
     // wildcard route for a 404 page
     path: '**',
     redirectTo: '',
