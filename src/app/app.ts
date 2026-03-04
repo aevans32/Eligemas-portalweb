@@ -1,10 +1,11 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { AuthService } from './core/services/auth.service';
+import { FloatingChatComponent } from './floating-chat/floating-chat';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, FloatingChatComponent],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

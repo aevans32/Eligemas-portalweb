@@ -1,0 +1,47 @@
+<div class="floating-chat">
+  <!-- Botón flotante (estado inicial) -->
+  <button
+    type="button"
+    class="chat-trigger"
+    [class.hidden]="isOpen"
+    (click)="openMenu()"
+    aria-label="Abrir opciones de chat"
+  >
+    <svg class="chat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+    </svg>
+  </button>
+
+  <!-- Menú flotante pequeño -->
+  <div class="chat-menu" [class.visible]="isOpen" [class.hidden]="!isOpen">
+    <header class="chat-menu-header">
+      <span class="chat-menu-title">¿Cómo prefieres contactarnos?</span>
+      <button type="button" class="chat-close" (click)="closeMenu()" aria-label="Cerrar menú">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+      </button>
+    </header>
+    <div class="chat-menu-body">
+      <button type="button" class="chat-option" (click)="openLink(asesorHumanoUrl)">
+        <span class="chat-option-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+        </span>
+        <span class="chat-option-label">Asesor Humano</span>
+      </button>
+      <button type="button" class="chat-option" (click)="openLink(asesorIAUrl)">
+        <span class="chat-option-icon chat-option-icon--ai" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="11" width="18" height="10" rx="2"/>
+            <circle cx="12" cy="5" r="2"/>
+            <path d="M12 7v4M9 9h6"/>
+          </svg>
+        </span>
+        <span class="chat-option-label">Asesor IA</span>
+      </button>
+    </div>
+  </div>
+</div>
