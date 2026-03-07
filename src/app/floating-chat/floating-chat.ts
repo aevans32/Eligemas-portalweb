@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 export class FloatingChatComponent {
   isOpen = false;
 
-  readonly asesorHumanoUrl = 'https://wa.me/51926291450';
+  readonly asesorHumanoUrl = 'https://wa.me/51981226290';
   readonly asesorIAUrl = 'https://wa.pe/14155238886';
 
   openMenu(): void {
@@ -23,6 +23,6 @@ export class FloatingChatComponent {
   }
 
   openLink(url: string): void {
-    window.open(url, '_blank', 'noopener,noreferrer');
+    window.location.href = url;
   }
 }
