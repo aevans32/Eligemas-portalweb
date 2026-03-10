@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 export class FloatingChatComponent {
   isOpen = false;
 
-  readonly asesorHumanoUrl = 'https://wa.me/51981226290';
+  readonly asesorHumanoUrl = 'https://wa.me/51967334184';
   readonly asesorIAUrl = 'https://wa.pe/14155238886';
 
   openMenu(): void {
