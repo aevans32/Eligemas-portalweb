@@ -322,7 +322,8 @@ export class NuevaSolicitud implements OnInit {
       const ref = this.dialog.open(ConfirmModal, {
         data: {
           title: '¡Muchas gracias por el registro de tu solicitud!',
-          message: 'Muy pronto te contactaremos, estamos evaluando tu solicitud. Recuerda que debes estar al día en el pago del 100% de tus deudas.',
+          // message: 'Muy pronto te contactaremos, estamos evaluando tu solicitud. Recuerda que debes estar al día en el pago del 100% de tus deudas.',
+          message: 'Para que la entidad financiera realice una adecuada evaluación de la solicitud de compra de deuda de tu crédito vehicular, por favor, envíanos al  Whatsapp +51 967 334 184 tu cronograma de pagos y última boleta de ingresos.',
           primaryText: 'Volver a mis solicitudes',
           icon: 'assignment_turned_in',
         },
