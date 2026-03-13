@@ -77,4 +77,13 @@ export class CatalogosService {
         .order('nombre')
         .returns<ProvinciaRow[]>();
     }
+
+    async getDistritosByProvincia(departamentoCode: string, provinciaCode: string) {
+    return supabase
+        .from('distritos')
+        .select('code, nombre')
+        .eq('departamento_code', departamentoCode)
+        .eq('provincia_code', provinciaCode)
+        .order('nombre');
+    }
 }

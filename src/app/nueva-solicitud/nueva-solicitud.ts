@@ -72,8 +72,8 @@ export class NuevaSolicitud implements OnInit {
     entidad_financiera_id: 'Selecciona el banco/financiera donde tienes el crédito que deseas refinanciar.',
     moneda_id: 'Moneda en la que está el crédito actual (PEN / USD).',
     monto_total_credito: 'Monto original desembolsado al inicio del crédito.',
-    monto_actual_credito: 'Saldo aproximado pendiente de pago hoy.',
-    monto_cuota_mensual: 'Monto aproximado de tu cuota mensual actual (mínimo 0.01).',
+    monto_actual_credito: 'Saldo pendiente de pago hoy.',
+    monto_cuota_mensual: 'Monto de tu cuota mensual actual (mínimo 0.01).',
     plazo_total_meses: 'Plazo total pactado al inicio del crédito (en meses).',
     numero_cuotas_pagadas: 'Cuotas ya pagadas hasta la fecha (aprox).',
     tea: 'Este dato es muy importante, asegúrate que es el correcto. Puedes encontrarlo en tu cronograma, estado de cuenta o preguntarlo a tu entidad financiera.',
@@ -87,7 +87,7 @@ export class NuevaSolicitud implements OnInit {
     ruc_titular: 'RUC del negocio o del titular (solo si eres independiente).',
     ocupacion: 'Actividad/ocupación principal (máx. 50 caracteres).',
     moneda_ingreso_id: 'Moneda en la que recibes la mayor parte de tus ingresos.',
-    ingreso_bruto: 'Ingreso bruto mensual aproximado (antes de descuentos).',
+    ingreso_bruto: 'Ingreso bruto mensual (antes de descuentos).',
   } as const;
 
   tooltipPos: 'above' | 'below' | 'left' | 'right' = 'above';

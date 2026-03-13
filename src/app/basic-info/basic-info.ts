@@ -153,6 +153,7 @@ export class BasicInfo {
 
   departamentos: Array<{ code: string; nombre: string }> = [];
   provincias: Array<{ code: string; nombre: string }> = [];
+  distritos: Array<{ code: string; nombre: string }> = [];
 
 
   estadosCiviles: EstadoCivilRow[] = [];
@@ -190,7 +191,7 @@ export class BasicInfo {
     
     // provinciaCode: new FormControl<string | null>(null, [Validators.required]),
     provinciaCode: new FormControl<string | null>({ value: null, disabled: true}, [Validators.required]), 
-    distrito: new FormControl('', [Validators.required, Validators.minLength(2)]),
+    distritoCode: new FormControl<string | null>({ value: null, disabled: true}, [Validators.required]), 
     departamentoCode: new FormControl('', [Validators.required]),
 
   });
@@ -213,6 +214,7 @@ export class BasicInfo {
 
 
     this.setupProvinciaDropdown();
+    this.setupDistritoDropdown();
 
     const [{ data: deps, error: depsErr }, { data: ec, error: ecErr }, { data: td, error: tdErr }] =
       await Promise.all([
@@ -297,10 +299,10 @@ export class BasicInfo {
 
       direccion: direccionFinal,
       provincia: this.form.controls.provinciaCode.value!,
-      distrito: this.form.controls.distrito.value!.trim(),
+      distrito: this.form.controls.distritoCode.value!,
       departamento_code: this.form.controls.departamentoCode.value!,
 
-      is_complete: true, // ✅ key
+      is_complete: true,
     };
 
     const { error } = await this.auth.upsertOrUpdateProfile(profileUpdate);
@@ -401,6 +403,35 @@ export class BasicInfo {
         provCtrl.enable({ emitEvent: false});
       }
 
+    });
+  }
+
+  private setupDistritoDropdown() {
+    const provCtrl = this.form.controls.provinciaCode;
+    const distCtrl = this.form.controls.distritoCode;
+
+    distCtrl.disable({ emitEvent: false });
+
+    provCtrl.valueChanges.subscribe(async (provCode) => {
+      distCtrl.setValue(null, { emitEvent: false });
+      distCtrl.markAsUntouched();
+      this.distritos = [];
+
+      if (!provCode) return;
+
+      const depCode = this.form.controls.departamentoCode.value;
+      if (!depCode) return;
+
+      const { data, error } = await this.catalog.getDistritosByProvincia(depCode, provCode);
+      if (error) {
+        console.error('Error loading distritos:', error.message);
+        return;
+      }
+
+      this.distritos = data ?? [];
+      if (this.distritos.length > 0) {
+        distCtrl.enable({ emitEvent: false });
+      }
     });
   }
 
