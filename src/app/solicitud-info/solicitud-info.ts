@@ -80,7 +80,13 @@ export class SolicitudInfoComponent implements OnInit{
     this.solicitud = data.solicitud;
     this.propuestas = data.propuestas;
 
-    
+    // DEBUG: ver estados de propuestas
+    console.log('Propuestas:', this.propuestas.map(p => ({
+      id: p.id,
+      entidad: p.entidad_financiera?.nombre,
+      estado_id: p.estado?.id,
+      estado_nombre: p.estado?.nombre,
+    })));
 
 
     const resProfile = await this.auth.getProfileForSolicitud(codigo);
@@ -96,6 +102,10 @@ export class SolicitudInfoComponent implements OnInit{
 
 
     this.loading = false;
+  }
+
+  esElegida(p: PropuestaListItem): boolean {
+    return this.solicitud?.propuesta_elegida_id === Number(p.id);
   }
 
   volver() {

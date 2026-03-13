@@ -250,3 +250,11 @@
   background: rgba(107,114,128,.12);
   color: rgb(75,85,99);
 }
+
+::ng-deep .propuestas-table tr.row-elegida td {
+  background-color: #E1F5EE;
+}
+
+::ng-deep .propuestas-table tr.row-elegida td:first-child {
+  box-shadow: inset 3px 0 0 #1D9E75;
+}

@@ -13,6 +13,7 @@ export interface SolicitudInfo {
   ocupacion: string | null;
   ingreso_bruto: number | null;
   es_dependiente: boolean | null;
+  propuesta_elegida_id: number | null;
 
   estado: {
     id: number;
@@ -46,4 +47,5 @@ export interface PropuestaListItem {
   plazo_meses?: number | null;
   cuota_estimada?: number | null;
   estado?: { id: number; nombre: string } | null;
+  
 }

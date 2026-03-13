@@ -109,7 +109,7 @@ export class Propuesta implements OnInit{
       const ref = this.dialog.open(ConfirmModal, {
         data: {
           title: '¡Felicitaciones!',
-          message: 'El banco elegido te contactará en el más breve plazo.',
+          message: 'La entidad financiera elegida te contactará en el más breve plazo.',
           primaryText: 'Entendido',
           icon: 'check_circle',
         },

@@ -391,7 +391,9 @@ export class NuevaSolicitud implements OnInit {
         message:
           'Con la finalidad de agilizar el llenado de la solicitud, ' +
           'agradeceremos que tenga a la mano los datos de su TEA y TCEA ' +
-          'de su crédito vehicular vigente.',
+          'de su crédito vehicular vigente.' + 
+          'Es necesario Completar los datos con información exacta, no aproximada. Solo así recibirás las mejores ofertas para comprar tu crédito a una mejor tasa. Si tienes dudas estamos para apoyarte a través de nuestro Canal de Whatsapp.'
+          ,
         primaryText: 'Entendido',
         icon: 'info',
       },

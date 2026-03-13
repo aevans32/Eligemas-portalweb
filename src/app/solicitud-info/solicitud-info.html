@@ -282,7 +282,7 @@
                     </ng-container>
 
                     <tr mat-header-row *matHeaderRowDef="displayedPropuestasColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedPropuestasColumns;"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedPropuestasColumns;" [class.row-elegida]="esElegida(row)"></tr>
                   </table>
                 }
               </div>
