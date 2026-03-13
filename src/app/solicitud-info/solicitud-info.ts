@@ -145,7 +145,8 @@ export class SolicitudInfoComponent implements OnInit{
       FALA: 'images/ef/falabella.jpeg',
       RIP: 'images/ef/ripley.jpeg',
       CAJA_AQP: 'images/ef/caja-aqp.jpeg',
-      
+      CAJA_HYO: 'images/ef/caja_huancayo.png',
+      MAF: 'images/ef/maf.png',
     };
 
     return map[code] ?? null;
