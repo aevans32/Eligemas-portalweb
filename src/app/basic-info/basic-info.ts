@@ -16,6 +16,9 @@ import { CatalogosService, TipoDocumentoRow } from '../core/services/catalogos.s
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DateAdapter, NativeDateAdapter } from '@angular/material/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmModal } from '../shared/components/confirm-modal/confirm-modal';
+import { firstValueFrom } from 'rxjs';
 
 export class EsPeDateAdapter extends NativeDateAdapter {
   override parse(value: any): Date | null {
@@ -148,6 +151,7 @@ export class BasicInfo {
   private catalog = inject(CatalogosService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private dialog = inject(MatDialog);
 
 
 
@@ -240,6 +244,9 @@ export class BasicInfo {
     this.setupDynamicValidators();
   }
 
+  /*
+    * Al hacer submit, validamos el formulario y luego preparamos los datos para guardarlos en el perfil del usuario.
+  */
   async save() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -320,15 +327,26 @@ export class BasicInfo {
     }
 
     // success path
-    this.snackBar.open('Datos registrados correctamente', 'Cerrar', {
-      duration: 4000,
-      panelClass: ['snackbar-success'],
+    // success path
+    const ref = this.dialog.open(ConfirmModal, {
+      data: {
+        title: '¡Datos registrados correctamente!',
+        message: 'Tu perfil ha sido guardado. Ahora puedes continuar con tu solicitud.',
+        primaryText: 'Continuar',
+        icon: 'check_circle',
+      },
+      panelClass: 'elige-modal-panel',
+      backdropClass: 'elige-modal-backdrop',
+      autoFocus: false,
+      disableClose: true,
     });
 
-    // optionally let user see it briefly before redirect
+    await firstValueFrom(ref.afterClosed());
+
     setTimeout(() => {
       this.router.navigateByUrl('/dashboard');
     }, 800);
+
   }
 
 
