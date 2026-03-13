@@ -33,16 +33,9 @@ export const routes: Routes = [
     path: 'proposito',
     loadComponent: () => import('./proposito/proposito').then(m => m.Proposito),
   },
-  // {
-  //   path: 'contacto',
-  //   loadComponent: () => import('./contacto/contacto').then(m => m.Contacto),
-  // },
-  
- 
   {
     path: 'contacto',
-    redirectTo: '',
-    pathMatch: 'full'
+    loadComponent: () => import('./contacto/contacto').then(m => m.Contacto),
   },
   {
     path: 'basic-info',

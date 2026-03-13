@@ -28,6 +28,13 @@
   line-height: 1.4;
 }
 
+.content-container {
+  width: 100%;
+  max-width: 800px;    /*Ajuste de ancho para ventana de detalle de solicitud, requerimiento previo.*/
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
 .loading-box{
   display:flex;
   align-items:center;
