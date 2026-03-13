@@ -246,7 +246,9 @@
         <mat-form-field class="span-1" appearance="outline">
           <mat-label>Departamento</mat-label>
           <mat-select formControlName="departamentoCode">
-            <mat-option *ngFor="let d of departamentos" [value]="d.code">{{ d.nombre }}</mat-option>
+            <mat-option *ngFor="let d of departamentos" [value]="d.code">
+              {{ d.nombre }}
+            </mat-option>
           </mat-select>
 
           <mat-error *ngIf="form.controls.departamentoCode.hasError('required') && form.controls.departamentoCode.touched">
@@ -273,14 +275,14 @@
         <!--DISTRITO-->
         <mat-form-field class="span-2" appearance="outline">
           <mat-label>Distrito</mat-label>
-          <input matInput formControlName="distrito" />
+          <mat-select formControlName="distritoCode">
+            <mat-option *ngFor="let d of distritos" [value]="d.code">
+              {{ d.nombre }}
+            </mat-option>
+          </mat-select>
 
-          <mat-error *ngIf="form.controls.distrito.hasError('required') && form.controls.distrito.touched">
-            El distrito es obligatorio.
-          </mat-error>
-
-          <mat-error *ngIf="form.controls.distrito.hasError('pattern') && form.controls.distrito.touched">
-            Solo letras y espacios.
+          <mat-error *ngIf="form.controls.distritoCode.hasError('required') && form.controls.distritoCode.touched">
+            Selecciona un distrito.
           </mat-error>
         </mat-form-field>
 
