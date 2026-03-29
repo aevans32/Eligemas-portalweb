@@ -167,3 +167,33 @@ header {
   cursor: default;
   user-select: none;
 }
+
+
+
+/* ─── NEW: Horizontal scroll on mobile ─────────────────────── */
+@media (max-width: 768px) {
+  .header-content {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch; /* smooth scroll on iOS */
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    gap: 16px;
+    padding-bottom: 8px; /* room for scrollbar if visible */
+  }
+
+  .nav-links {
+    flex-shrink: 0; /* prevent links from compressing */
+    gap: 8px;
+  }
+
+  .auth-buttons {
+    flex-shrink: 0;
+  }
+
+  .logo-container {
+    flex-shrink: 0;
+  }
+}
+/* ────────────────────────────────────────────────────────────── */
+

@@ -23,6 +23,9 @@ export class Header implements OnInit {
 
   hasSolicitud = false;
 
+
+
+
   async logout() {
     await this.auth.signOut();
     this.auth.setCachedUserName(null);
