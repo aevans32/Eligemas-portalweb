@@ -43,7 +43,10 @@ export class Signup {
   form = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(8)]),
-    acceptTerms: new FormControl(false, [Validators.requiredTrue])
+    acceptTerms: new FormControl(false, [Validators.requiredTrue]),
+    acceptPrivacy: new FormControl(false, [Validators.requiredTrue]),
+    acceptDataSharing: new FormControl(false, [Validators.requiredTrue]),
+    acceptMarketing: new FormControl(false), // optional
   });
 
   // Tooltips para password
