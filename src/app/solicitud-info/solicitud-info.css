@@ -38,7 +38,7 @@
   /* CONTENT CONTAINER — owns max-width cap */
   & .content-container {
     width: 100%;
-    max-width: 800px;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 0 16px;
     box-sizing: border-box;   /* NEW: prevents right-side overflow */
@@ -197,13 +197,13 @@
 }
 
 .logo-cell {
-  width: 56px;
+  width: 72px;
   padding-right: 8px;
 }
 
 .ef-logo {
-  width: 40px;
-  height: 40px;
+  width: 52;
+  height: 52px;
   padding: 0;
   background: transparent;
   border: none;
@@ -266,4 +266,9 @@
   .page-container .title-container .title span {
     font-size: 20px;
   }
+}
+
+::ng-deep .propuestas-table .wrap-header {
+  white-space: normal !important;
+  min-width: 72px;
 }
