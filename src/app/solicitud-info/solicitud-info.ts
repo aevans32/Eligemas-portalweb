@@ -117,7 +117,14 @@ export class SolicitudInfoComponent implements OnInit{
   }
 
   verPropuesta(p: PropuestaListItem) {
-    this.router.navigate(['/propuesta', p.id]);
+    this.router.navigate(['/propuesta', p.id], {
+      queryParams: {
+        cuota_solicitud: this.solicitud?.monto_cuota_mensual,
+        plazo_solicitud: this.solicitud?.plazo_total_meses,
+        tcea_solicitud: this.solicitud?.tcea,
+        monto_solicitud: this.solicitud?.monto_total_credito,
+      }
+    });
   }
 
 

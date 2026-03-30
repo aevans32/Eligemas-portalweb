@@ -45,10 +45,21 @@ export class Propuesta implements OnInit{
 
   propuesta: PropuestaDetalleRPC = null;
 
+  cuotaSolicitud: number | null = null;
+  plazoSolicitud: number | null = null
+  tceaSolicitud: number | null = null;
+  montoSolicitud: number | null = null;
 
   async ngOnInit() {
     const idStr = this.route.snapshot.paramMap.get('id');
     const id = Number(idStr);
+
+    const qp = this.route.snapshot.queryParamMap;
+    this.cuotaSolicitud = qp.has('cuota_solicitud') ? Number(qp.get('cuota_solicitud')) : null;
+    this.plazoSolicitud = qp.has('plazo_solicitud') ? Number(qp.get('plazo_solicitud')) : null;
+    this.tceaSolicitud = qp.has('tcea_solicitud') ? Number(qp.get('tcea_solicitud')) : null;
+    this.montoSolicitud = qp.has('monto_solicitud') ? Number(qp.get('monto_solicitud')) : null;
+
 
     if (!idStr || Number.isNaN(id)) {
       this.errorMsg = 'ID de propuesta inválido.';
@@ -169,6 +180,60 @@ export class Propuesta implements OnInit{
     };
 
     return map[code] ?? null;
+  }
+
+  getTceaDelta(): number | null {
+    if (this.tceaSolicitud == null || this.propuesta?.tcea == null) return null;
+    return this.tceaSolicitud - Number(this.propuesta.tcea);
+  }
+
+  getTceaDeltaLabel(): string {
+    const delta = this.getTceaDelta();
+    if (delta == null) return '—';
+    return delta >= 0 ? `Ahorras ${Math.abs(delta).toFixed(2)}%` : `Sube ${Math.abs(delta).toFixed(2)}%`;
+  }
+
+  tceaDeltaClass(): string {
+    const delta = this.getTceaDelta();
+    if (delta == null) return 'neutral';
+    return delta >= 0 ? 'good' : 'bad';
+  }
+
+  getCuotaDelta(): number | null {
+    if (this.cuotaSolicitud == null || this.propuesta?.cuota_estimada == null) return null;
+    return this.cuotaSolicitud - Number(this.propuesta.cuota_estimada);
+  }
+
+  getCuotaDeltaLabel(): string {
+    const delta = this.getCuotaDelta();
+    if (delta == null) return '—';
+    return delta >= 0 ? `Ahorras ${this.formatMoney(Math.abs(delta))}` : `Sube ${this.formatMoney(Math.abs(delta))}`;
+  }
+
+  cuotaDeltaClass(): string {
+    const delta = this.getCuotaDelta();
+    if (delta == null) return 'neutral';
+    return delta >= 0 ? 'good' : 'bad';
+  }
+
+  getInteresesDelta(): number | null {
+    if (this.cuotaSolicitud == null || this.plazoSolicitud == null) return null;
+    if (this.propuesta?.cuota_estimada == null || this.propuesta?.plazo_meses == null) return null;
+    const totalSolicitud = this.cuotaSolicitud * this.plazoSolicitud;
+    const totalPropuesta = Number(this.propuesta.cuota_estimada) * Number(this.propuesta.plazo_meses);
+    return totalSolicitud - totalPropuesta;
+  }
+
+  getInteresesDeltaLabel(): string {
+    const delta = this.getInteresesDelta();
+    if (delta == null) return '—';
+    return delta >= 0 ? `Ahorras ${this.formatMoney(Math.abs(delta))}` : `Sube ${this.formatMoney(Math.abs(delta))}`;
+  }
+
+  interesesDeltaClass(): string {
+    const delta = this.getInteresesDelta();
+    if (delta == null) return 'neutral';
+    return delta >= 0 ? 'good' : 'bad';
   }
 
 }
