@@ -1,5 +1,7 @@
 .modal-wrap {
-  width: min(420px, calc(100vw - 48px));
+  width: 100%;          /* fill whatever the dialog gives it */
+  max-width: 420px;     /* cap on desktop */
+  box-sizing: border-box; /* padding doesn't add to width */
   padding: 22px 22px 18px;
   text-align: center;
 }

@@ -327,7 +327,6 @@ export class BasicInfo {
     }
 
     // success path
-    // success path
     const ref = this.dialog.open(ConfirmModal, {
       data: {
         title: '¡Datos registrados correctamente!',
@@ -339,6 +338,8 @@ export class BasicInfo {
       backdropClass: 'elige-modal-backdrop',
       autoFocus: false,
       disableClose: true,
+      width: '90vw',        // NEW: responsive width
+      maxWidth: '480px',
     });
 
     await firstValueFrom(ref.afterClosed());

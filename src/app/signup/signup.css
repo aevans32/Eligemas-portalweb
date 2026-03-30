@@ -2,85 +2,96 @@
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+
+  & .title-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 54px;
+    margin-bottom: 16px;
+
+    & .title {
+      text-align: center;
+
+      & span {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  & .content-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 24px 16px;
+    box-sizing: border-box;
+  }
+
+  & .content-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    max-width: 480px;
+
+    & form {
+      width: 100%;
+      background-color: #f4f6fa;
+      border-radius: 16px;
+      padding: 40px 32px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+      box-sizing: border-box;
+
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+
+      & .instructions {
+        text-align: center;
+        margin-bottom: 4px;
+
+        & span {
+          font-size: 13px;
+          color: #6b7280;
+          line-height: 1.4;
+          cursor: default;
+        }
+      }
+
+      & button[type="submit"] {
+        margin-top: 8px;
+
+        &:disabled {
+          background-color: #c8d8d4;
+          color: #6b8f88;
+          border-color: #a0bcb6;
+          cursor: not-allowed;
+          opacity: 0.7;
+        }
+      }
+    }
+  }
 }
 
-.page-container .content-wrapper {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+/* ─── MOBILE ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .page-container .title-container {
+    margin-top: 32px;
+  }
 
-  background-color: #f4f6fa;
-  border-radius: 16px;
-  padding: 40px;
-
-  max-width: 480px;
-  width: 100%;
-  margin: 24px auto;
-
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.page-container .content-container {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.page-container form {
-  width: 100%;
-  max-width: 260px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.page-container button {
-  margin-top: 16px;
-}
-
-
-/* TITLE */
-.page-container .title-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 54px;
-  margin-bottom: 16px;
-}
-
-.page-container .title-container .title {
-  text-align: center;
-}
-
-.page-container .title-container .title span {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-/* INSTRUCTIONS */
-.page-container .instructions {
-  margin-top: 0px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.page-container .instructions span {
-  font-size: 13px;
-  color: #6b7280; /* neutral gray */
-  line-height: 1.4;
-}
-
-/* Optional: clickable hint styling */
-.page-container .instructions span[routerLink] {
-  cursor: default;
-}
-
-
-@media (max-width: 480px) {
   .page-container .title-container .title span {
     font-size: 20px;
+  }
+
+  .page-container .content-wrapper {
+    padding: 16px 16px;
+    align-items: flex-start;
+  }
+
+  .page-container .content-container form {
+    padding: 32px 20px;
   }
 
   .page-container .instructions span {
@@ -88,31 +99,28 @@
   }
 }
 
-
-@media (min-width: 768px) {
-  .page-container .content-wrapper {
-    width: 420px;
-    height: 420px;
-  }
+/* ─── MATERIAL OVERRIDES ─────────────────────────────────────── */
+:host ::ng-deep form mat-form-field {
+  width: 100%;
 }
 
-/* Centra verticalmente el icono del matSuffix en outline (MDC) */
+/* Center icon in password suffix */
 :host ::ng-deep .password-field .mat-mdc-form-field-icon-suffix {
   display: flex;
   align-items: center;
 }
 
-/* Opcional: micro-ajuste si aún lo ves un pelín bajo */
 :host ::ng-deep .password-field .mat-mdc-icon-button {
   transform: translateY(-8px);
 }
 
+/* ─── LINKS ──────────────────────────────────────────────────── */
 .link {
   color: #1976d2;
   text-decoration: underline;
   cursor: pointer;
-}
 
-.link:hover {
-  opacity: 0.8;
+  &:hover {
+    opacity: 0.8;
+  }
 }

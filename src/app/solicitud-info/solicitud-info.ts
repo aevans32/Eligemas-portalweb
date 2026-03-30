@@ -47,7 +47,17 @@ export class SolicitudInfoComponent implements OnInit{
   solicitud: SolicitudInfo | null = null;
   propuestas: PropuestaListItem[] = [];
 
-  displayedPropuestasColumns = ['logo', 'entidad', 'monto', 'tcea', 'plazo', 'cuota', 'diferencia', 'acciones'];
+  displayedPropuestasColumns = [
+    'logo', 
+    'monto', 
+    'plazo', 
+    'tcea', 
+    'cuota',
+    'ahorro-tcea',
+    'ahorro-cuota-mensual',
+    'ahorro-total-intereses',
+    'acciones'
+  ];
 
   async ngOnInit() {
 
@@ -80,13 +90,7 @@ export class SolicitudInfoComponent implements OnInit{
     this.solicitud = data.solicitud;
     this.propuestas = data.propuestas;
 
-    // DEBUG: ver estados de propuestas
-    console.log('Propuestas:', this.propuestas.map(p => ({
-      id: p.id,
-      entidad: p.entidad_financiera?.nombre,
-      estado_id: p.estado?.id,
-      estado_nombre: p.estado?.nombre,
-    })));
+    
 
 
     const resProfile = await this.auth.getProfileForSolicitud(codigo);
@@ -113,7 +117,14 @@ export class SolicitudInfoComponent implements OnInit{
   }
 
   verPropuesta(p: PropuestaListItem) {
-    this.router.navigate(['/propuesta', p.id]);
+    this.router.navigate(['/propuesta', p.id], {
+      queryParams: {
+        cuota_solicitud: this.solicitud?.monto_cuota_mensual,
+        plazo_solicitud: this.solicitud?.plazo_total_meses,
+        tcea_solicitud: this.solicitud?.tcea,
+        monto_solicitud: this.solicitud?.monto_total_credito,
+      }
+    });
   }
 
 
@@ -188,6 +199,54 @@ export class SolicitudInfoComponent implements OnInit{
 
   cuotaDeltaClass(p: PropuestaListItem): string {
     const delta = this.getCuotaDelta(p);
+    if (delta == null) return 'neutral';
+    return delta >= 0 ? 'good' : 'bad';
+  }
+
+  getTceaDelta(p: PropuestaListItem): number | null {
+    const tceaSolicitud = this.solicitud?.tcea;
+    const tceaPropuesta = p.tcea;
+    if (tceaSolicitud == null || tceaPropuesta == null) return null;
+    return Number(tceaSolicitud) - Number(tceaPropuesta);
+  }
+
+  getTceaDeltaLabel(p: PropuestaListItem): string {
+    const delta = this.getTceaDelta(p);
+    if (delta == null) return '—';
+    const abs = Math.abs(delta).toFixed(2);
+    return delta >= 0 ? `Ahorras ${abs}%` : `Sube ${abs}%`;
+  }
+
+  tceaDeltaClass(p: PropuestaListItem): string {
+    const delta = this.getTceaDelta(p);
+    if (delta == null) return 'neutral';
+    return delta >= 0 ? 'good' : 'bad';
+  }
+
+  getInteresesDelta(p: PropuestaListItem): number | null {
+    const totalPagarSolicitud =
+      this.solicitud?.monto_cuota_mensual != null && this.solicitud?.plazo_total_meses != null
+        ? Number(this.solicitud.monto_cuota_mensual) * Number(this.solicitud.plazo_total_meses)
+        : null;
+
+    const totalPagarPropuesta =
+      p.cuota_estimada != null && p.plazo_meses != null
+        ? Number(p.cuota_estimada) * Number(p.plazo_meses)
+        : null;
+
+    if (totalPagarSolicitud == null || totalPagarPropuesta == null) return null;
+    return totalPagarSolicitud - totalPagarPropuesta;
+  }
+
+  getInteresesDeltaLabel(p: PropuestaListItem): string {
+    const delta = this.getInteresesDelta(p);
+    if (delta == null) return '—';
+    const abs = Math.abs(delta);
+    return delta >= 0 ? `Ahorras ${this.formatMoney(abs)}` : `Sube ${this.formatMoney(abs)}`;
+  }
+
+  interesesDeltaClass(p: PropuestaListItem): string {
+    const delta = this.getInteresesDelta(p);
     if (delta == null) return 'neutral';
     return delta >= 0 ? 'good' : 'bad';
   }

@@ -84,6 +84,39 @@
                 </div>
               </div>
 
+              <mat-divider></mat-divider>
+              <br>
+
+              <div class="section-title">
+                <mat-icon>savings</mat-icon>
+                <span>Comparativa con tu crédito actual</span>
+              </div>
+
+              <div class="grid">
+                <div class="kv">
+                  <div class="k">Ahorro TCEA</div>
+                  <div class="v">
+                    <span class="delta-chip" [ngClass]="tceaDeltaClass()">{{ getTceaDeltaLabel() }}</span>
+                  </div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Ahorro cuota mensual</div>
+                  <div class="v">
+                    <span class="delta-chip" [ngClass]="cuotaDeltaClass()">{{ getCuotaDeltaLabel() }}</span>
+                  </div>
+                </div>
+
+                <div class="kv">
+                  <div class="k">Ahorro total de intereses</div>
+                  <div class="v">
+                    <span class="delta-chip" [ngClass]="interesesDeltaClass()">{{ getInteresesDeltaLabel() }}</span>
+                  </div>
+                </div>
+              </div>
+
+
+
               @if (propuesta.comentarios) {
                 <div class="comment">
                   <mat-icon>chat</mat-icon>

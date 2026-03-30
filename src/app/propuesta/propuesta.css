@@ -1,45 +1,60 @@
-.title-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 26px;
-  margin-bottom: 10px;
-}
-
-.title {
-  text-align: center;
-  padding: 0 24px;
-}
-
-.title span {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.subtitle-container {
-  text-align: center;
-  padding: 0 24px;
-  margin-bottom: 18px;
-}
-
-.subtitle-container span {
-  font-size: 13px;
-  color: #6b7280;
-  line-height: 1.4;
-}
-
-
-/* ===== Layout base ===== */
 .page-container {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+
+  /* TITLE */
+  & .title-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 26px;
+    margin-bottom: 10px;
+
+    & .title {
+      text-align: center;
+      padding: 0 24px;
+
+      & span {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  /* SUBTITLE */
+  & .subtitle-container {
+    text-align: center;
+    padding: 0 24px;
+    margin-bottom: 18px;
+
+    & span {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+  }
+
+  /* CONTENT CONTAINER — owns max-width cap */
+  & .content-container {
+    flex: 1;
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box; /* KEY: prevents right-side overflow */
+  }
+
+  & .content-wrapper {
+    width: 100%;
+  }
+
+  & .content-inner {
+    width: 100%;
+  }
 }
 
-.content-container {
-  flex: 1;
-}
-
+/* ─── LOADING / ERROR ─────────────────────────────────────────── */
 .loading-box {
   display: flex;
   align-items: center;
@@ -49,7 +64,6 @@
   color: #6b7280;
 }
 
-/* ===== Error ===== */
 .error-card {
   display: flex;
   align-items: center;
@@ -62,34 +76,51 @@
   font-size: 14px;
 }
 
-/* ===== Card principal ===== */
+/* ─── MAIN CARD ───────────────────────────────────────────────── */
 .info-card {
   border-radius: 18px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
   padding: 16px;
 }
 
-/* ===== Header de la oferta ===== */
+/* ─── OFFER HEADER ────────────────────────────────────────────── */
 .header-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 12px;
+
+  & .big {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--primary-color);
+  }
+
+  & .small {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #6b7280;
+  }
 }
 
-.header-row .big {
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--primary-color);
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
 }
 
-.header-row .small {
-  margin-top: 4px;
-  font-size: 13px;
-  color: #6b7280;
+.ef-logo {
+  width: 144px;
+  height: 144px;
+  border-radius: 10px;
+  object-fit: contain;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  flex: 0 0 auto;
 }
 
-/* ===== Grid de datos ===== */
+/* ─── KEY-VALUE GRID ──────────────────────────────────────────── */
 .grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -97,31 +128,25 @@
   padding: 16px 4px 8px 4px;
 }
 
-@media (max-width: 820px) {
-  .grid {
-    grid-template-columns: 1fr;
-  }
-}
-
 .kv {
   background: #f9fafb;
   border-radius: 12px;
   padding: 12px 14px;
+
+  & .k {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  & .v {
+    margin-top: 4px;
+    font-size: 16px;
+    font-weight: 800;
+    color: #111827;
+  }
 }
 
-.kv .k {
-  font-size: 12px;
-  color: #6b7280;
-}
-
-.kv .v {
-  margin-top: 4px;
-  font-size: 16px;
-  font-weight: 800;
-  color: #111827;
-}
-
-/* ===== Comentarios ===== */
+/* ─── COMMENT ─────────────────────────────────────────────────── */
 .comment {
   display: flex;
   align-items: flex-start;
@@ -132,46 +157,44 @@
   background: #f3f4f6;
   color: #374151;
   font-size: 14px;
+
+  & mat-icon {
+    font-size: 20px;
+    margin-top: 2px;
+  }
 }
 
-.comment mat-icon {
-  font-size: 20px;
-  margin-top: 2px;
-}
-
-/* ===== Acciones ===== */
+/* ─── ACTIONS ─────────────────────────────────────────────────── */
 .actions {
   display: flex;
   flex-direction: column;
   gap: 10px;
   margin-top: 18px;
+
+  & button {
+    height: 44px;
+    font-weight: 700;
+    border-radius: 12px;
+  }
 }
 
-.actions button {
-  height: 44px;
-  font-weight: 700;
-  border-radius: 12px;
-}
-
-/* Hint cuando ya fue seleccionada */
 .hint {
   font-size: 13px;
   color: #6b7280;
   text-align: center;
 }
 
-/* ===== Botón primario destacado ===== */
 button[color="primary"] {
   background: linear-gradient(135deg, #8DD2B5, #6366f1);
   color: white;
+
+  &:disabled {
+    background: #e5e7eb;
+    color: #9ca3af;
+  }
 }
 
-button[color="primary"]:disabled {
-  background: #e5e7eb;
-  color: #9ca3af;
-}
-
-/* ===== Estados (por si los quieres usar luego) ===== */
+/* ─── STATE PILLS ─────────────────────────────────────────────── */
 .state {
   display: inline-flex;
   align-items: center;
@@ -181,64 +204,30 @@ button[color="primary"]:disabled {
   font-weight: 800;
 }
 
-.state--proceso {
-  background: #fffbeb;
-  color: #92400e;
+.state--proceso   { background: #fffbeb; color: #92400e; }
+.state--ofertas   { background: #eef2ff; color: #3730a3; }
+.state--finalizado{ background: #ecfdf5; color: #065f46; }
+.state--rechazado { background: #fef2f2; color: #991b1b; }
+.state--cancelado { background: #f3f4f6; color: #374151; }
+
+/* ─── MOBILE ──────────────────────────────────────────────────── */
+@media (max-width: 820px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.state--ofertas {
-  background: #eef2ff;
-  color: #3730a3;
+@media (max-width: 768px) {
+  .page-container .content-container {
+    padding: 0 12px;
+  }
+
+  .page-container .title-container .title span {
+    font-size: 20px;
+  }
+
+  .ef-logo {
+    width: 80px;
+    height: 80px;
+  }
 }
-
-.state--finalizado {
-  background: #ecfdf5;
-  color: #065f46;
-}
-
-.state--rechazado {
-  background: #fef2f2;
-  color: #991b1b;
-}
-
-.state--cancelado {
-  background: #f3f4f6;
-  color: #374151;
-}
-
-
-.header-left{
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-width: 0;
-}
-
-.ef-logo{
-  width: 144px;
-  height: 144px;
-  border-radius: 10px;
-  object-fit: contain;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,.08);
-  flex: 0 0 auto;
-}
-
-.content-container {
-  width: 100%;
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 0 16px;
-}
-
-/* opcional: el wrapper ya no necesita centrar con flex si no quieres */
-.content-wrapper {
-  width: 100%;
-}
-
-/* asegura que el inner ocupe el ancho del container */
-.content-inner {
-  width: 100%;
-}
-
-

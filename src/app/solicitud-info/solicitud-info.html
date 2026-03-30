@@ -213,59 +213,76 @@
                 @else {
                   <table mat-table [dataSource]="propuestas" class="propuestas-table">
 
-                    <!-- LOGO -->
+                    <!-- LOGO + ENTIDAD -->
                     <ng-container matColumnDef="logo">
-                      <th mat-header-cell *matHeaderCellDef></th>
+                      <th mat-header-cell *matHeaderCellDef>Entidad</th>
                       <td mat-cell *matCellDef="let p" class="logo-cell">
-                        <div class="ef-logo" [ngClass]="logoClass(p.entidad_financiera)">
-                          <img
-                            *ngIf="logoSrc(p.entidad_financiera) as src"
-                            [src]="src"
-                            [alt]="p.entidad_financiera?.nombre ?? 'Entidad'"
-                            loading="lazy"
-                          />
+                        <div class="ef-logo-wrap">
+                          <div class="ef-logo" [ngClass]="logoClass(p.entidad_financiera)">
+                            <img
+                              *ngIf="logoSrc(p.entidad_financiera) as src"
+                              [src]="src"
+                              [alt]="p.entidad_financiera?.nombre ?? 'Entidad'"
+                              loading="lazy"
+                            />
+                          </div>
+                          
                         </div>
                       </td>
                     </ng-container>
 
-                    <!-- ENTIDAD -->
-                    <ng-container matColumnDef="entidad">
-                      <th mat-header-cell *matHeaderCellDef>Entidad</th>
-                      <td mat-cell *matCellDef="let p">
-                        {{ p.entidad_financiera?.nombre ?? '—' }}
-                      </td>
-                    </ng-container>
 
                     <!-- MONTO -->
                     <ng-container matColumnDef="monto">
-                      <th mat-header-cell *matHeaderCellDef>Monto</th>
+                      <th mat-header-cell *matHeaderCellDef class="wrap-header">Monto Total de Deuda</th>
                       <td mat-cell *matCellDef="let p">{{ formatMoney(p.monto_aprobado ?? null) }}</td>
-                    </ng-container>
-
-                    <!-- TCEA -->
-                    <ng-container matColumnDef="tcea">
-                      <th mat-header-cell *matHeaderCellDef>TCEA</th>
-                      <td mat-cell *matCellDef="let p">{{ formatPercent(p.tcea ?? null) }}</td>
                     </ng-container>
 
                     <!-- PLAZO -->
                     <ng-container matColumnDef="plazo">
-                      <th mat-header-cell *matHeaderCellDef>Plazo</th>
+                      <th mat-header-cell *matHeaderCellDef>Plazo (Meses)</th>
                       <td mat-cell *matCellDef="let p">{{ p.plazo_meses ?? '—' }}</td>
                     </ng-container>
 
+
+                    <!-- TCEA -->
+                    <ng-container matColumnDef="tcea">
+                      <th mat-header-cell *matHeaderCellDef>Nueva TCEA (%)</th>
+                      <td mat-cell *matCellDef="let p">{{ formatPercent(p.tcea ?? null) }}</td>
+                    </ng-container>
+                    
                     <!-- CUOTA -->
                     <ng-container matColumnDef="cuota">
-                      <th mat-header-cell *matHeaderCellDef>Cuota</th>
+                      <th mat-header-cell *matHeaderCellDef>Nueva Cuota</th>
                       <td mat-cell *matCellDef="let p">{{ formatMoney(p.cuota_estimada ?? null) }}</td>
                     </ng-container>
 
-                    <!-- DIFERENCIA -->
-                    <ng-container matColumnDef="diferencia">
-                      <th mat-header-cell *matHeaderCellDef>Diferencia</th>
+                    <!-- AHORRO TCEA -->
+                    <ng-container matColumnDef="ahorro-tcea">
+                      <th mat-header-cell *matHeaderCellDef class="wrap-header">Ahorro TCEA (%)</th>
+                      <td mat-cell *matCellDef="let p">
+                        <span class="delta-chip" [ngClass]="tceaDeltaClass(p)">
+                          {{ getTceaDeltaLabel(p) }}
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <!-- AHORRO CUOTA MENSUAL -->
+                    <ng-container matColumnDef="ahorro-cuota-mensual">
+                      <th mat-header-cell *matHeaderCellDef>Ahorro Cuota Mensual</th>
                       <td mat-cell *matCellDef="let p">
                         <span class="delta-chip" [ngClass]="cuotaDeltaClass(p)">
                           {{ getCuotaDeltaLabel(p) }}
+                        </span>
+                      </td>
+                    </ng-container>
+
+                    <!-- AHORRO TOTAL INTERESES -->
+                    <ng-container matColumnDef="ahorro-total-intereses">
+                      <th mat-header-cell *matHeaderCellDef class="wrap-header">Ahorro Total de Intereses</th>
+                      <td mat-cell *matCellDef="let p">
+                        <span class="delta-chip" [ngClass]="interesesDeltaClass(p)">
+                          {{ getInteresesDeltaLabel(p) }}
                         </span>
                       </td>
                     </ng-container>
