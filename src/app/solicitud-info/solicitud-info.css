@@ -1,199 +1,199 @@
-.title-container {
+.page-container {
   display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+
+  /* TITLE */
+  & .title-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 26px;
+    margin-bottom: 10px;
+
+    & .title {
+      text-align: center;
+      padding: 0 24px;
+
+      & span {
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--primary-color);
+      }
+    }
+  }
+
+  /* SUBTITLE */
+  & .subtitle-container {
+    text-align: center;
+    padding: 0 24px;
+    margin-bottom: 18px;
+
+    & span {
+      font-size: 13px;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+  }
+
+  /* CONTENT CONTAINER — owns max-width cap */
+  & .content-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 16px;
+    box-sizing: border-box;   /* NEW: prevents right-side overflow */
+  }
+
+  /* WRAPPER — no visual styles, just spacing */
+  & .content-wrapper {
+    width: 100%;
+  }
+
+  /* INNER — full width */
+  & .content-inner {
+    width: 100%;
+  }
+}
+
+/* ─── STATES ─────────────────────────────────────────────────── */
+.loading-box {
+  display: flex;
+  align-items: center;
   justify-content: center;
-  margin-top: 26px;
-  margin-bottom: 10px;
-}
-
-.title {
-  text-align: center;
-  padding: 0 24px;
-}
-
-.title span {
-  font-size: 24px;
-  font-weight: 700;
-  color: var(--primary-color);
-}
-
-.subtitle-container {
-  text-align: center;
-  padding: 0 24px;
-  margin-bottom: 18px;
-}
-
-.subtitle-container span {
-  font-size: 13px;
+  gap: 12px;
+  padding: 24px;
   color: #6b7280;
-  line-height: 1.4;
 }
 
-.loading-box{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:12px;
-  padding:24px;
-  color:#6b7280;
+.error-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: #fff1f2;
+  color: #991b1b;
+  margin-bottom: 14px;
 }
 
-.error-card{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:14px 16px;
-  border-radius:14px;
-  background:#fff1f2;
-  color:#991b1b;
-  margin-bottom:14px;
-}
-
-.content-container {
-  width: 100%;
-  max-width: 800px;    /*Ajuste de ancho para ventana de detalle de solicitud, requerimiento previo.*/
-  margin: 0 auto;
-  padding: 0 16px;
-}
-
-.content-wrapper {
-  width: 100%;
-}
-
-/* asegura que el inner ocupe el ancho del container */
-.content-inner {
-  width: 100%;
-}
-
-.table-container {
-  padding: 6px;
-  overflow-x: auto;
-}
-.propuestas-table {
-  min-width: 720px; /* opcional, para que no colapse columnas */
-}
-
-
-.info-card{
+/* ─── INFO CARDS ──────────────────────────────────────────────── */
+.info-card {
   border-radius: 18px;
-  box-shadow: 0 10px 24px rgba(0,0,0,.06);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
   padding: 12px;
   margin-bottom: 16px;
 }
 
-.card-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:flex-start;
-  gap:12px;
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
   padding: 8px 6px 12px 6px;
 }
 
-.sol-codigo{
+.sol-codigo {
   font-size: 18px;
   font-weight: 800;
   color: var(--primary-color);
 }
 
-.sol-fecha{
+.sol-fecha {
   font-size: 12px;
-  color: #6b7280;
+  color: #6c806b;
   margin-top: 4px;
 }
 
-.grid{
-  display:grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 12px;
-  padding: 14px 6px 6px 6px;
-}
-
-@media (max-width: 820px){
-  .grid{ grid-template-columns: 1fr; }
-}
-
-.kv .k{
-  font-size: 12px;
-  color: #6b7280;
-}
-
-.kv .v{
-  font-size: 14px;
-  font-weight: 700;
-  color: #111827;
-  margin-top: 2px;
-}
-
-.estado-mensaje{
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding: 10px 8px 0 8px;
-  color:#374151;
-  font-size: 13px;
-}
-
-.section-title{
-  display:flex;
-  align-items:center;
-  gap:8px;
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
   padding: 8px 6px 10px 6px;
   font-weight: 800;
   color: #111827;
 }
 
-.count-chip{
-  margin-left:auto;
+.count-chip {
+  margin-left: auto;
   font-size: 12px;
   font-weight: 800;
   background: #eef2ff;
-  color:#3730a3;
+  color: #3730a3;
   padding: 4px 10px;
   border-radius: 999px;
 }
 
-.table-container{
-  padding: 6px;
+.estado-mensaje {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 8px 0 8px;
+  color: #374151;
+  font-size: 13px;
 }
 
-.propuestas-table{
-  width: 100%;
+/* ─── KEY-VALUE GRID ──────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  padding: 14px 6px 6px 6px;
 }
 
-.actions-cell{
-  text-align:right;
-  white-space:nowrap;
+.kv {
+  & .k {
+    font-size: 12px;
+    color: #6b7280;
+  }
+
+  & .v {
+    font-size: 14px;
+    font-weight: 700;
+    color: #111827;
+    margin-top: 2px;
+  }
 }
 
-.state{
-  display:inline-flex;
-  align-items:center;
+@media (max-width: 820px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── STATE PILLS ─────────────────────────────────────────────── */
+.state {
+  display: inline-flex;
+  align-items: center;
   padding: 6px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 800;
-}
-.state.small{
-  padding: 4px 8px;
-  font-size: 11px;
-}
 
-.state--ok{ background:#ecfdf5; color:#065f46; }
-.state--warn{ background:#fffbeb; color:#92400e; }
-.state--bad{ background:#fef2f2; color:#991b1b; }
-.state--neutral{ background:#f3f4f6; color:#374151; }
-
-.empty{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  padding:16px 8px;
-  color:#6b7280;
+  &.small {
+    padding: 4px 8px;
+    font-size: 11px;
+  }
 }
 
-.bottom-actions{
-  display:flex;
-  justify-content:flex-start;
-  padding: 6px 2px 0 2px;
+.state--ok      { background: #ecfdf5; color: #065f46; }
+.state--warn    { background: #fffbeb; color: #92400e; }
+.state--bad     { background: #fef2f2; color: #991b1b; }
+.state--neutral { background: #f3f4f6; color: #374151; }
+
+/* ─── PROPOSALS TABLE ─────────────────────────────────────────── */
+.table-container {
+  padding: 6px;
+  overflow-x: auto;
+}
+
+.propuestas-table {
+  width: 100%;
+  min-width: 720px;
+}
+
+.actions-cell {
+  text-align: right;
+  white-space: nowrap;
 }
 
 .logo-cell {
@@ -204,51 +204,42 @@
 .ef-logo {
   width: 40px;
   height: 40px;
-
-  /* remove the box */
   padding: 0;
   background: transparent;
   border: none;
-
   display: inline-flex;
   align-items: center;
   justify-content: center;
+
+  & img {
+    margin-top: 10px;
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    object-fit: cover;
+    display: block;
+  }
 }
 
-
-.ef-logo img {
-  margin-top: 10px;
-  object-fit: contain;
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  object-fit: cover;
-  display: block;
-}
-
-
-.delta-chip{
+.delta-chip {
   display: inline-flex;
   align-items: center;
   padding: 4px 10px;
   border-radius: 999px;
   font-size: 12px;
   font-weight: 600;
+
+  &.good    { background: rgba(34, 197, 94, 0.12); color: rgb(22, 163, 74); }
+  &.bad     { background: rgba(239, 68, 68, 0.12);  color: rgb(220, 38, 38); }
+  &.neutral { background: rgba(107, 114, 128, 0.12); color: rgb(75, 85, 99); }
 }
 
-.delta-chip.good{
-  background: rgba(34,197,94,.12);
-  color: rgb(22,163,74);
-}
-
-.delta-chip.bad{
-  background: rgba(239,68,68,.12);
-  color: rgb(220,38,38);
-}
-
-.delta-chip.neutral{
-  background: rgba(107,114,128,.12);
-  color: rgb(75,85,99);
+.empty {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 8px;
+  color: #6b7280;
 }
 
 ::ng-deep .propuestas-table tr.row-elegida td {
@@ -257,4 +248,22 @@
 
 ::ng-deep .propuestas-table tr.row-elegida td:first-child {
   box-shadow: inset 3px 0 0 #1D9E75;
+}
+
+/* ─── BOTTOM ACTIONS ──────────────────────────────────────────── */
+.bottom-actions {
+  display: flex;
+  justify-content: flex-start;
+  padding: 6px 2px 0 2px;
+}
+
+/* ─── MOBILE ──────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .page-container .content-container {
+    padding: 0 12px;
+  }
+
+  .page-container .title-container .title span {
+    font-size: 20px;
+  }
 }
