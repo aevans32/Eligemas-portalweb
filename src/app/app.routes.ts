@@ -30,6 +30,13 @@ export const routes: Routes = [
     loadComponent: () => import('./quienes-somos/quienes-somos').then(m => m.QuienesSomos),
   },
   {
+    path: 'terminos',
+    loadComponent: () => import('./terminos/terminos').then(m => m.Terminos),
+  },{
+    path: 'tratamiento-derechos',
+    loadComponent: () => import('./tratamiento-derechos/tratamiento-derechos').then(m => m.TratamientoDerechos),
+  },
+  {
     path: 'proposito',
     loadComponent: () => import('./proposito/proposito').then(m => m.Proposito),
   },

@@ -65,10 +65,12 @@
             }
         </mat-form-field>
 
+
+        <!-- Terminos y Condiciones -->
         <mat-checkbox formControlName="acceptTerms" class="terms-checkbox">
-            Acepto los 
+            Declaro haber leído los 
           <a 
-            routerLink="/politica-privacidad"
+            routerLink="/terminos"
             target="_blank"
             rel="noopener" 
             class="link" 
@@ -76,10 +78,61 @@
           >
             términos y condiciones
           </a>
+          de la plataforma Elige+
         </mat-checkbox>
 
-        @if (form.controls.acceptTerms.touched && form.controls.acceptTerms.hasError('required')) {
-          <mat-error>Debes aceptar los términos para continuar</mat-error>
+
+        <!-- Datos Personales -->
+        <mat-checkbox formControlName="acceptPrivacy" class="terms-checkbox">
+            Autorizo el tratamiento de mis datos personales por parte de Elige+ para la gestión y operación de la plataforma, de acuerdo con la 
+          <a 
+            routerLink="/politica-privacidad"
+            target="_blank"
+            rel="noopener" 
+            class="link" 
+            (click)="$event.stopPropagation()"
+          >
+            Política de Privacidad
+          </a>
+        </mat-checkbox>
+
+
+        <!-- Transferencia a entidades financieras -->
+        <mat-checkbox formControlName="acceptDataSharing" class="terms-checkbox">
+            Autorizo a Elige+ a compartir mis 
+          <a 
+            routerLink="/tratamiento-derechos"
+            target="_blank"
+            rel="noopener" 
+            class="link" 
+            (click)="$event.stopPropagation()"
+          >
+            datos personales 
+          </a>
+          con entidades financieras, para que puedan enviarme ofertas personalizadas de compra de deuda u otros productos financieros 
+        </mat-checkbox>
+
+
+        <!-- Comunicaciones Comerciales -->
+        <mat-checkbox formControlName="acceptMarketing" class="terms-checkbox">
+            Autorizo a Elige+ a enviarme comunicaciones informativas y comerciales relacionadas con sus servicios de acuerdo a la 
+          <a 
+            routerLink="/politica-privacidad"
+            target="_blank"
+            rel="noopener" 
+            class="link" 
+            
+          >
+            Política de Privacidad
+          </a>
+        </mat-checkbox>
+
+        @if (
+          (form.controls.acceptTerms.touched && form.controls.acceptTerms.hasError('required')) ||
+          (form.controls.acceptPrivacy.touched && form.controls.acceptPrivacy.hasError('required')) ||
+          (form.controls.acceptDataSharing.touched && form.controls.acceptDataSharing.hasError('required'))
+        ) {
+          <mat-error>Debes aceptar los tres primeros puntos para continuar</mat-error>
         }
         
 
